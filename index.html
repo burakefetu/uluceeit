@@ -31,10 +31,11 @@
                     },
                     colors: {
                         ceko: {
-                            dark: '#050c1a',
-                            navy: '#0b1a3d',
-                            deep: '#08142d',
+                            dark: '#060f24',
+                            navy: '#0b1d4a',
+                            deep: '#0e245c',
                             royal: '#1d4ed8',
+                            blue: '#2563eb',
                             cyan: '#06b6d4',
                             sky: '#38bdf8',
                             accent: '#f59e0b',
@@ -43,11 +44,11 @@
                         }
                     },
                     boxShadow: {
-                        'glass-sm': '0 8px 30px 0 rgba(11, 26, 61, 0.06)',
-                        'glass': '0 20px 45px -10px rgba(11, 26, 61, 0.18)',
-                        'glass-glow': '0 0 45px -10px rgba(29, 78, 216, 0.4)',
+                        'glass-sm': '0 8px 30px 0 rgba(11, 29, 74, 0.08)',
+                        'glass': '0 20px 45px -10px rgba(11, 29, 74, 0.15)',
+                        'glass-glow': '0 0 45px -10px rgba(37, 99, 235, 0.35)',
                         'glass-amber': '0 0 45px -10px rgba(245, 158, 11, 0.35)',
-                        'card-navy': '0 25px 50px -12px rgba(11, 26, 61, 0.35)'
+                        'card-navy': '0 25px 50px -12px rgba(6, 15, 36, 0.45)'
                     }
                 }
             }
@@ -56,27 +57,36 @@
     <style>
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #0b1a3d; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #1d4ed8; }
+        ::-webkit-scrollbar-thumb { background: #0b1d4a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2563eb; }
         html { scroll-behavior: smooth; }
         
-        /* Deep Navy Liquid Glass Cards (Beyaz Zemin Üzerinde Parlayan Lacivert Sıvı Cam) */
+        /* Ultra-refined Liquid Glass System */
+        .liquid-glass-hero {
+            background: linear-gradient(135deg, rgba(11, 29, 74, 0.92) 0%, rgba(6, 15, 36, 0.95) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .liquid-glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+        .liquid-glass-card:hover {
+            border-color: rgba(37, 99, 235, 0.4);
+        }
+
         .liquid-glass-navy {
-            background: linear-gradient(135deg, rgba(11, 26, 61, 0.95) 0%, rgba(8, 20, 45, 0.92) 100%);
+            background: linear-gradient(135deg, #0b1d4a 0%, #060f24 100%);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
         .liquid-glass-navy:hover {
-            border-color: rgba(56, 189, 248, 0.45);
-        }
-
-        /* Frosted White Glass Cards */
-        .liquid-glass-white {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-color: rgba(56, 189, 248, 0.4);
         }
 
         /* Animations */
@@ -97,22 +107,22 @@
         .animate-pulse-glow { animation: pulse-glow 3.5s ease-in-out infinite; }
 
         #chatbot-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; }
-        #chatbot-button { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #1d4ed8, #0b1a3d); color: white; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 30px rgba(11, 26, 61, 0.35); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid white; }
-        #chatbot-button:hover { transform: scale(1.08); box-shadow: 0 15px 35px rgba(29, 78, 216, 0.5); }
-        #chatbot-window { width: 360px; height: 490px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 24px; box-shadow: 0 30px 60px rgba(11, 26, 61, 0.25); display: none; flex-direction: column; margin-bottom: 15px; overflow: hidden; border: 1px solid #e2e8f0; }
-        #chatbot-header { background: linear-gradient(135deg, #0b1a3d, #1d4ed8); color: white; padding: 16px 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        #chatbot-button { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #0b1d4a, #2563eb); color: white; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 30px rgba(11, 29, 74, 0.35); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid white; }
+        #chatbot-button:hover { transform: scale(1.08); box-shadow: 0 15px 35px rgba(37, 99, 235, 0.5); }
+        #chatbot-window { width: 360px; height: 490px; background: #ffffff; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 24px; box-shadow: 0 30px 60px rgba(11, 29, 74, 0.25); display: none; flex-direction: column; margin-bottom: 15px; overflow: hidden; border: 1px solid #e2e8f0; }
+        #chatbot-header { background: linear-gradient(135deg, #0b1d4a, #1d4ed8); color: white; padding: 16px 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
         #chatbot-close { cursor: pointer; font-size: 18px; }
         #chatbot-messages { flex-grow: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #f8fafc; }
         .chat-message { max-width: 85%; padding: 10px 14px; border-radius: 18px; font-size: 13.5px; line-height: 1.45; word-wrap: break-word; }
-        .user-message { align-self: flex-end; background: linear-gradient(135deg, #2563eb, #0b1a3d); color: white; border-bottom-right-radius: 4px; box-shadow: 0 4px 15px rgba(29, 78, 216, 0.2); }
+        .user-message { align-self: flex-end; background: linear-gradient(135deg, #2563eb, #0b1d4a); color: white; border-bottom-right-radius: 4px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); }
         .bot-message { align-self: flex-start; background: #ffffff; color: #1e293b; border-bottom-left-radius: 4px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         #chatbot-input-container { display: flex; padding: 12px 16px; background-color: #ffffff; border-top: 1px solid #e2e8f0; }
         #chatbot-input { flex-grow: 1; padding: 10px 14px; background-color: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 20px; outline: none; font-size: 14px; }
-        #chatbot-input:focus { border-color: #1d4ed8; background-color: #ffffff; }
-        #chatbot-send { background: linear-gradient(135deg, #0b1a3d, #1d4ed8); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-left: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.2s; }
+        #chatbot-input:focus { border-color: #2563eb; background-color: #ffffff; }
+        #chatbot-send { background: linear-gradient(135deg, #0b1d4a, #2563eb); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-left: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.2s; }
         #chatbot-send:hover { transform: scale(1.05); }
         .typing-indicator { display: flex; gap: 4px; padding: 10px 14px; background-color: #ffffff; border-radius: 18px; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid #e2e8f0; width: max-content; }
-        .typing-indicator span { width: 6px; height: 6px; background-color: #0b1a3d; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
+        .typing-indicator span { width: 6px; height: 6px; background-color: #0b1d4a; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
         .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
         .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
@@ -120,8 +130,8 @@
 </head>
 <body class="bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-ceko-navy selection:text-white">
 
-    <!-- BEYAZ ZARİF NAVBAR -->
-    <nav class="fixed w-full bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm z-50 transition-all duration-300" id="navbar">
+    <!-- BEYAZ ZARİF NAVBAR & TAM KORUMALI MOBİL MENÜ -->
+    <nav class="fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm z-50 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 
@@ -136,7 +146,7 @@
                     </div>
                 </div>
 
-                <!-- Menü Linkleri -->
+                <!-- Masaüstü Menü Linkleri -->
                 <div class="hidden md:flex items-center space-x-7">
                     <a href="#hakkimizda" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Hakkımızda</a>
                     <a href="#etkinlikler" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Etkinlikler</a>
@@ -153,35 +163,51 @@
 
                 <!-- Mobil Menü Butonu -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobileMenuBtn" class="text-slate-700 hover:text-blue-600 focus:outline-none p-2 rounded-lg" aria-label="Menüyü Aç">
-                        <i class="fa-solid fa-bars text-2xl"></i>
+                    <button id="mobileMenuBtn" class="text-slate-700 hover:text-blue-600 p-2.5 rounded-xl hover:bg-slate-100 focus:outline-none transition-colors" aria-label="Menüyü Aç">
+                        <i class="fa-solid fa-bars text-2xl" id="menuIcon"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobil Açılır Menü -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white/98 backdrop-blur-2xl border-t border-slate-100 absolute w-full shadow-2xl">
-            <div class="px-4 pt-3 pb-6 space-y-2">
-                <a href="#hakkimizda" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50">Hakkımızda</a>
-                <a href="#etkinlikler" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50">Etkinlikler</a>
-                <a href="#sponsorlar" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-800 hover:text-amber-600 hover:bg-amber-50 flex items-center justify-between">
-                    <span>Sponsorlarımız & İndirimler</span>
+        <!-- MOBİL AÇILIR MENÜ (100% OPAK BEYAZ, ÜST ÜSTE BİNME KESİNLİKLE ENGELLENDİ) -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-200 shadow-2xl w-full absolute top-full left-0 z-50">
+            <div class="px-5 pt-4 pb-6 space-y-2">
+                <a href="#hakkimizda" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-compass text-blue-600 w-5"></i> Hakkımızda
+                </a>
+                <a href="#etkinlikler" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-calendar-check text-blue-600 w-5"></i> Etkinlikler
+                </a>
+                <a href="#sponsorlar" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-amber-600 hover:bg-amber-50 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-tags text-amber-500 w-5"></i> Sponsorlarımız & İndirimler</span>
                     <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">Fırsatlar</span>
                 </a>
-                <a href="#yonetim-kurulu" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50">Yönetim Kurulu</a>
-                <a href="#iletisim" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50">İletişim</a>
-                <a href="#uye-ol" class="block mt-4 text-center bg-gradient-to-r from-ceko-navy to-blue-700 text-white px-4 py-3.5 rounded-xl font-bold shadow-md">Hemen Üye Ol</a>
+                <a href="#yonetim-kurulu" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-users text-blue-600 w-5"></i> Yönetim Kurulu
+                </a>
+                <a href="#iletisim" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-envelope text-blue-600 w-5"></i> İletişim
+                </a>
+                <div class="pt-2">
+                    <a href="#uye-ol" class="block text-center bg-gradient-to-r from-ceko-navy to-blue-700 text-white px-4 py-3.5 rounded-xl font-bold shadow-md hover:shadow-lg transition-all">
+                        Hemen Üye Ol (SKS)
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- HERO SECTION (FERAH BEYAZ ZEMİN ÜZERİNDE PARLAYAN DERİN LACİVERT SIVI CAM KART) -->
-    <section class="relative pt-32 pb-20 lg:pt-44 lg:pb-28 overflow-hidden bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#ffffff]">
+    <!-- HERO SECTION (ASİL VE PREMİUM RENK UYUMU + 3D SIVI CAM VİTRİN) -->
+    <section class="relative pt-32 pb-20 lg:pt-44 lg:pb-32 overflow-hidden bg-gradient-to-b from-[#081538] via-[#0b1d4a] to-[#081538] text-white">
         
-        <!-- Yumuşak Arka Plan Işık Efektleri -->
-        <div class="absolute top-1/4 left-10 -translate-x-1/2 w-[550px] h-[550px] bg-blue-400/10 blur-[130px] rounded-full pointer-events-none animate-pulse-glow"></div>
-        <div class="absolute top-1/3 right-10 w-[450px] h-[450px] bg-sky-300/15 blur-[120px] rounded-full pointer-events-none"></div>
+        <!-- Dinamik Sıvı Cam Işık Küreleri -->
+        <div class="absolute top-1/4 left-10 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/20 blur-[150px] rounded-full pointer-events-none animate-pulse-glow"></div>
+        <div class="absolute top-1/3 right-10 w-[500px] h-[500px] bg-sky-400/15 blur-[140px] rounded-full pointer-events-none"></div>
+        <div class="absolute bottom-10 left-1/3 w-[400px] h-[400px] bg-amber-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+        
+        <!-- Sıvı Cam Ağ Deseni -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
@@ -189,61 +215,61 @@
                 <!-- Sol Kolon: Başlık, Açıklama ve Eylemler -->
                 <div class="lg:w-7/12 text-center lg:text-left">
                     
-                    <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-blue-50 border border-blue-200/80 text-xs sm:text-sm text-ceko-navy mb-8 shadow-sm">
+                    <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.08] border border-white/15 backdrop-blur-2xl text-xs sm:text-sm text-slate-200 mb-8 shadow-glass-sm">
                         <span class="flex h-2.5 w-2.5 relative">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                         </span>
-                        <span class="font-bold tracking-wide">2026-2027 Dönemi</span>
-                        <span class="text-slate-400">•</span>
-                        <span class="text-blue-600 font-bold">Kayıtlar Başladı</span>
+                        <span class="font-bold text-white tracking-wide">2026-2027 Dönemi</span>
+                        <span class="text-slate-500">•</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300 font-semibold">Kayıtlar Başladı</span>
                     </div>
 
-                    <h1 class="text-4xl sm:text-6xl lg:text-6.5xl font-black tracking-tight leading-[1.1] mb-6 text-ceko-navy">
+                    <h1 class="text-4xl sm:text-6xl lg:text-6.5xl font-black tracking-tight leading-[1.1] mb-6 text-white">
                         Geleceğin Liderleri, <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-600 to-amber-500">
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-amber-300">
                             Burada Şekilleniyor.
                         </span>
                     </h1>
 
-                    <p class="text-base sm:text-lg text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                    <p class="text-base sm:text-lg text-slate-300 mb-8 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
                         Bursa Uludağ Üniversitesi <strong>Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu (ULUÇEEİT)</strong>; iş dünyasını, insan kaynaklarını, sosyal politikaları ve kariyerini bugünden inşa eden en güçlü öğrenci platformudur.
                     </p>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-                        <a href="#uye-ol" class="inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-ceko-navy via-blue-900 to-blue-700 hover:from-blue-700 hover:to-ceko-navy text-white px-8 py-4 rounded-2xl font-bold text-base transition-all shadow-lg hover:shadow-blue-900/30 transform hover:-translate-y-0.5">
+                        <a href="#uye-ol" class="inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white px-8 py-4 rounded-2xl font-bold text-base transition-all shadow-xl shadow-blue-600/40 hover:shadow-blue-500/60 transform hover:-translate-y-0.5">
                             <span>Ailemize Katıl (SKS)</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
                         </a>
-                        <a href="#sponsorlar" class="inline-flex items-center justify-center gap-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 hover:text-ceko-navy px-7 py-4 rounded-2xl font-semibold text-base transition-all shadow-sm hover:border-amber-400">
-                            <i class="fa-solid fa-tags text-amber-500"></i>
+                        <a href="#sponsorlar" class="inline-flex items-center justify-center gap-2.5 bg-white/[0.08] hover:bg-white/[0.15] border border-white/20 text-slate-100 hover:text-white px-7 py-4 rounded-2xl font-semibold text-base transition-all backdrop-blur-2xl hover:border-amber-400/50">
+                            <i class="fa-solid fa-tags text-amber-400"></i>
                             <span>Üye İndirimleri & Sponsorlar</span>
                         </a>
                     </div>
 
-                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-slate-500 border-t border-slate-200 pt-6">
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-slate-300 border-t border-white/10 pt-6">
                         <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-circle-check text-blue-600"></i>
+                            <i class="fa-solid fa-circle-check text-blue-400"></i>
                             <span>Resmi SKS Topluluğu</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-circle-check text-amber-500"></i>
+                            <i class="fa-solid fa-circle-check text-amber-400"></i>
                             <span>Sertifikalı Eğitimler</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i>
                             <span>%30'a Varan İndirimler</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sağ Kolon: Deep Navy Liquid Glass Topluluk Kartı -->
+                <!-- Sağ Kolon: 3D Liquid Glass Topluluk Vitrini -->
                 <div class="lg:w-5/12 w-full">
                     <div class="relative mx-auto max-w-md">
                         
-                        <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 via-blue-400 to-amber-400 rounded-3xl blur-xl opacity-35 group-hover:opacity-60 transition duration-1000"></div>
+                        <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 via-sky-400 to-amber-400 rounded-3xl blur-xl opacity-40 group-hover:opacity-70 transition duration-1000"></div>
 
-                        <div class="relative rounded-3xl liquid-glass-navy p-7 sm:p-8 shadow-card-navy overflow-hidden text-white">
+                        <div class="relative rounded-3xl liquid-glass-hero p-7 sm:p-8 shadow-card-navy overflow-hidden">
                             
                             <div class="flex justify-between items-center pb-5 border-b border-white/10">
                                 <div class="flex items-center gap-2.5">
@@ -278,7 +304,7 @@
                             </div>
                         </div>
 
-                        <div class="hidden sm:flex absolute -top-5 -left-6 liquid-glass-navy px-4 py-3 rounded-2xl shadow-card-navy items-center gap-3 animate-float border border-white/15 text-white">
+                        <div class="hidden sm:flex absolute -top-5 -left-6 liquid-glass-hero px-4 py-3 rounded-2xl shadow-card-navy items-center gap-3 animate-float border border-white/15">
                             <div class="w-10 h-10 rounded-xl bg-blue-500/25 text-blue-300 flex items-center justify-center text-lg border border-blue-400/30">
                                 <i class="fa-solid fa-graduation-cap"></i>
                             </div>
@@ -288,7 +314,7 @@
                             </div>
                         </div>
 
-                        <div class="hidden sm:flex absolute -bottom-6 -right-6 liquid-glass-navy px-4 py-3 rounded-2xl shadow-card-navy items-center gap-3 animate-float-delayed border border-white/15 text-white">
+                        <div class="hidden sm:flex absolute -bottom-6 -right-6 liquid-glass-hero px-4 py-3 rounded-2xl shadow-card-navy items-center gap-3 animate-float-delayed border border-white/15">
                             <div class="w-10 h-10 rounded-xl bg-amber-500/25 text-amber-300 flex items-center justify-center text-lg border border-amber-400/30">
                                 <i class="fa-solid fa-tags"></i>
                             </div>
@@ -305,8 +331,8 @@
         </div>
     </section>
 
-    <!-- SECTION 2: HAKKIMIZDA (MİSYON & VİZYON - DERİN LACİVERT SIVI CAM PANELLERİ) -->
-    <section id="hakkimizda" class="py-24 bg-gradient-to-b from-white via-slate-50 to-white relative overflow-hidden scroll-mt-20 border-t border-slate-100">
+    <!-- SECTION 2: HAKKIMIZDA (MİSYON & VİZYON) -->
+    <section id="hakkimizda" class="py-24 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] relative overflow-hidden scroll-mt-20">
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             
@@ -320,10 +346,10 @@
                 </p>
             </div>
 
-            <!-- Misyon & Vizyon Kartları (Liquid Glass Navy) -->
+            <!-- Misyon & Vizyon Kartları -->
             <div class="grid md:grid-cols-2 gap-8 mb-16">
                 
-                <!-- Misyonumuz Kartı -->
+                <!-- Misyonumuz Kartı (Liquid Glass Navy) -->
                 <div class="group relative rounded-3xl liquid-glass-navy p-8 sm:p-10 shadow-card-navy hover:shadow-glass-glow transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between text-white overflow-hidden border border-white/15">
                     <div class="absolute top-0 right-0 w-44 h-44 bg-blue-500/15 rounded-full blur-2xl group-hover:bg-blue-500/30 transition-all pointer-events-none"></div>
 
@@ -355,7 +381,7 @@
                     </div>
                 </div>
 
-                <!-- Vizyonumuz Kartı -->
+                <!-- Vizyonumuz Kartı (Liquid Glass Navy) -->
                 <div class="group relative rounded-3xl liquid-glass-navy p-8 sm:p-10 shadow-card-navy hover:shadow-glass-amber transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between text-white overflow-hidden border border-white/15">
                     <div class="absolute top-0 right-0 w-44 h-44 bg-amber-500/15 rounded-full blur-2xl group-hover:bg-amber-500/30 transition-all pointer-events-none"></div>
 
@@ -393,7 +419,7 @@
     </section>
 
     <!-- SECTION 3: KARİYER HARİTASI & MEZUNİYET ROTASI -->
-    <section id="kariyer" class="py-24 bg-gradient-to-b from-white via-slate-50 to-white relative overflow-hidden scroll-mt-20 border-t border-slate-100">
+    <section id="kariyer" class="py-24 bg-white relative overflow-hidden scroll-mt-20 border-t border-slate-100">
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             
@@ -478,7 +504,7 @@
 
             </div>
 
-            <!-- Öğrencilere Sunulan Fırsatlar Paneli (Liquid Glass Navy) -->
+            <!-- Öğrencilere Sunulan Fırsatlar Paneli -->
             <div class="rounded-3xl liquid-glass-navy text-white p-8 sm:p-12 shadow-card-navy relative overflow-hidden border border-white/20">
                 <div class="relative z-10">
                     <div class="text-center mb-10">
@@ -518,7 +544,7 @@
     </section>
 
     <!-- SECTION 4: ETKİNLİKLER -->
-    <section id="etkinlikler" class="py-24 bg-gradient-to-b from-white via-slate-50 to-white relative overflow-hidden scroll-mt-20 border-t border-slate-100">
+    <section id="etkinlikler" class="py-24 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] relative overflow-hidden scroll-mt-20 border-t border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col md:flex-row justify-between items-end mb-14">
                 <div>
@@ -536,7 +562,7 @@
                 <div class="liquid-glass-navy text-white rounded-3xl overflow-hidden shadow-card-navy hover:shadow-glass-glow hover:-translate-y-2 transition-all duration-300 flex flex-col group border border-white/15">
                     <div class="relative h-52 overflow-hidden">
                         <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80" alt="Ankara Gezisi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#08142d] via-transparent to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#060f24] via-transparent to-transparent"></div>
                         <div class="absolute top-4 right-4 bg-slate-900/80 text-white px-3.5 py-1 rounded-full text-xs font-bold shadow backdrop-blur-md border border-white/15">
                             Geçmiş Etkinlik
                         </div>
@@ -562,8 +588,8 @@
         </div>
     </section>
 
-    <!-- SECTION 5: SPONSORLAR & ÜYE AVANTAJLARI (FERAH ZEMİNDE PARLAYAN SIVI CAM KARTLARI) -->
-    <section id="sponsorlar" class="py-24 bg-gradient-to-b from-white via-slate-50 to-white relative overflow-hidden scroll-mt-20 border-t border-slate-100">
+    <!-- SECTION 5: SPONSORLAR & ÜYE AVANTAJLARI -->
+    <section id="sponsorlar" class="py-24 bg-white relative overflow-hidden scroll-mt-20 border-t border-slate-100">
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-14">
@@ -783,7 +809,7 @@
 
             </div>
 
-            <!-- Sponsorluk Başvuru Bandı (Liquid Glass Navy) -->
+            <!-- Sponsorluk Başvuru Bandı -->
             <div class="mt-16 liquid-glass-navy border border-white/20 rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-card-navy text-white">
                 <div class="flex items-center gap-5">
                     <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-2xl flex-shrink-0 border border-amber-400/30">
@@ -804,8 +830,8 @@
         </div>
     </section>
 
-    <!-- SECTION 6: ÜYE OL (BEYAZ VE LACİVERT DENGELİ PANEL) -->
-    <section id="uye-ol" class="py-24 bg-gradient-to-b from-white via-slate-50 to-white relative overflow-hidden scroll-mt-20 border-t border-slate-100">
+    <!-- SECTION 6: ÜYE OL (DENGELİ SKS PANELİ) -->
+    <section id="uye-ol" class="py-24 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] relative overflow-hidden scroll-mt-20 border-t border-slate-100">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-slate-200 bg-white">
                 
@@ -857,7 +883,7 @@
                     </div>
                 </div>
 
-                <!-- Sağ Adımlar & Buton Kolonu (Ferah Beyaz) -->
+                <!-- Sağ Adımlar & Buton Kolonu -->
                 <div class="lg:w-3/5 p-8 sm:p-12 flex flex-col justify-center items-center text-center bg-white">
                     <div class="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center mb-6 border border-blue-100 text-blue-600 shadow-sm">
                         <i class="fa-solid fa-id-card text-4xl"></i>
@@ -921,7 +947,7 @@
     </section>
 
     <!-- SECTION 8: YÖNETİM KURULU (DERİN LACİVERT SIVI CAM PROFİLLER) -->
-    <section id="yonetim-kurulu" class="py-24 bg-gradient-to-b from-white via-slate-50 to-white scroll-mt-20 border-t border-slate-100">
+    <section id="yonetim-kurulu" class="py-24 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] scroll-mt-20 border-t border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-5xl font-black text-ceko-navy mb-4">2026-2027 <span class="text-blue-600">Yönetim Kurulumuz</span></h2>
@@ -1035,7 +1061,7 @@
         </div>
     </section>
 
-    <!-- SECTION 9: FOOTER (ASİL DERİN GECE LACİVERTİ) -->
+    <!-- SECTION 9: FOOTER -->
     <footer id="iletisim" class="bg-[#050c1a] text-white pt-16 pb-8 border-t border-white/10 scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-12">
@@ -1063,6 +1089,7 @@
                     <h4 class="text-base font-bold mb-6 text-white border-b border-white/10 pb-2 inline-block">Hızlı Bağlantılar</h4>
                     <ul class="space-y-2.5 text-sm text-slate-400">
                         <li><a href="#hakkimizda" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Hakkımızda</a></li>
+                        <li><a href="#kariyer" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Kariyer Haritası</a></li>
                         <li><a href="#etkinlikler" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Geçmiş Etkinlikler</a></li>
                         <li><a href="#sponsorlar" class="hover:text-amber-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Sponsorlar & İndirimler</a></li>
                         <li><a href="#uye-ol" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Üyelik Başvurusu</a></li>
@@ -1091,7 +1118,7 @@
         </div>
     </footer>
 
-    <!-- CHATBOT WIDGET (BEYAZ VE LACİVERT MODERN DIALOG) -->
+    <!-- CHATBOT WIDGET -->
     <div id="chatbot-container">
         <div id="chatbot-window">
             <div id="chatbot-header">
@@ -1169,17 +1196,30 @@
             });
         });
 
+        // Mobil Menü Açma/Kapama
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
         
         mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            const isClosed = mobileMenu.classList.contains('hidden');
+            if (isClosed) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+            } else {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            }
         });
 
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
             });
         });
 
