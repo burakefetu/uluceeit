@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ULUÇEEİT - Bursa Uludağ Üniversitesi</title>
     
+    <link rel="icon" type="image/png" href="logo.png">
+    
     <!-- Meta & SEO Tags -->
     <meta name="description" content="Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu (ULUÇEEİT) Resmi Web Sitesi. Geleceğe Yön Ver!">
-    <meta name="keywords" content="ULUÇEEİT, Uludağ Üniversitesi, ÇEEİ, Çalışma Ekonomisi, Öğrenci Kulübü, Bursa, İndirimler, Sponsorlar">
+    <meta name="keywords" content="ULUÇEEİT, Uludağ Üniversitesi, ÇEEİ, Çalışma Ekonomisi, Öğrenci Kulübü, Bursa, İndirimler, Sponsorlar, İİBF">
     <meta property="og:title" content="ULUÇEEİT - Bursa Uludağ Üniversitesi">
     <meta property="og:description" content="Geleceğe Yön Ver! Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu.">
+    <meta property="og:image" content="logo.png">
     <meta property="og:type" content="website">
     
     <!-- Tailwind CSS ve FontAwesome Yüklenmesi -->
@@ -28,7 +31,8 @@
                     },
                     colors: {
                         ceko: {
-                            dark: '#0b1329',
+                            dark: '#070d1e',
+                            navy: '#0b1633',
                             primary: '#1d4ed8',
                             secondary: '#38bdf8',
                             accent: '#f59e0b',
@@ -43,12 +47,29 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #1d4ed8; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #0b1329; }
+        ::-webkit-scrollbar-thumb:hover { background: #070d1e; }
         html { scroll-behavior: smooth; }
         
+        /* Floating Animation */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes float-delayed {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(10px); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .animate-float { animation: float-slow 4s ease-in-out infinite; }
+        .animate-float-delayed { animation: float-delayed 5s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
         #chatbot-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; }
         #chatbot-button { width: 60px; height: 60px; border-radius: 50%; background-color: #1d4ed8; color: white; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 20px rgba(29, 78, 216, 0.3); transition: transform 0.3s ease, background-color 0.3s ease; }
-        #chatbot-button:hover { transform: scale(1.08); background-color: #0b1329; }
+        #chatbot-button:hover { transform: scale(1.08); background-color: #070d1e; }
         #chatbot-window { width: 360px; height: 480px; background-color: white; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); display: none; flex-direction: column; margin-bottom: 15px; overflow: hidden; border: 1px solid #e2e8f0; }
         #chatbot-header { background-color: #1d4ed8; color: white; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
         #chatbot-close { cursor: pointer; font-size: 18px; }
@@ -60,7 +81,7 @@
         #chatbot-input { flex-grow: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 20px; outline: none; font-size: 14px; }
         #chatbot-input:focus { border-color: #1d4ed8; }
         #chatbot-send { background-color: #1d4ed8; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-left: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background-color 0.2s; }
-        #chatbot-send:hover { background-color: #0b1329; }
+        #chatbot-send:hover { background-color: #070d1e; }
         .typing-indicator { display: flex; gap: 4px; padding: 10px 14px; background-color: #e2e8f0; border-radius: 16px; align-self: flex-start; border-bottom-left-radius: 4px; width: max-content; }
         .typing-indicator span { width: 6px; height: 6px; background-color: #64748b; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
         .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
@@ -71,136 +92,196 @@
 <body class="bg-ceko-light font-sans text-gray-800 antialiased selection:bg-ceko-accent selection:text-white">
 
     <!-- NAVBAR -->
-    <nav class="fixed w-full bg-white/90 backdrop-blur-md shadow-sm z-50 transition-all duration-300" id="navbar">
+    <nav class="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <img src="OJGELDİNGİİİİİİİİİİZ.png" alt="ULUÇEEİT Logo" class="h-11 w-11 object-contain drop-shadow-md rounded-full bg-white p-0.5 border border-slate-200" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
-                    <div class="hidden h-11 w-11 rounded-xl bg-ceko-primary text-white flex items-center justify-center font-extrabold text-lg shadow-md">
-                        UÇ
+                
+                <!-- Logo & İsim -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo(0,0)">
+                    <div class="relative">
+                        <img src="logo.png" alt="ULUÇEEİT Logo" class="h-12 w-12 object-contain rounded-full bg-white shadow-md ring-2 ring-blue-600/30 group-hover:scale-105 transition-transform duration-300" onerror="this.src='logo.jpg'">
                     </div>
                     <div class="flex flex-col justify-center">
-                        <span class="font-bold text-lg text-ceko-dark block leading-tight">ULUÇEEİT</span>
-                        <span class="text-[11px] text-gray-500 font-medium">Bursa Uludağ Üniversitesi</span>
+                        <span class="font-black text-xl text-ceko-dark tracking-tight leading-none group-hover:text-ceko-primary transition-colors">ULUÇEEİT</span>
+                        <span class="text-[11px] text-gray-500 font-semibold mt-0.5">Bursa Uludağ Üniversitesi</span>
                     </div>
                 </div>
+
+                <!-- Menü Linkleri -->
                 <div class="hidden md:flex items-center space-x-7">
-                    <a href="#hakkimizda" class="text-gray-600 hover:text-ceko-primary font-medium text-sm transition-colors">Hakkımızda</a>
-                    <a href="#etkinlikler" class="text-gray-600 hover:text-ceko-primary font-medium text-sm transition-colors">Etkinlikler</a>
-                    <a href="#sponsorlar" class="text-gray-600 hover:text-ceko-primary font-medium text-sm transition-colors flex items-center gap-1.5">
+                    <a href="#hakkimizda" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors">Hakkımızda</a>
+                    <a href="#etkinlikler" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors">Etkinlikler</a>
+                    <a href="#sponsorlar" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors flex items-center gap-1.5">
                         <i class="fa-solid fa-tags text-xs text-ceko-accent"></i> Sponsorlar & İndirimler
                     </a>
-                    <a href="#yonetim-kurulu" class="text-gray-600 hover:text-ceko-primary font-medium text-sm transition-colors">Yönetim</a>
-                    <a href="#iletisim" class="text-gray-600 hover:text-ceko-primary font-medium text-sm transition-colors">İletişim</a>
-                    <a href="#uye-ol" class="bg-ceko-primary hover:bg-ceko-dark text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                        Üye Ol <i class="fa-solid fa-arrow-right ml-1.5 text-xs"></i>
+                    <a href="#yonetim-kurulu" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors">Yönetim</a>
+                    <a href="#iletisim" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors">İletişim</a>
+                    <a href="#uye-ol" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-ceko-dark text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-blue-600/30 transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <span>Üye Ol</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
                 </div>
+
+                <!-- Mobil Menü Butonu -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobileMenuBtn" class="text-gray-600 hover:text-ceko-primary focus:outline-none p-2" aria-label="Menüyü Aç">
+                    <button id="mobileMenuBtn" class="text-gray-700 hover:text-ceko-primary focus:outline-none p-2 rounded-lg" aria-label="Menüyü Aç">
                         <i class="fa-solid fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
-            <div class="px-4 pt-2 pb-6 space-y-2">
-                <a href="#hakkimizda" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-ceko-primary hover:bg-gray-50">Hakkımızda</a>
-                <a href="#etkinlikler" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-ceko-primary hover:bg-gray-50">Etkinlikler</a>
-                <a href="#sponsorlar" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-ceko-primary hover:bg-gray-50 flex items-center justify-between">
+
+        <!-- Mobil Açılır Menü -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl">
+            <div class="px-4 pt-3 pb-6 space-y-2">
+                <a href="#hakkimizda" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50">Hakkımızda</a>
+                <a href="#etkinlikler" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50">Etkinlikler</a>
+                <a href="#sponsorlar" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50 flex items-center justify-between">
                     <span>Sponsorlarımız & İndirimler</span>
-                    <span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-bold">Fırsatlar</span>
+                    <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">Fırsatlar</span>
                 </a>
-                <a href="#yonetim-kurulu" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-ceko-primary hover:bg-gray-50">Yönetim Kurulu</a>
-                <a href="#iletisim" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-ceko-primary hover:bg-gray-50">İletişim</a>
-                <a href="#uye-ol" class="block mt-4 text-center bg-ceko-primary text-white px-4 py-3 rounded-lg font-bold">Hemen Üye Ol</a>
+                <a href="#yonetim-kurulu" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50">Yönetim Kurulu</a>
+                <a href="#iletisim" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50">İletişim</a>
+                <a href="#uye-ol" class="block mt-4 text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-3.5 rounded-xl font-bold shadow-md">Hemen Üye Ol</a>
             </div>
         </div>
     </nav>
 
-    <!-- MODERN HERO SECTION -->
-    <section class="relative pt-32 pb-24 lg:pt-44 lg:pb-32 overflow-hidden bg-ceko-dark">
-        <!-- Arka Plan Işıklandırması (Ambient Glow) -->
-        <div class="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-blue-600/25 blur-[140px] rounded-full pointer-events-none"></div>
-        <div class="absolute top-1/3 right-10 w-[450px] h-[450px] bg-amber-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+    <!-- ULTRA-MODERN HERO SECTION -->
+    <section class="relative pt-32 pb-20 lg:pt-44 lg:pb-32 overflow-hidden bg-ceko-dark text-white">
         
-        <!-- İnce Izgara Deseni -->
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
+        <!-- Dinamik Arka Plan Işık Efektleri (Radial Ambient Mesh) -->
+        <div class="absolute top-1/4 left-10 -translate-x-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[150px] rounded-full pointer-events-none animate-pulse-glow"></div>
+        <div class="absolute top-1/3 right-10 w-[500px] h-[500px] bg-sky-500/15 blur-[140px] rounded-full pointer-events-none"></div>
+        <div class="absolute bottom-10 left-1/3 w-[400px] h-[400px] bg-amber-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+        
+        <!-- Modern Izgara & Nokta Deseni -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
                 
-                <!-- Sol Kolon: Metin & Butonlar -->
-                <div class="lg:w-1/2 text-center lg:text-left">
+                <!-- Sol Kolon: Başlık, Açıklama ve Eylemler -->
+                <div class="lg:w-7/12 text-center lg:text-left">
                     
-                    <!-- Modern Minimalist Rozet -->
-                    <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/10 backdrop-blur-md text-xs sm:text-sm text-slate-300 mb-8 shadow-inner">
-                        <span class="flex h-2 w-2 relative">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    <!-- Canlı Durum Rozeti -->
+                    <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-800/80 border border-slate-700/80 backdrop-blur-xl text-xs sm:text-sm text-slate-300 mb-8 shadow-inner">
+                        <span class="flex h-2.5 w-2.5 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                         </span>
-                        <span class="font-medium text-white">Bursa Uludağ Üniversitesi</span>
+                        <span class="font-bold text-white tracking-wide">2026-2027 Dönemi</span>
                         <span class="text-slate-600">•</span>
-                        <span class="text-blue-400 font-medium tracking-wide">ULUÇEEİT</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300 font-semibold">Kayıtlar Başladı</span>
                     </div>
 
-                    <!-- Ana Slogan Başlığı -->
-                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.08] mb-6">
-                        Geleceğe <br class="hidden sm:inline" />
+                    <!-- Ana Slogan -->
+                    <h1 class="text-4xl sm:text-6xl lg:text-6.5xl font-black tracking-tight leading-[1.1] mb-6 text-white">
+                        Geleceğin Liderleri, <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-amber-300">
-                            Yön Ver.
+                            Burada Şekilleniyor.
                         </span>
                     </h1>
 
-                    <!-- Açıklama Metni -->
-                    <p class="text-base sm:text-lg text-slate-300 mb-9 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
-                        Çalışma Ekonomisi ve Endüstri İlişkileri; iş gücü piyasasını, sosyal politikaları ve iş dünyasının dinamiklerini "insan" merkezli bir vizyonla ele alan dinamik bir alandır. ULUÇEEİT ile geleceğini bugünden şekillendir.
+                    <!-- Açıklama -->
+                    <p class="text-base sm:text-lg text-slate-300 mb-8 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Bursa Uludağ Üniversitesi <strong>Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu (ULUÇEEİT)</strong>; iş dünyasını, insan kaynaklarını, sosyal politikaları ve kariyerini bugünden inşa eden en güçlü öğrenci platformudur.
                     </p>
 
                     <!-- CTA Butonları -->
-                    <div class="flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start">
-                        <a href="#uye-ol" class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-7 py-3.5 rounded-xl font-semibold text-base transition-all shadow-lg shadow-blue-600/30 hover:shadow-blue-500/40 transform hover:-translate-y-0.5">
-                            <span>Aramıza Katıl</span>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
+                        <a href="#uye-ol" class="inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white px-8 py-4 rounded-2xl font-bold text-base transition-all shadow-xl shadow-blue-600/30 hover:shadow-blue-500/50 transform hover:-translate-y-0.5">
+                            <span>Ailemize Katıl (SKS)</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
                         </a>
-                        <a href="#sponsorlar" class="inline-flex items-center justify-center gap-2 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/30 text-amber-300 hover:text-white px-7 py-3.5 rounded-xl font-medium text-base transition-all backdrop-blur-sm">
-                            <i class="fa-solid fa-percent text-sm text-amber-400"></i>
-                            <span>İndirimleri & Sponsorları Gör</span>
+                        <a href="#sponsorlar" class="inline-flex items-center justify-center gap-2.5 bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700 text-slate-200 hover:text-white px-7 py-4 rounded-2xl font-semibold text-base transition-all backdrop-blur-md hover:border-amber-400/50">
+                            <i class="fa-solid fa-tags text-amber-400"></i>
+                            <span>Üye İndirimleri & Sponsorlar</span>
                         </a>
+                    </div>
+
+                    <!-- Güven / Özellik Rozetleri -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-slate-400 border-t border-slate-800/80 pt-6">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-blue-400"></i>
+                            <span>Resmi SKS Topluluğu</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-amber-400"></i>
+                            <span>Sertifikalı Eğitimler</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                            <span>%30'a Varan İndirimler</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Sağ Kolon: Modern Kart & Görsel Tasarımı -->
-                <div class="lg:w-1/2 w-full relative">
-                    <div class="relative mx-auto max-w-lg">
+                <!-- Sağ Kolon: Ultra-Modern Topluluk Kimlik & Logo Kartı -->
+                <div class="lg:w-5/12 w-full">
+                    <div class="relative mx-auto max-w-md">
                         
-                        <!-- Ana Görsel Kutusu -->
-                        <div class="relative rounded-3xl p-2 bg-gradient-to-b from-white/20 via-white/5 to-transparent shadow-2xl backdrop-blur-xl">
-                            <div class="overflow-hidden rounded-2xl bg-slate-900 aspect-[4/3] relative">
-                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=80" alt="Topluluk Buluşması" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-700">
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+                        <!-- Arka Plan Parlama Çerçevesi -->
+                        <div class="absolute -inset-1.5 bg-gradient-to-r from-blue-600 via-sky-400 to-amber-400 rounded-3xl blur-lg opacity-40 group-hover:opacity-75 transition duration-1000"></div>
+
+                        <!-- Ana Glassmorphic Kart -->
+                        <div class="relative rounded-3xl bg-slate-900/90 border border-white/15 p-7 sm:p-8 backdrop-blur-2xl shadow-2xl overflow-hidden">
+                            
+                            <!-- Kart Üst Başlığı -->
+                            <div class="flex justify-between items-center pb-5 border-b border-slate-800">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span class="text-xs font-bold uppercase tracking-widest text-slate-300">Resmi Topluluk Kartı</span>
+                                </div>
+                                <span class="text-xs font-mono font-semibold text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-md border border-blue-500/20">BUÜ • İİBF</span>
+                            </div>
+
+                            <!-- Logo ve Topluluk İsmi -->
+                            <div class="py-7 text-center">
+                                <div class="relative w-36 h-36 sm:w-40 sm:h-40 mx-auto mb-5 group">
+                                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-500 to-amber-400 rounded-full blur-md opacity-40 group-hover:opacity-80 transition-opacity"></div>
+                                    <img src="logo.png" alt="ULUÇEEİT Resmi Logo" class="relative w-full h-full object-contain rounded-full bg-white p-1 shadow-2xl ring-4 ring-blue-500/30 group-hover:scale-105 transition-transform duration-500" onerror="this.src='logo.jpg'">
+                                </div>
+                                <h3 class="text-2xl font-black text-white tracking-tight mb-1">ULUÇEEİT</h3>
+                                <p class="text-xs sm:text-sm font-medium text-slate-400">Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu</p>
+                            </div>
+
+                            <!-- Canlı Sayaçlar / İstatistikler Izgarası -->
+                            <div class="grid grid-cols-3 gap-3 pt-5 border-t border-slate-800 text-center">
+                                <div class="p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/50">
+                                    <p class="text-lg sm:text-xl font-black text-white">+500</p>
+                                    <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium">Aktif Üye</p>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/50">
+                                    <p class="text-lg sm:text-xl font-black text-blue-400">40+</p>
+                                    <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium">Etkinlik</p>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/50">
+                                    <p class="text-lg sm:text-xl font-black text-amber-400">%30</p>
+                                    <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium">İndirim</p>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Yüzen Rozet 1 (Sol Üst) -->
-                        <div class="absolute -top-4 -left-4 sm:-left-6 bg-slate-900/90 border border-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-base">
+                        <div class="hidden sm:flex absolute -top-5 -left-6 bg-slate-900/95 border border-white/15 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-2xl items-center gap-3 animate-float">
+                            <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg">
                                 <i class="fa-solid fa-graduation-cap"></i>
                             </div>
                             <div>
-                                <p class="text-[11px] text-slate-400 font-medium">2026-2027 Dönemi</p>
-                                <p class="text-xs font-bold text-white">Kayıtlar Başladı</p>
+                                <p class="text-[11px] text-slate-400 font-medium">Mesleki Ağ & Vizyon</p>
+                                <p class="text-xs font-bold text-white">Ankara Gezileri & Ziyaretler</p>
                             </div>
                         </div>
 
                         <!-- Yüzen Rozet 2 (Sağ Alt) -->
-                        <div class="absolute -bottom-5 -right-4 sm:-right-6 bg-slate-900/90 border border-white/10 backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+                        <div class="hidden sm:flex absolute -bottom-6 -right-6 bg-slate-900/95 border border-white/15 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-2xl items-center gap-3 animate-float-delayed">
                             <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
                                 <i class="fa-solid fa-tags"></i>
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-white">%30'a Varan</p>
-                                <p class="text-[11px] text-slate-400">Üye İndirimleri</p>
+                                <p class="text-[11px] text-slate-400 font-medium">Anlaşmalı Mekanlar</p>
+                                <p class="text-xs font-bold text-white">Özel Üye Ayrıcalıkları</p>
                             </div>
                         </div>
 
@@ -342,7 +423,7 @@
         </div>
     </section>
 
-    <!-- SPONSORLAR & ÜYE AVANTAJLARI (YENİ BÖLÜM) -->
+    <!-- SPONSORLAR & ÜYE AVANTAJLARI -->
     <section id="sponsorlar" class="py-24 bg-slate-900 text-white relative overflow-hidden scroll-mt-20">
         <!-- Arka Plan Efektleri -->
         <div class="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/15 blur-[120px] rounded-full pointer-events-none"></div>
@@ -386,7 +467,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
-                                <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
+                                <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
                                     <i class="fa-solid fa-mug-hot"></i>
                                 </div>
                                 <div>
@@ -418,7 +499,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
-                                <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
+                                <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
                                     <i class="fa-solid fa-language"></i>
                                 </div>
                                 <div>
@@ -450,7 +531,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
-                                <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
+                                <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
                                     <i class="fa-solid fa-chart-line"></i>
                                 </div>
                                 <div>
@@ -482,7 +563,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
-                                <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
+                                <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
                                     <i class="fa-solid fa-print"></i>
                                 </div>
                                 <div>
@@ -514,7 +595,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
-                                <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
+                                <div class="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
                                     <i class="fa-solid fa-dumbbell"></i>
                                 </div>
                                 <div>
@@ -546,7 +627,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
-                                <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
+                                <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform">
                                     <i class="fa-solid fa-burger"></i>
                                 </div>
                                 <div>
@@ -827,10 +908,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-12">
                 <div>
                     <div class="flex items-center gap-3 mb-6">
-                        <img src="OJGELDİNGİİİİİİİİİİZ.png" alt="ULUÇEEİT Logo" class="h-10 w-10 object-contain bg-white rounded-full p-0.5 border border-slate-200" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
-                        <div class="hidden h-10 w-10 rounded-xl bg-ceko-primary text-white flex items-center justify-center font-extrabold text-base">
-                            UÇ
-                        </div>
+                        <img src="logo.png" alt="ULUÇEEİT Logo" class="h-11 w-11 object-contain bg-white rounded-full p-0.5 border border-blue-500/30" onerror="this.src='logo.jpg'">
                         <span class="font-bold text-xl text-white">ULUÇEEİT</span>
                     </div>
                     <p class="text-gray-400 text-sm mb-6">
