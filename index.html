@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ULUÇEEİT - Bursa Uludağ Üniversitesi</title>
+    
+    <!-- Meta & SEO Tags -->
+    <meta name="description" content="Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu (ULUÇEEİT) Resmi Web Sitesi. Geleceğe Yön Ver!">
+    <meta name="keywords" content="ULUÇEEİT, Uludağ Üniversitesi, ÇEEİ, Çalışma Ekonomisi, Öğrenci Kulübü, Bursa">
+    <meta property="og:title" content="ULUÇEEİT - Bursa Uludağ Üniversitesi">
+    <meta property="og:description" content="Geleceğe Yön Ver! Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu.">
+    <meta property="og:type" content="website">
+    
+    <!-- Tailwind CSS ve FontAwesome Yüklenmesi -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        ceko: {
+                            dark: '#0b1329',
+                            primary: '#1d4ed8',
+                            secondary: '#38bdf8',
+                            accent: '#f59e0b',
+                            light: '#f8fafc'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #1d4ed8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0b1329; }
+        html { scroll-behavior: smooth; }
+        
+        #chatbot-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; }
+        #chatbot-button { width: 60px; height: 60px; border-radius: 50%; background-color: #1d4ed8; color: white; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 20px rgba(29, 78, 216, 0.3); transition: transform 0.3s ease, background-color 0.3s ease; }
+        #chatbot-button:hover { transform: scale(1.08); background-color: #0b1329; }
+        #chatbot-window { width: 360px; height: 480px; background-color: white; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); display: none; flex-direction: column; margin-bottom: 15px; overflow: hidden; border: 1px solid #e2e8f0; }
+        #chatbot-header { background-color: #1d4ed8; color: white; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        #chatbot-close { cursor: pointer; font-size: 18px; }
+        #chatbot-messages { flex-grow: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #f8fafc; }
+        .chat-message { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; line-height: 1.45; word-wrap: break-word; }
+        .user-message { align-self: flex-end; background-color: #1d4ed8; color: white; border-bottom-right-radius: 4px; }
+        .bot-message { align-self: flex-start; background-color: #e2e8f0; color: #1e293b; border-bottom-left-radius: 4px; }
+        #chatbot-input-container { display: flex; padding: 12px; background-color: white; border-top: 1px solid #e2e8f0; }
+        #chatbot-input { flex-grow: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 20px; outline: none; font-size: 14px; }
+        #chatbot-input:focus { border-color: #1d4ed8; }
+        #chatbot-send { background-color: #1d4ed8; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-left: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background-color 0.2s; }
+        #chatbot-send:hover { background-color: #0b1329; }
+        .typing-indicator { display: flex; gap: 4px; padding: 10px 14px; background-color: #e2e8f0; border-radius: 16px; align-self: flex-start; border-bottom-left-radius: 4px; width: max-content; }
+        .typing-indicator span { width: 6px; height: 6px; background-color: #64748b; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+    </style>
+</head>
+<body class="bg-ceko-light font-sans text-gray-800 antialiased selection:bg-ceko-accent selection:text-white">
+
+    <!-- NAVBAR -->
+    <nav class="fixed w-full bg-white/90 backdrop-blur-md shadow-sm z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <img src="OJGELDİNGİİİİİİİİİİZ.png" alt="ULUÇEEİT Logo" class="h-11 w-11 object-contain drop-shadow-md rounded-full bg-white p-0.5 border border-slate-200" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                    <div class="hidden h-11 w-11 rounded-xl bg-ceko-primary text-white flex items-center justify-center font-extrabold text-lg shadow-md">
+                        UÇ
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <span class="font-bold text-lg text-ceko-dark block leading-tight">ULUÇEEİT</span>
+                        <span class="text-[11px] text-gray-500 font-medium">Bursa Uludağ Üniversitesi</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#hakkimizda" class="text-gray-600 hover:text-ceko-primary font-medium text-sm transition-colors">Hakkımızda</a>
+                    <a href="#etkinlikler" class="text-gray-600 hover:text-ceko-primary font-medium text-sm transition-colors">Etkinlikler</a>
+                    <a href="#yonetim-kurulu" class="text-gray-600 hover:text-ceko-primary font-medium text-sm transition-colors">Yönetim</a>
+                    <a href="#iletisim" class="text-gray-600 hover:text-ceko-primary font-medium text-sm transition-colors">İletişim</a>
+                    <a href="#uye-ol" class="bg-ceko-primary hover:bg-ceko-dark text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        Üye Ol <i class="fa-solid fa-arrow-right ml-1.5 text-xs"></i>
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobileMenuBtn" class="text-gray-600 hover:text-ceko-primary focus:outline-none p-2" aria-label="Menüyü Aç">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#hakkimizda" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-ceko-primary hover:bg-gray-50">Hakkımızda</a>
+                <a href="#etkinlikler" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-ceko-primary hover:bg-gray-50">Etkinlikler</a>
+                <a href="#yonetim-kurulu" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-ceko-primary hover:bg-gray-50">Yönetim Kurulu</a>
+                <a href="#iletisim" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-ceko-primary hover:bg-gray-50">İletişim</a>
+                <a href="#uye-ol" class="block mt-4 text-center bg-ceko-primary text-white px-4 py-3 rounded-lg font-bold">Hemen Üye Ol</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MODERN HERO SECTION -->
+    <section class="relative pt-32 pb-24 lg:pt-44 lg:pb-32 overflow-hidden bg-ceko-dark">
+        <!-- Arka Plan Işıklandırması (Ambient Glow) -->
+        <div class="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-blue-600/25 blur-[140px] rounded-full pointer-events-none"></div>
+        <div class="absolute top-1/3 right-10 w-[450px] h-[450px] bg-amber-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+        
+        <!-- İnce Izgara Deseni -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                
+                <!-- Sol Kolon: Metin & Butonlar -->
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    
+                    <!-- Modern Minimalist Rozet -->
+                    <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/10 backdrop-blur-md text-xs sm:text-sm text-slate-300 mb-8 shadow-inner">
+                        <span class="flex h-2 w-2 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        </span>
+                        <span class="font-medium text-white">Bursa Uludağ Üniversitesi</span>
+                        <span class="text-slate-600">•</span>
+                        <span class="text-blue-400 font-medium tracking-wide">ULUÇEEİT</span>
+                    </div>
+
+                    <!-- Ana Slogan Başlığı -->
+                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.08] mb-6">
+                        Geleceğe <br class="hidden sm:inline" />
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-amber-300">
+                            Yön Ver.
+                        </span>
+                    </h1>
+
+                    <!-- Açıklama Metni -->
+                    <p class="text-base sm:text-lg text-slate-300 mb-9 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Çalışma Ekonomisi ve Endüstri İlişkileri; iş gücü piyasasını, sosyal politikaları ve iş dünyasının dinamiklerini "insan" merkezli bir vizyonla ele alan dinamik bir alandır. ULUÇEEİT ile geleceğini bugünden şekillendir.
+                    </p>
+
+                    <!-- CTA Butonları -->
+                    <div class="flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start">
+                        <a href="#uye-ol" class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-7 py-3.5 rounded-xl font-semibold text-base transition-all shadow-lg shadow-blue-600/30 hover:shadow-blue-500/40 transform hover:-translate-y-0.5">
+                            <span>Aramıza Katıl</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                        <a href="#etkinlikler" class="inline-flex items-center justify-center gap-2 bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200 hover:text-white px-7 py-3.5 rounded-xl font-medium text-base transition-all backdrop-blur-sm">
+                            <i class="fa-regular fa-compass text-sm text-blue-400"></i>
+                            <span>Etkinlikleri Keşfet</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Sağ Kolon: Modern Kart & Görsel Tasarımı -->
+                <div class="lg:w-1/2 w-full relative">
+                    <div class="relative mx-auto max-w-lg">
+                        
+                        <!-- Ana Görsel Kutusu -->
+                        <div class="relative rounded-3xl p-2 bg-gradient-to-b from-white/20 via-white/5 to-transparent shadow-2xl backdrop-blur-xl">
+                            <div class="overflow-hidden rounded-2xl bg-slate-900 aspect-[4/3] relative">
+                                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=80" alt="Topluluk Buluşması" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+                            </div>
+                        </div>
+
+                        <!-- Yüzen Rozet 1 (Sol Üst) -->
+                        <div class="absolute -top-4 -left-4 sm:-left-6 bg-slate-900/90 border border-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-base">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div>
+                                <p class="text-[11px] text-slate-400 font-medium">2026-2027 Dönemi</p>
+                                <p class="text-xs font-bold text-white">Kayıtlar Başladı</p>
+                            </div>
+                        </div>
+
+                        <!-- Yüzen Rozet 2 (Sağ Alt) -->
+                        <div class="absolute -bottom-5 -right-4 sm:-right-6 bg-slate-900/90 border border-white/10 backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-white">+500 Üye</p>
+                                <p class="text-[11px] text-slate-400">Geniş Aile & Ağ</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Alt Yumuşak Geçiş Katmanı -->
+        <div class="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-ceko-light to-transparent pointer-events-none"></div>
+    </section>
+
+    <!-- HAKKIMIZDA BÖLÜMÜ -->
+    <section id="hakkimizda" class="py-20 bg-ceko-light relative scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-ceko-dark mb-4">Biz Kimiz ve <span class="text-ceko-primary">Ne Yapıyoruz?</span></h2>
+                <div class="w-24 h-1 bg-ceko-accent mx-auto rounded-full mb-8"></div>
+            </div>
+
+            <div class="space-y-12">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gradient-to-br from-ceko-dark to-ceko-primary p-8 rounded-3xl shadow-lg text-white">
+                        <h3 class="text-2xl font-bold mb-6 flex items-center text-ceko-accent">
+                            <i class="fa-solid fa-bullseye mr-3"></i> Misyonumuz
+                        </h3>
+                        <p class="mb-4 text-blue-50 leading-relaxed text-base sm:text-lg">Çalışma hayatının dinamiklerini bilimsel temelde kavrayarak toplumsal ihtiyaçlara yenilikçi çözümler üreten donanımlı profesyoneller yetiştirmek en temel hedefimizdir.</p>
+                        <p class="text-blue-50 leading-relaxed text-base sm:text-lg">Emek piyasalarından sosyal güvenliğe kadar her alanda sahada fark yaratmayı amaçlıyor; akademik yetkinlik ile toplumsal duyarlılığı her zaman omuz omuza yürütüyoruz.</p>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-ceko-primary mb-6 flex items-center">
+                            <i class="fa-solid fa-eye mr-3 text-ceko-accent"></i> Vizyonumuz
+                        </h3>
+                        <p class="mb-4 text-gray-700 leading-relaxed text-base sm:text-lg">Topluluğumuz; çalışma hayatında sosyal adaleti ve etik değerleri pusula edinen, değişen ekonomiye sadece uyum sağlayan değil, yön veren profesyoneller yetiştirme vizyonuyla hareket eder.</p>
+                        <p class="text-gray-700 leading-relaxed text-base sm:text-lg">Sürdürülebilir kalkınma, güçlü iş ilişkileri ve adil çalışma koşulları inşa etme yolunda fark yaratan bir ses olmayı hedefliyoruz.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-amber-50">
+                    <div class="text-center mb-10">
+                        <h3 class="text-2xl md:text-3xl font-bold text-ceko-dark mb-4">Mezun Olunca Ne İş Yapacağım?</h3>
+                        <p class="text-gray-600 text-base sm:text-lg">Kariyer yolculuğunda sınırları sen çizersin! ÇEEİ bölümü, hem kamu hem de özel sektörde oldukça geniş ve prestijli bir çalışma yelpazesi sunar:</p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-6 bg-gray-50 rounded-2xl hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-building-columns text-4xl text-ceko-primary mb-4"></i>
+                            <h4 class="font-bold text-gray-800 mb-2">Devletin Kilit Noktalarında</h4>
+                            <p class="text-sm text-gray-600">Çalışma ve Sosyal Güvenlik Bakanlığı, İŞKUR, SGK gibi kurumlarda uzmanlık; Kaymakamlık, Valilik ve İdari Hakimlik gibi prestijli kariyer fırsatları.</p>
+                        </div>
+                        <div class="p-6 bg-gray-50 rounded-2xl hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-building text-4xl text-ceko-accent mb-4"></i>
+                            <h4 class="font-bold text-gray-800 mb-2">Özel Sektörün Tam Kalbinde</h4>
+                            <p class="text-sm text-gray-600">İnsan Kaynakları yönetiminden denetim şirketlerine, finans ve muhasebeden danışmanlık firmalarına kadar iş dünyasının her alanında yer alma şansı.</p>
+                        </div>
+                        <div class="p-6 bg-gray-50 rounded-2xl hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-graduation-cap text-4xl text-green-600 mb-4"></i>
+                            <h4 class="font-bold text-gray-800 mb-2">Alternatif Kariyer Rotaları</h4>
+                            <p class="text-sm text-gray-600">"Benim yolum daha farklı" diyorsan; akademik dünyada yükselebilir, uluslararası kuruluşlarda veya STK'larda sosyal politikalara yön veren bir uzman olabilirsin.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-ceko-primary p-8 md:p-12 rounded-3xl shadow-lg text-white relative overflow-hidden">
+                    <i class="fa-solid fa-plane absolute bottom-4 right-10 text-6xl text-white/10 transform -rotate-45"></i>
+                    <i class="fa-solid fa-book-open absolute top-10 left-10 text-6xl text-white/10"></i>
+                    
+                    <div class="relative z-10">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-center">Öğrencilere Sunulan Fırsatlar</h3>
+                        <p class="text-center text-blue-100 mb-10 max-w-2xl mx-auto text-base sm:text-lg">Dört yıllık lisans eğitimini sadece amfilerle sınırlamıyor, kariyerini bugünden inşa etmen için güçlü fırsatlar sunuyoruz:</p>
+                        
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
+                                    <i class="fa-solid fa-award text-2xl"></i>
+                                </div>
+                                <h4 class="font-bold text-lg mb-2">Çift Anadal ve Yandal</h4>
+                                <p class="text-sm text-blue-50">İkinci bir alanda diploma alarak uzmanlığını genişletme şansı.</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
+                                    <i class="fa-solid fa-globe text-2xl"></i>
+                                </div>
+                                <h4 class="font-bold text-lg mb-2">Değişim Programları</h4>
+                                <p class="text-sm text-blue-50">Erasmus, Farabi ve Mevlana ile yurt içinde ve yurt dışında vizyon katan akademik deneyimler.</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
+                                    <i class="fa-solid fa-file-contract text-2xl"></i>
+                                </div>
+                                <h4 class="font-bold text-lg mb-2">Güçlü Bir Özgeçmiş</h4>
+                                <p class="text-sm text-blue-50">Sertifikalı eğitimler, çalıştaylar, stajlar ve sosyal sorumluluk projeleriyle sahada pişerek kendini geliştirme imkanı.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ETKİNLİKLER -->
+    <section id="etkinlikler" class="py-20 bg-white scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-ceko-dark mb-4">Öne Çıkan <span class="text-ceko-primary">Etkinliklerimiz</span></h2>
+                    <div class="w-24 h-1 bg-ceko-primary rounded-full"></div>
+                </div>
+                <div class="mt-6 md:mt-0">
+                    <span class="text-gray-500 font-medium"><i class="fa-regular fa-calendar-check mr-2"></i>Dolu dolu bir dönem bizi bekliyor</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80" alt="Ankara Gezisi" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-gray-800/80 text-white px-3 py-1 rounded-full text-xs font-bold shadow backdrop-blur-sm">
+                            Geçmiş Etkinlik
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs text-gray-500 font-semibold mb-2">
+                            <i class="fa-regular fa-calendar mr-2"></i> Güz Dönemi
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Ankara Kültür ve Mesleki Gezisi</h3>
+                        <p class="text-gray-600 text-sm mb-4 flex-grow">Başkent Ankara'da ilgili bakanlıkları ve kurumları ziyaret ettik. Anıtkabir ziyaretimizle tamamladığımız bu gezi bize çok şey kattı.</p>
+                        <div class="mt-auto border-t pt-4 flex justify-between items-center">
+                            <span class="text-ceko-dark text-sm font-semibold"><i class="fa-solid fa-location-dot text-ceko-accent mr-2"></i> Ankara</span>
+                            <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="text-ceko-primary hover:text-ceko-dark text-sm font-semibold transition-colors flex items-center">
+                                <i class="fa-brands fa-instagram mr-1.5 text-base"></i> İncele
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÜYE OL BÖLÜMÜ -->
+    <section id="uye-ol" class="py-24 relative overflow-hidden bg-ceko-dark scroll-mt-20">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-ceko-dark z-0"></div>
+        
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-white/10">
+                <div class="lg:w-2/5 bg-gradient-to-b from-ceko-primary to-ceko-dark p-10 text-white flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4">Ailemize<br>Katıl!</h3>
+                        <p class="text-blue-100 text-sm leading-relaxed mb-8">
+                            Sadece derslerle sınırlı kalma. ULUÇEEİT ile kendini geliştir, sosyalleş ve iş hayatına bir adım önde başla. Kulübümüze resmi kayıt işlemleri, üniversitemizin SKS sistemi üzerinden yapılmaktadır.
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                                    <i class="fa-solid fa-certificate text-ceko-accent"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Sertifikalı Eğitimler</h4>
+                                    <p class="text-xs text-blue-200">CV'ni güçlendirecek belgeler</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                                    <i class="fa-solid fa-people-group text-ceko-accent"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Güçlü Network</h4>
+                                    <p class="text-xs text-blue-200">Mezunlar ve sektör profesyonelleri</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                                    <i class="fa-solid fa-mug-hot text-ceko-accent"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Sosyal Ortam</h4>
+                                    <p class="text-xs text-blue-200">Eğlenceli geziler ve buluşmalar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 text-sm text-blue-200 border-t border-white/20 pt-6">
+                        Sorularınız için: <br>
+                        <a href="mailto:iletisim@uluceeit.com" class="font-semibold text-white hover:text-ceko-accent transition-colors">iletisim@uluceeit.com</a>
+                    </div>
+                </div>
+
+                <div class="lg:w-3/5 p-10 bg-white flex flex-col justify-center items-center text-center">
+                    <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-id-card text-4xl text-ceko-primary"></i>
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">Resmi Üyelik İşlemleri</h3>
+                    <p class="text-gray-600 mb-8 max-w-md text-sm">
+                        ULUÇEEİT ailesinin resmi bir parçası olmak için Uludağ Üniversitesi Topluluk Kayıt Sistemi üzerinden giriş yaparak kulübümüzü seçebilirsiniz.
+                    </p>
+                    
+                    <div class="bg-gray-50 rounded-2xl p-6 mb-8 w-full max-w-md border border-gray-100">
+                        <h4 class="font-semibold text-gray-800 mb-3 text-left flex items-center text-sm">
+                            <i class="fa-solid fa-circle-info text-ceko-primary mr-2"></i>Nasıl Kayıt Olurum?
+                        </h4>
+                        <ol class="text-left text-xs sm:text-sm text-gray-600 space-y-2 list-decimal list-inside">
+                            <li>Aşağıdaki butona tıklayarak SKS sistemine gidin.</li>
+                            <li>Öğrenci numaranız ve şifreniz ile giriş yapın.</li>
+                            <li>Topluluklar listesinden <strong>Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu</strong>'nu bulun.</li>
+                            <li>"Kayıt Ol" butonuna tıklayarak tamamlayın.</li>
+                        </ol>
+                    </div>
+
+                    <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" rel="noopener noreferrer" class="w-full max-w-md flex justify-center items-center py-4 px-6 rounded-xl shadow-md text-base font-bold text-white bg-ceko-primary hover:bg-ceko-dark transition-all transform hover:-translate-y-0.5">
+                        SKS Sistemi Üzerinden Kayıt Ol <i class="fa-solid fa-arrow-up-right-from-square ml-2.5 text-sm"></i>
+                    </a>
+                    
+                    <p class="mt-4 text-xs text-gray-400">
+                        * Resmi Uludağ Üniversitesi sayfasına yönlendirileceksiniz.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHATSAPP GRUBU -->
+    <section class="py-12 bg-ceko-light border-y border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12 border border-green-100 flex flex-col md:flex-row items-center gap-8 justify-between relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-green-50 rounded-full opacity-50 z-0"></div>
+                
+                <div class="text-left relative z-10 flex-1">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold mb-4">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Resmi İletişim Kanalı
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">WhatsApp Grubumuza Katılın!</h3>
+                    <p class="text-gray-600 text-sm sm:text-base">
+                        Duyuruları ilk siz öğrenin, etkinliklerden anında haberdar olun ve ULUÇEEİT ailesiyle doğrudan iletişime geçin.
+                    </p>
+                </div>
+                
+                <div class="relative z-10 flex-shrink-0">
+                    <a href="https://chat.whatsapp.com/" target="_blank" rel="noopener noreferrer" 
+                       class="group inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white px-7 py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-green-200 transform hover:-translate-y-0.5">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        <span>Gruba Katıl</span>
+                    </a>
+                    <p class="text-[11px] text-gray-400 mt-2 text-center">Uludağ Üniversitesi öğrencilerine özeldir.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- YÖNETİM KURULU -->
+    <section id="yonetim-kurulu" class="py-20 bg-gray-50 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-ceko-dark mb-4">2026-2027 <span class="text-ceko-primary">Yönetim Kurulumuz</span></h2>
+                <div class="w-24 h-1 bg-ceko-accent mx-auto rounded-full"></div>
+                <p class="mt-6 text-gray-600 max-w-3xl mx-auto text-base sm:text-lg">
+                    ULUÇEEİT'i daha ileriye taşımak ve "Geleceğe Yön Ver" mottomuzu yaşatmak için özveriyle çalışan ekibimiz.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 text-center flex flex-col items-center group">
+                    <div class="w-20 h-20 bg-ceko-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-ceko-primary transition-colors">
+                        <i class="fa-solid fa-user-tie text-3xl text-ceko-primary group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">Burak Efe Türk</h3>
+                    <p class="text-ceko-primary text-sm font-medium mt-1">Yönetim Kurulu Başkanı</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 text-center flex flex-col items-center group">
+                    <div class="w-20 h-20 bg-ceko-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-ceko-primary transition-colors">
+                        <i class="fa-solid fa-user text-3xl text-ceko-primary group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">Melis Ceyda Öztürk</h3>
+                    <p class="text-ceko-primary text-sm font-medium mt-1">Yönetim Kurulu Başkan Yrd.</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 text-center flex flex-col items-center group">
+                    <div class="w-20 h-20 bg-ceko-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-ceko-primary transition-colors">
+                        <i class="fa-solid fa-user text-3xl text-ceko-primary group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">Yağmur Yetiş</h3>
+                    <p class="text-ceko-primary text-sm font-medium mt-1">Yönetim Kurulu Başkan Yrd.</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 text-center flex flex-col items-center group">
+                    <div class="w-20 h-20 bg-ceko-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-ceko-primary transition-colors">
+                        <i class="fa-solid fa-user-gear text-3xl text-ceko-primary group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">Efe Budak</h3>
+                    <p class="text-ceko-primary text-sm font-medium mt-1">Genel Koordinatör</p>
+                </div>
+            </div>
+
+            <!-- DEPARTMANLAR -->
+            <div class="mt-16">
+                <h3 class="text-xl sm:text-2xl font-bold text-center text-gray-800 mb-8">Departmanlarımız</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
+                    
+                    <div class="bg-white border-l-4 border-ceko-accent p-4 shadow-sm rounded-r-xl cursor-pointer group transition-all duration-300 hover:shadow-md komite-karti w-full" onclick="toggleKomite(this)">
+                        <div class="flex justify-between items-center">
+                            <p class="font-bold text-gray-700 text-sm">Sponsorluk ve Finans</p>
+                            <i class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-300 transform"></i>
+                        </div>
+                        <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
+                            <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600 pb-1">
+                                <ul class="space-y-1.5 list-disc list-inside">
+                                    <li>Osman Eren Kahveci</li>
+                                    <li>Kemal Göç</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border-l-4 border-ceko-secondary p-4 shadow-sm rounded-r-xl cursor-pointer group transition-all duration-300 hover:shadow-md komite-karti w-full" onclick="toggleKomite(this)">
+                        <div class="flex justify-between items-center">
+                            <p class="font-bold text-gray-700 text-sm">Organizasyon ve Etkinlik</p>
+                            <i class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-300 transform"></i>
+                        </div>
+                        <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
+                            <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600 pb-1">
+                                <ul class="space-y-1.5 list-disc list-inside">
+                                    <li>İpek Sarıoğlu</li>
+                                    <li>Esma Şen</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border-l-4 border-ceko-primary p-4 shadow-sm rounded-r-xl cursor-pointer group transition-all duration-300 hover:shadow-md komite-karti w-full" onclick="toggleKomite(this)">
+                        <div class="flex justify-between items-center">
+                            <p class="font-bold text-gray-700 text-sm">Sosyal Medya ve Tasarım</p>
+                            <i class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-300 transform"></i>
+                        </div>
+                        <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
+                            <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600 pb-1">
+                                <ul class="space-y-1.5 list-disc list-inside">
+                                    <li>Nilsu Gülen</li>
+                                    <li>Yavuz Selim Ekinci</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border-l-4 border-gray-800 p-4 shadow-sm rounded-r-xl cursor-pointer group transition-all duration-300 hover:shadow-md komite-karti w-full" onclick="toggleKomite(this)">
+                        <div class="flex justify-between items-center">
+                            <p class="font-bold text-gray-700 text-sm">Halkla İlişkiler ve İK</p>
+                            <i class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-300 transform"></i>
+                        </div>
+                        <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
+                            <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600 pb-1">
+                                <ul class="space-y-1.5 list-disc list-inside">
+                                    <li>İlayda Şentürk</li>
+                                    <li>Şevval Sezgin</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="iletisim" class="bg-ceko-dark text-white pt-16 pb-8 border-t border-gray-800 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-12">
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="OJGELDİNGİİİİİİİİİİZ.png" alt="ULUÇEEİT Logo" class="h-10 w-10 object-contain bg-white rounded-full p-0.5 border border-slate-200" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                        <div class="hidden h-10 w-10 rounded-xl bg-ceko-primary text-white flex items-center justify-center font-extrabold text-base">
+                            UÇ
+                        </div>
+                        <span class="font-bold text-xl text-white">ULUÇEEİT</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-6">
+                        Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu (ULUÇEEİT). Geleceğe Yön Ver!
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-ceko-accent hover:text-ceko-dark transition-colors" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram text-lg"></i>
+                        </a>
+                        <a href="#" class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-ceko-accent hover:text-ceko-dark transition-colors" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-ceko-accent hover:text-ceko-dark transition-colors" aria-label="LinkedIn">
+                            <i class="fa-brands fa-linkedin-in text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-base font-bold mb-6 text-white border-b border-gray-800 pb-2 inline-block">Hızlı Bağlantılar</h4>
+                    <ul class="space-y-2.5 text-sm text-gray-400">
+                        <li><a href="#hakkimizda" class="hover:text-ceko-accent transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Hakkımızda</a></li>
+                        <li><a href="#etkinlikler" class="hover:text-ceko-accent transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Geçmiş Etkinlikler</a></li>
+                        <li><a href="#uye-ol" class="hover:text-ceko-accent transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Üyelik Başvurusu</a></li>
+                        <li><a href="#yonetim-kurulu" class="hover:text-ceko-accent transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Yönetim Kurulu</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-base font-bold mb-6 text-white border-b border-gray-800 pb-2 inline-block">Bize Ulaşın</h4>
+                    <ul class="space-y-3.5 text-sm text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-location-dot mt-1 mr-3 text-ceko-accent"></i>
+                            <span>Bursa Uludağ Üniversitesi<br>İİBF Öğrenci Kulüpleri Odası, Görükle</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa-solid fa-envelope mr-3 text-ceko-accent"></i>
+                            <a href="mailto:iletisim@uluceeit.com" class="hover:text-white transition-colors">iletisim@uluceeit.com</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800/80 pt-8 text-center text-xs text-gray-500 flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2026 Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu. Tüm hakları saklıdır.</p>
+                <p class="mt-2 md:mt-0">Made with <i class="fa-solid fa-heart text-red-500"></i> for BUÜ students.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CHATBOT WIDGET -->
+    <div id="chatbot-container">
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-robot"></i>
+                    <span>ULUÇEEİT Asistanı</span>
+                </div>
+                <i class="fa-solid fa-xmark" id="chatbot-close"></i>
+            </div>
+            <div id="chatbot-messages">
+                <div class="chat-message bot-message">
+                    Merhaba! Ben ULUÇEEİT Asistanı. Kulübümüz, etkinliklerimiz veya kayıt süreci hakkında size nasıl yardımcı olabilirim?
+                </div>
+            </div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Bir soru sorun..." autocomplete="off">
+                <button id="chatbot-send" aria-label="Mesaj Gönder">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <div id="chatbot-button" aria-label="Asistanı Aç">
+            <i class="fa-solid fa-message"></i>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        function toggleKomite(element) {
+            const uyelerDiv = element.querySelector('.komite-uyeler');
+            const icon = element.querySelector('.fa-chevron-down');
+            const isCurrentlyOpen = !uyelerDiv.classList.contains('max-h-0');
+
+            document.querySelectorAll('.komite-uyeler').forEach(el => {
+                el.classList.add('max-h-0');
+                el.classList.remove('max-h-96');
+                el.classList.remove('opacity-100');
+                el.classList.add('opacity-0');
+            });
+
+            document.querySelectorAll('.komite-karti .fa-chevron-down').forEach(el => {
+                el.classList.remove('rotate-180');
+            });
+
+            if (!isCurrentlyOpen) {
+                uyelerDiv.classList.remove('max-h-0');
+                uyelerDiv.classList.add('max-h-96');
+                uyelerDiv.classList.remove('opacity-0');
+                uyelerDiv.classList.add('opacity-100');
+                icon.classList.add('rotate-180');
+            }
+        }
+
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+
+        const chatbotButton = document.getElementById('chatbot-button');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotClose = document.getElementById('chatbot-close');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSend = document.getElementById('chatbot-send');
+
+        chatbotButton.addEventListener('click', () => {
+            chatbotWindow.style.display = chatbotWindow.style.display === 'flex' ? 'none' : 'flex';
+            if (chatbotWindow.style.display === 'flex') {
+                chatbotInput.focus();
+            }
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+        });
+
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message', sender === 'user' ? 'user-message' : 'bot-message');
+            messageDiv.textContent = text;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const indicatorDiv = document.createElement('div');
+            indicatorDiv.classList.add('typing-indicator');
+            indicatorDiv.id = 'typing-indicator';
+            indicatorDiv.innerHTML = '<span></span><span></span><span></span>';
+            chatbotMessages.appendChild(indicatorDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        function getBotResponse(input) {
+            const lower = input.toLowerCase();
+            if (lower.includes('kayıt') || lower.includes('üye') || lower.includes('nasıl katılırım') || lower.includes('sks')) {
+                return "Kayıtlarımız Bursa Uludağ Üniversitesi SKS sistemi üzerinden resmi olarak yapılmaktadır. Sayfamızdaki 'Üye Ol' butonuna tıklayarak doğrudan SKS portalına ulaşabilirsiniz.";
+            } else if (lower.includes('etkinlik') || lower.includes('gezi') || lower.includes('ne yapıyorsunuz')) {
+                return "Topluluğumuz mesleki geziler (Ankara kurum ziyaretleri vb.), sertifikalı eğitimler, kariyer panelleri ve sosyal buluşmalar düzenlemektedir. 'Etkinlikler' bölümünden detayları inceleyebilirsiniz.";
+            } else if (lower.includes('iletişim') || lower.includes('nerede') || lower.includes('oda') || lower.includes('mail')) {
+                return "Bize iletisim@uluceeit.com adresinden veya İİBF Öğrenci Kulüpleri Odası'ndan ulaşabilirsiniz.";
+            } else if (lower.includes('whatsapp') || lower.includes('grup')) {
+                return "Resmi WhatsApp grubumuza web sitemizdeki 'WhatsApp Grubumuza Katılın' bölümündeki bağlantı üzerinden katılabilirsiniz!";
+            } else if (lower.includes('yönetim') || lower.includes('başkan') || lower.includes('kim')) {
+                return "Yönetim Kurulu Başkanımız Burak Efe Türk, Başkan Yardımcılarımız Melis Ceyda Öztürk ve Yağmur Yetiş, Genel Koordinatörümüz Efe Budak'tır.";
+            } else {
+                return "Sorunuz için teşekkürler! ULUÇEEİT hakkında üyelik, etkinlikler, yönetim veya iletişim konularında bilgi almak için soru sorabilir veya doğrudan iletisim@uluceeit.com adresinden bize ulaşabilirsiniz.";
+            }
+        }
+
+        async function handleSend() {
+            const message = chatbotInput.value.trim();
+            if (message === '') return;
+            chatbotInput.value = '';
+            appendMessage(message, 'user');
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                hideTypingIndicator();
+                const reply = getBotResponse(message);
+                appendMessage(reply, 'bot');
+            }, 600);
+        }
+
+        chatbotSend.addEventListener('click', handleSend);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+    </script>
+</body>
+</html>

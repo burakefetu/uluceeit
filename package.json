@@ -1,0 +1,12 @@
+{
+  "name": "uluceeit",
+  "version": "1.0.0",
+  "description": "Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu Web Sitesi",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs"
+  },
+  "author": "Burak Efe Türk",
+  "license": "ISC"
+}
