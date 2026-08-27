@@ -33,6 +33,7 @@
                         ceko: {
                             dark: '#070d1e',
                             navy: '#0b1633',
+                            card: '#0f1c3f',
                             primary: '#1d4ed8',
                             secondary: '#38bdf8',
                             accent: '#f59e0b',
@@ -45,12 +46,12 @@
     </script>
     <style>
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-track { background: #070d1e; }
         ::-webkit-scrollbar-thumb { background: #1d4ed8; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #070d1e; }
+        ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
         html { scroll-behavior: smooth; }
         
-        /* Floating Animation */
+        /* Floating & Glow Animations */
         @keyframes float-slow {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
@@ -68,55 +69,56 @@
         .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
 
         #chatbot-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; }
-        #chatbot-button { width: 60px; height: 60px; border-radius: 50%; background-color: #1d4ed8; color: white; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 20px rgba(29, 78, 216, 0.3); transition: transform 0.3s ease, background-color 0.3s ease; }
-        #chatbot-button:hover { transform: scale(1.08); background-color: #070d1e; }
-        #chatbot-window { width: 360px; height: 480px; background-color: white; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); display: none; flex-direction: column; margin-bottom: 15px; overflow: hidden; border: 1px solid #e2e8f0; }
-        #chatbot-header { background-color: #1d4ed8; color: white; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        #chatbot-button { width: 60px; height: 60px; border-radius: 50%; background-color: #1d4ed8; color: white; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 25px rgba(29, 78, 216, 0.4); transition: transform 0.3s ease, background-color 0.3s ease; }
+        #chatbot-button:hover { transform: scale(1.08); background-color: #0b1633; }
+        #chatbot-window { width: 360px; height: 480px; background-color: #0b1633; border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); display: none; flex-direction: column; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        #chatbot-header { background: linear-gradient(135deg, #1d4ed8, #0b1633); color: white; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
         #chatbot-close { cursor: pointer; font-size: 18px; }
-        #chatbot-messages { flex-grow: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #f8fafc; }
+        #chatbot-messages { flex-grow: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #070d1e; }
         .chat-message { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; line-height: 1.45; word-wrap: break-word; }
         .user-message { align-self: flex-end; background-color: #1d4ed8; color: white; border-bottom-right-radius: 4px; }
-        .bot-message { align-self: flex-start; background-color: #e2e8f0; color: #1e293b; border-bottom-left-radius: 4px; }
-        #chatbot-input-container { display: flex; padding: 12px; background-color: white; border-top: 1px solid #e2e8f0; }
-        #chatbot-input { flex-grow: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 20px; outline: none; font-size: 14px; }
-        #chatbot-input:focus { border-color: #1d4ed8; }
+        .bot-message { align-self: flex-start; background-color: #1e293b; color: #f1f5f9; border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
+        #chatbot-input-container { display: flex; padding: 12px; background-color: #0b1633; border-top: 1px solid rgba(255,255,255,0.1); }
+        #chatbot-input { flex-grow: 1; padding: 10px 14px; background-color: #1e293b; color: white; border: 1px solid #334155; border-radius: 20px; outline: none; font-size: 14px; }
+        #chatbot-input:focus { border-color: #38bdf8; }
         #chatbot-send { background-color: #1d4ed8; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-left: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background-color 0.2s; }
-        #chatbot-send:hover { background-color: #070d1e; }
-        .typing-indicator { display: flex; gap: 4px; padding: 10px 14px; background-color: #e2e8f0; border-radius: 16px; align-self: flex-start; border-bottom-left-radius: 4px; width: max-content; }
-        .typing-indicator span { width: 6px; height: 6px; background-color: #64748b; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
+        #chatbot-send:hover { background-color: #2563eb; }
+        .typing-indicator { display: flex; gap: 4px; padding: 10px 14px; background-color: #1e293b; border-radius: 16px; align-self: flex-start; border-bottom-left-radius: 4px; width: max-content; }
+        .typing-indicator span { width: 6px; height: 6px; background-color: #94a3b8; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
         .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
         .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     </style>
 </head>
-<body class="bg-ceko-light font-sans text-gray-800 antialiased selection:bg-ceko-accent selection:text-white">
+<body class="bg-ceko-dark font-sans text-slate-100 antialiased selection:bg-ceko-accent selection:text-slate-950">
 
     <!-- NAVBAR -->
-    <nav class="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50 transition-all duration-300" id="navbar">
+    <nav class="fixed w-full bg-slate-950/85 backdrop-blur-xl border-b border-white/10 shadow-lg z-50 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 
                 <!-- Logo & İsim -->
-                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo(0,0)">
+                <div class="flex-shrink-0 flex items-center gap-3.5 cursor-pointer group" onclick="window.scrollTo(0,0)">
                     <div class="relative flex items-center justify-center">
                         <img src="logo.png" alt="ULUÇEEİT Logo" class="h-12 w-12 object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300" onerror="this.src='logo.jpg'">
                     </div>
                     <div class="flex flex-col justify-center">
-                        <span class="font-black text-xl text-ceko-dark tracking-tight leading-none group-hover:text-ceko-primary transition-colors">ULUÇEEİT</span>
-                        <span class="text-[11px] text-gray-500 font-semibold mt-0.5">Bursa Uludağ Üniversitesi</span>
+                        <span class="font-black text-xl text-white tracking-tight leading-none group-hover:text-blue-400 transition-colors">ULUÇEEİT</span>
+                        <span class="text-[11px] text-slate-400 font-semibold mt-1">Bursa Uludağ Üniversitesi</span>
                     </div>
                 </div>
 
                 <!-- Menü Linkleri -->
                 <div class="hidden md:flex items-center space-x-7">
-                    <a href="#hakkimizda" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors">Hakkımızda</a>
-                    <a href="#etkinlikler" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors">Etkinlikler</a>
-                    <a href="#sponsorlar" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors flex items-center gap-1.5">
-                        <i class="fa-solid fa-tags text-xs text-ceko-accent"></i> Sponsorlar & İndirimler
+                    <a href="#hakkimizda" class="text-slate-300 hover:text-white font-semibold text-sm transition-colors">Hakkımızda</a>
+                    <a href="#kariyer" class="text-slate-300 hover:text-white font-semibold text-sm transition-colors">Kariyer & Gelecek</a>
+                    <a href="#etkinlikler" class="text-slate-300 hover:text-white font-semibold text-sm transition-colors">Etkinlikler</a>
+                    <a href="#sponsorlar" class="text-slate-300 hover:text-amber-400 font-semibold text-sm transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-tags text-xs text-amber-400"></i> Sponsorlar & İndirimler
                     </a>
-                    <a href="#yonetim-kurulu" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors">Yönetim</a>
-                    <a href="#iletisim" class="text-gray-600 hover:text-ceko-primary font-semibold text-sm transition-colors">İletişim</a>
-                    <a href="#uye-ol" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-ceko-dark text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-blue-600/30 transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <a href="#yonetim-kurulu" class="text-slate-300 hover:text-white font-semibold text-sm transition-colors">Yönetim</a>
+                    <a href="#iletisim" class="text-slate-300 hover:text-white font-semibold text-sm transition-colors">İletişim</a>
+                    <a href="#uye-ol" class="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-600/30 transform hover:-translate-y-0.5 flex items-center gap-2">
                         <span>Üye Ol</span>
                         <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
@@ -124,7 +126,7 @@
 
                 <!-- Mobil Menü Butonu -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobileMenuBtn" class="text-gray-700 hover:text-ceko-primary focus:outline-none p-2 rounded-lg" aria-label="Menüyü Aç">
+                    <button id="mobileMenuBtn" class="text-slate-300 hover:text-white focus:outline-none p-2 rounded-lg" aria-label="Menüyü Aç">
                         <i class="fa-solid fa-bars text-2xl"></i>
                     </button>
                 </div>
@@ -132,16 +134,17 @@
         </div>
 
         <!-- Mobil Açılır Menü -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl">
+        <div id="mobileMenu" class="hidden md:hidden bg-slate-900 border-t border-slate-800 absolute w-full shadow-2xl">
             <div class="px-4 pt-3 pb-6 space-y-2">
-                <a href="#hakkimizda" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50">Hakkımızda</a>
-                <a href="#etkinlikler" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50">Etkinlikler</a>
-                <a href="#sponsorlar" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50 flex items-center justify-between">
+                <a href="#hakkimizda" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-200 hover:text-blue-400 hover:bg-slate-800">Hakkımızda</a>
+                <a href="#kariyer" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-200 hover:text-blue-400 hover:bg-slate-800">Kariyer & Gelecek</a>
+                <a href="#etkinlikler" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-200 hover:text-blue-400 hover:bg-slate-800">Etkinlikler</a>
+                <a href="#sponsorlar" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-200 hover:text-amber-400 hover:bg-slate-800 flex items-center justify-between">
                     <span>Sponsorlarımız & İndirimler</span>
-                    <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">Fırsatlar</span>
+                    <span class="bg-amber-500/20 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/30">Fırsatlar</span>
                 </a>
-                <a href="#yonetim-kurulu" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50">Yönetim Kurulu</a>
-                <a href="#iletisim" class="block px-3 py-3 rounded-xl text-base font-semibold text-gray-700 hover:text-ceko-primary hover:bg-blue-50/50">İletişim</a>
+                <a href="#yonetim-kurulu" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-200 hover:text-blue-400 hover:bg-slate-800">Yönetim Kurulu</a>
+                <a href="#iletisim" class="block px-3 py-3 rounded-xl text-base font-semibold text-slate-200 hover:text-blue-400 hover:bg-slate-800">İletişim</a>
                 <a href="#uye-ol" class="block mt-4 text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-3.5 rounded-xl font-bold shadow-md">Hemen Üye Ol</a>
             </div>
         </div>
@@ -290,141 +293,280 @@
 
             </div>
         </div>
-
-        <!-- Alt Yumuşak Geçiş Katmanı -->
-        <div class="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-ceko-light to-transparent pointer-events-none"></div>
     </section>
 
-    <!-- HAKKIMIZDA BÖLÜMÜ -->
-    <section id="hakkimizda" class="py-20 bg-ceko-light relative scroll-mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- HAKKIMIZDA BÖLÜMÜ (YENİLENMİŞ ULTRA-MODERN TASARIM) -->
+    <section id="hakkimizda" class="py-24 bg-[#091124] relative overflow-hidden scroll-mt-20 border-t border-slate-800/80">
+        
+        <!-- Ambient Işıklandırma -->
+        <div class="absolute top-10 left-1/4 w-96 h-96 bg-blue-600/10 blur-[130px] rounded-full pointer-events-none"></div>
+        <div class="absolute bottom-10 right-1/4 w-96 h-96 bg-sky-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <!-- Bölüm Başlığı -->
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-ceko-dark mb-4">Biz Kimiz ve <span class="text-ceko-primary">Ne Yapıyoruz?</span></h2>
-                <div class="w-24 h-1 bg-ceko-accent mx-auto rounded-full mb-8"></div>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs sm:text-sm font-semibold mb-4">
+                    <i class="fa-solid fa-compass text-xs"></i> Temel Değerlerimiz
+                </div>
+                <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
+                    Biz Kimiz ve <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-amber-300">Ne Yapıyoruz?</span>
+                </h2>
+                <div class="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-amber-400 mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg">
+                    Akademik yetkinlik, güçlü iş ağları ve sosyal duyarlılıkla donatılmış, geleceğin çalışma hayatına yön veren öncü topluluk.
+                </p>
             </div>
 
-            <div class="space-y-12">
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div class="bg-gradient-to-br from-ceko-dark to-ceko-primary p-8 rounded-3xl shadow-lg text-white">
-                        <h3 class="text-2xl font-bold mb-6 flex items-center text-ceko-accent">
-                            <i class="fa-solid fa-bullseye mr-3"></i> Misyonumuz
-                        </h3>
-                        <p class="mb-4 text-blue-50 leading-relaxed text-base sm:text-lg">Çalışma hayatının dinamiklerini bilimsel temelde kavrayarak toplumsal ihtiyaçlara yenilikçi çözümler üreten donanımlı profesyoneller yetiştirmek en temel hedefimizdir.</p>
-                        <p class="text-blue-50 leading-relaxed text-base sm:text-lg">Emek piyasalarından sosyal güvenliğe kadar her alanda sahada fark yaratmayı amaçlıyor; akademik yetkinlik ile toplumsal duyarlılığı her zaman omuz omuza yürütüyoruz.</p>
-                    </div>
+            <!-- Misyon & Vizyon Kartları (Kusursuz Renk & Tasarım Uyumu) -->
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                
+                <!-- Misyonumuz Kartı -->
+                <div class="group relative rounded-3xl bg-slate-900/80 border border-slate-800 hover:border-blue-500/50 p-8 sm:p-10 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:-translate-y-1.5">
+                    <div class="absolute top-0 right-0 w-36 h-36 bg-blue-600/10 rounded-full blur-2xl group-hover:bg-blue-600/20 transition-all"></div>
                     
-                    <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
-                        <h3 class="text-2xl font-bold text-ceko-primary mb-6 flex items-center">
-                            <i class="fa-solid fa-eye mr-3 text-ceko-accent"></i> Vizyonumuz
-                        </h3>
-                        <p class="mb-4 text-gray-700 leading-relaxed text-base sm:text-lg">Topluluğumuz; çalışma hayatında sosyal adaleti ve etik değerleri pusula edinen, değişen ekonomiye sadece uyum sağlayan değil, yön veren profesyoneller yetiştirme vizyonuyla hareket eder.</p>
-                        <p class="text-gray-700 leading-relaxed text-base sm:text-lg">Sürdürülebilir kalkınma, güçlü iş ilişkileri ve adil çalışma koşulları inşa etme yolunda fark yaratan bir ses olmayı hedefliyoruz.</p>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Hedefimiz</span>
+                            <h3 class="text-2xl font-extrabold text-white">Misyonumuz</h3>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-300 leading-relaxed text-base sm:text-lg mb-6">
+                        Çalışma hayatının dinamiklerini bilimsel temelde kavrayarak toplumsal ihtiyaçlara yenilikçi çözümler üreten donanımlı profesyoneller yetiştirmek en temel hedefimizdir.
+                    </p>
+
+                    <div class="space-y-3 pt-4 border-t border-slate-800 text-sm text-slate-300">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-check-circle text-blue-400"></i>
+                            <span>Emek piyasaları ve sosyal güvenlikte sahada fark yaratma</span>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-check-circle text-blue-400"></i>
+                            <span>Akademik derinlik ile pratik saha deneyimini birleştirme</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-amber-50">
+                <!-- Vizyonumuz Kartı -->
+                <div class="group relative rounded-3xl bg-slate-900/80 border border-slate-800 hover:border-amber-400/50 p-8 sm:p-10 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:-translate-y-1.5">
+                    <div class="absolute top-0 right-0 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
+                    
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400/30 text-amber-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Gelecek Bakışımız</span>
+                            <h3 class="text-2xl font-extrabold text-white">Vizyonumuz</h3>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-300 leading-relaxed text-base sm:text-lg mb-6">
+                        Topluluğumuz; çalışma hayatında sosyal adaleti ve etik değerleri pusula edinen, değişen küresel ekonomiye sadece uyum sağlayan değil, bizzat yön veren liderler yetiştirme vizyonuyla hareket eder.
+                    </p>
+
+                    <div class="space-y-3 pt-4 border-t border-slate-800 text-sm text-slate-300">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-check-circle text-amber-400"></i>
+                            <span>Sürdürülebilir kalkınma ve adil çalışma koşulları inşası</span>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-check-circle text-amber-400"></i>
+                            <span>İş dünyasında sesi duyulan, vizyoner profesyonel ağı</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- KARİYER & MEZUNİYET ROTASI BÖLÜMÜ (YENİLENMİŞ MODERN TASARIM) -->
+    <section id="kariyer" class="py-24 bg-ceko-dark relative overflow-hidden scroll-mt-20 border-t border-slate-800/60">
+        
+        <div class="absolute top-1/3 right-10 w-[450px] h-[450px] bg-blue-600/15 blur-[140px] rounded-full pointer-events-none"></div>
+        <div class="absolute bottom-10 left-10 w-[450px] h-[450px] bg-amber-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs sm:text-sm font-semibold mb-4">
+                    <i class="fa-solid fa-briefcase text-xs"></i> Kariyer Haritası
+                </div>
+                <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
+                    Mezun Olunca <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-sky-300 to-blue-400">Ne İş Yapacağım?</span>
+                </h2>
+                <div class="w-24 h-1.5 bg-gradient-to-r from-amber-400 to-blue-500 mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg">
+                    Kariyer yolculuğunda sınırları sen çizersin! ÇEEİ bölümü, hem kamuda hem özel sektörde oldukça prestijli ve geniş çalışma alanları sunar.
+                </p>
+            </div>
+
+            <!-- 3'lü Modern Kariyer Matrisi -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                
+                <!-- Kariyer 1: Kamu Sektörü -->
+                <div class="group rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 p-8 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-400">A Grubu & Bürokrasi</span>
+                        <h3 class="text-2xl font-bold text-white mb-4 mt-1">Devletin Kilit Noktalarında</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Çalışma ve Sosyal Güvenlik Bakanlığı, İŞKUR, SGK müfettişlik ve uzmanlıkları; Kaymakamlık, Valilik ve İdari Hakimlik gibi prestijli kamu kariyerleri.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800/80">
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-300 border border-blue-500/20">#SGKUzmanı</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-300 border border-blue-500/20">#Kaymakamlık</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-300 border border-blue-500/20">#Müfettişlik</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kariyer 2: Özel Sektör & İK -->
+                <div class="group rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-amber-400/50 p-8 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/30 text-amber-400 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Kurumsal Dünya</span>
+                        <h3 class="text-2xl font-bold text-white mb-4 mt-1">Özel Sektörün Kalbinde</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Global ve yerel holdinglerde İnsan Kaynakları (İK) Direktörlüğü, Bordrolama & Özlük İşleri, Big4 Denetim & Danışmanlık ve Yetenek Yönetimi.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800/80">
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/20">#İnsanKaynakları</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/20">#BordroUzmanı</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/20">#Danışmanlık</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kariyer 3: Global & Alternatif Rotalar -->
+                <div class="group rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-emerald-400/50 p-8 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Uluslararası & Akademi</span>
+                        <h3 class="text-2xl font-bold text-white mb-4 mt-1">Alternatif Kariyer Rotaları</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Üniversitelerde akademik kariyer, ILO (Uluslararası Çalışma Örgütü), Birleşmiş Milletler, sendikalar ve uluslararası STK'larda sosyal politika uzmanlığı.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800/80">
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">#Akademi</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">#ILO</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">#SosyalPolitika</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Öğrencilere Sunulan Fırsatlar Paneli -->
+            <div class="rounded-3xl bg-gradient-to-r from-blue-900/80 via-slate-900 to-slate-900 border border-blue-500/30 p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+                <div class="relative z-10">
                     <div class="text-center mb-10">
-                        <h3 class="text-2xl md:text-3xl font-bold text-ceko-dark mb-4">Mezun Olunca Ne İş Yapacağım?</h3>
-                        <p class="text-gray-600 text-base sm:text-lg">Kariyer yolculuğunda sınırları sen çizersin! ÇEEİ bölümü, hem kamu hem de özel sektörde oldukça geniş ve prestijli bir çalışma yelpazesi sunar:</p>
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3">Öğrencilere Sunulan Fırsatlar</h3>
+                        <p class="text-slate-300 max-w-xl mx-auto text-sm sm:text-base">Dört yıllık lisans eğitimini sadece amfilerle sınırlamıyor, kariyerini bugünden inşa etmen için güçlü imkanlar sunuyoruz:</p>
                     </div>
-                    
-                    <div class="grid md:grid-cols-3 gap-6">
-                        <div class="p-6 bg-gray-50 rounded-2xl hover:shadow-md transition-shadow">
-                            <i class="fa-solid fa-building-columns text-4xl text-ceko-primary mb-4"></i>
-                            <h4 class="font-bold text-gray-800 mb-2">Devletin Kilit Noktalarında</h4>
-                            <p class="text-sm text-gray-600">Çalışma ve Sosyal Güvenlik Bakanlığı, İŞKUR, SGK gibi kurumlarda uzmanlık; Kaymakamlık, Valilik ve İdari Hakimlik gibi prestijli kariyer fırsatları.</p>
-                        </div>
-                        <div class="p-6 bg-gray-50 rounded-2xl hover:shadow-md transition-shadow">
-                            <i class="fa-solid fa-building text-4xl text-ceko-accent mb-4"></i>
-                            <h4 class="font-bold text-gray-800 mb-2">Özel Sektörün Tam Kalbinde</h4>
-                            <p class="text-sm text-gray-600">İnsan Kaynakları yönetiminden denetim şirketlerine, finans ve muhasebeden danışmanlık firmalarına kadar iş dünyasının her alanında yer alma şansı.</p>
-                        </div>
-                        <div class="p-6 bg-gray-50 rounded-2xl hover:shadow-md transition-shadow">
-                            <i class="fa-solid fa-graduation-cap text-4xl text-green-600 mb-4"></i>
-                            <h4 class="font-bold text-gray-800 mb-2">Alternatif Kariyer Rotaları</h4>
-                            <p class="text-sm text-gray-600">"Benim yolum daha farklı" diyorsan; akademik dünyada yükselebilir, uluslararası kuruluşlarda veya STK'larda sosyal politikalara yön veren bir uzman olabilirsin.</p>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="bg-ceko-primary p-8 md:p-12 rounded-3xl shadow-lg text-white relative overflow-hidden">
-                    <i class="fa-solid fa-plane absolute bottom-4 right-10 text-6xl text-white/10 transform -rotate-45"></i>
-                    <i class="fa-solid fa-book-open absolute top-10 left-10 text-6xl text-white/10"></i>
-                    
-                    <div class="relative z-10">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-center">Öğrencilere Sunulan Fırsatlar</h3>
-                        <p class="text-center text-blue-100 mb-10 max-w-2xl mx-auto text-base sm:text-lg">Dört yıllık lisans eğitimini sadece amfilerle sınırlamıyor, kariyerini bugünden inşa etmen için güçlü fırsatlar sunuyoruz:</p>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="text-center p-6 rounded-2xl bg-slate-800/50 border border-slate-700/60">
+                            <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <h4 class="font-bold text-lg text-white mb-2">Çift Anadal ve Yandal</h4>
+                            <p class="text-xs sm:text-sm text-slate-300">İkinci bir alanda resmi diploma alarak uzmanlığını genişletme şansı.</p>
+                        </div>
                         
-                        <div class="grid md:grid-cols-3 gap-8">
-                            <div class="text-center">
-                                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                                    <i class="fa-solid fa-award text-2xl"></i>
-                                </div>
-                                <h4 class="font-bold text-lg mb-2">Çift Anadal ve Yandal</h4>
-                                <p class="text-sm text-blue-50">İkinci bir alanda diploma alarak uzmanlığını genişletme şansı.</p>
+                        <div class="text-center p-6 rounded-2xl bg-slate-800/50 border border-slate-700/60">
+                            <div class="w-14 h-14 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                                <i class="fa-solid fa-plane-departure"></i>
                             </div>
-                            <div class="text-center">
-                                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                                    <i class="fa-solid fa-globe text-2xl"></i>
-                                </div>
-                                <h4 class="font-bold text-lg mb-2">Değişim Programları</h4>
-                                <p class="text-sm text-blue-50">Erasmus, Farabi ve Mevlana ile yurt içinde ve yurt dışında vizyon katan akademik deneyimler.</p>
+                            <h4 class="font-bold text-lg text-white mb-2">Değişim Programları</h4>
+                            <p class="text-xs sm:text-sm text-slate-300">Erasmus+, Farabi ve Mevlana ile yurt içinde ve yurt dışında küresel vizyon.</p>
+                        </div>
+                        
+                        <div class="text-center p-6 rounded-2xl bg-slate-800/50 border border-slate-700/60">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                                <i class="fa-solid fa-file-contract"></i>
                             </div>
-                            <div class="text-center">
-                                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                                    <i class="fa-solid fa-file-contract text-2xl"></i>
-                                </div>
-                                <h4 class="font-bold text-lg mb-2">Güçlü Bir Özgeçmiş</h4>
-                                <p class="text-sm text-blue-50">Sertifikalı eğitimler, çalıştaylar, stajlar ve sosyal sorumluluk projeleriyle sahada pişerek kendini geliştirme imkanı.</p>
-                            </div>
+                            <h4 class="font-bold text-lg text-white mb-2">Güçlü Bir Özgeçmiş</h4>
+                            <p class="text-xs sm:text-sm text-slate-300">Sertifikalı eğitimler, mesleki geziler, çalıştaylar ve güçlü staj referansları.</p>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
 
     <!-- ETKİNLİKLER -->
-    <section id="etkinlikler" class="py-20 bg-white scroll-mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+    <section id="etkinlikler" class="py-24 bg-[#091124] relative overflow-hidden scroll-mt-20 border-t border-slate-800/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-14">
                 <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-ceko-dark mb-4">Öne Çıkan <span class="text-ceko-primary">Etkinliklerimiz</span></h2>
-                    <div class="w-24 h-1 bg-ceko-primary rounded-full"></div>
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs sm:text-sm font-semibold mb-3">
+                        <i class="fa-solid fa-calendar-star text-xs"></i> Topluluk Takvimi
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight">Öne Çıkan <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300">Etkinliklerimiz</span></h2>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-sky-400 rounded-full mt-4"></div>
                 </div>
                 <div class="mt-6 md:mt-0">
-                    <span class="text-gray-500 font-medium"><i class="fa-regular fa-calendar-check mr-2"></i>Dolu dolu bir dönem bizi bekliyor</span>
+                    <span class="text-slate-400 font-medium text-sm"><i class="fa-regular fa-calendar-check mr-2 text-blue-400"></i>Dolu dolu bir dönem bizi bekliyor</span>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="relative h-48">
-                        <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80" alt="Ankara Gezisi" class="w-full h-full object-cover">
-                        <div class="absolute top-4 right-4 bg-gray-800/80 text-white px-3 py-1 rounded-full text-xs font-bold shadow backdrop-blur-sm">
+                
+                <!-- Etkinlik Kartı 1 -->
+                <div class="bg-slate-900/90 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 hover:border-blue-500/50 hover:-translate-y-2 transition-all duration-300 flex flex-col group">
+                    <div class="relative h-52 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80" alt="Ankara Gezisi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-slate-950/80 text-white px-3.5 py-1 rounded-full text-xs font-bold shadow backdrop-blur-md border border-white/10">
                             Geçmiş Etkinlik
                         </div>
                     </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <div class="text-xs text-gray-500 font-semibold mb-2">
-                            <i class="fa-regular fa-calendar mr-2"></i> Güz Dönemi
+                    <div class="p-7 flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs text-blue-400 font-semibold mb-2 flex items-center">
+                                <i class="fa-regular fa-calendar mr-2"></i> Güz Dönemi
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3 leading-snug">Ankara Kültür ve Mesleki Gezisi</h3>
+                            <p class="text-slate-300 text-sm mb-6 leading-relaxed">Başkent Ankara'da ilgili bakanlıkları ve kurumları ziyaret ettik. Anıtkabir ziyaretimizle tamamladığımız bu gezi bize vizyon kattı.</p>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Ankara Kültür ve Mesleki Gezisi</h3>
-                        <p class="text-gray-600 text-sm mb-4 flex-grow">Başkent Ankara'da ilgili bakanlıkları ve kurumları ziyaret ettik. Anıtkabir ziyaretimizle tamamladığımız bu gezi bize çok şey kattı.</p>
-                        <div class="mt-auto border-t pt-4 flex justify-between items-center">
-                            <span class="text-ceko-dark text-sm font-semibold"><i class="fa-solid fa-location-dot text-ceko-accent mr-2"></i> Ankara</span>
-                            <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="text-ceko-primary hover:text-ceko-dark text-sm font-semibold transition-colors flex items-center">
-                                <i class="fa-brands fa-instagram mr-1.5 text-base"></i> İncele
+                        <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+                            <span class="text-slate-300 text-sm font-semibold"><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Ankara</span>
+                            <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-sky-300 text-sm font-bold transition-colors flex items-center gap-1.5">
+                                <i class="fa-brands fa-instagram text-base"></i> İncele
                             </a>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
     <!-- SPONSORLAR & ÜYE AVANTAJLARI -->
-    <section id="sponsorlar" class="py-24 bg-slate-900 text-white relative overflow-hidden scroll-mt-20">
+    <section id="sponsorlar" class="py-24 bg-ceko-dark text-white relative overflow-hidden scroll-mt-20 border-t border-slate-800/60">
         <!-- Arka Plan Efektleri -->
         <div class="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/15 blur-[120px] rounded-full pointer-events-none"></div>
         <div class="absolute bottom-0 left-10 w-96 h-96 bg-amber-500/10 blur-[130px] rounded-full pointer-events-none"></div>
@@ -463,7 +605,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="sponsorCardsGrid">
                 
                 <!-- Sponsor 1: Kafe & Coffee Shop -->
-                <div class="sponsor-card bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="kafe">
+                <div class="sponsor-card bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="kafe">
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
@@ -488,14 +630,14 @@
                         </p>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
+                    <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
                         <span class="flex items-center"><i class="fa-solid fa-location-dot text-amber-400 mr-1.5"></i> Görükle Yerleşkesi</span>
                         <span class="text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">Üye Kartı İle</span>
                     </div>
                 </div>
 
                 <!-- Sponsor 2: Dil Okulu & Eğitim -->
-                <div class="sponsor-card bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-blue-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="egitim">
+                <div class="sponsor-card bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-blue-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="egitim">
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
@@ -520,14 +662,14 @@
                         </p>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
+                    <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
                         <span class="flex items-center"><i class="fa-solid fa-location-dot text-blue-400 mr-1.5"></i> Nilüfer / FSM & Online</span>
                         <span class="text-blue-400 font-semibold bg-blue-500/10 px-2.5 py-1 rounded-md border border-blue-500/20">Sertifikalı</span>
                     </div>
                 </div>
 
                 <!-- Sponsor 3: Kariyer & İK Eğitim Enstitüsü -->
-                <div class="sponsor-card bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-purple-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="egitim">
+                <div class="sponsor-card bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-purple-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="egitim">
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
@@ -552,14 +694,14 @@
                         </p>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
+                    <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
                         <span class="flex items-center"><i class="fa-solid fa-laptop text-purple-400 mr-1.5"></i> Online / Canlı Akademi</span>
                         <span class="text-purple-400 font-semibold bg-purple-500/10 px-2.5 py-1 rounded-md border border-purple-500/20">CV Güçlendirme</span>
                     </div>
                 </div>
 
                 <!-- Sponsor 4: Kırtasiye, Baskı & Copy Center -->
-                <div class="sponsor-card bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="hizmet">
+                <div class="sponsor-card bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="hizmet">
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
@@ -584,14 +726,14 @@
                         </p>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
+                    <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
                         <span class="flex items-center"><i class="fa-solid fa-location-dot text-emerald-400 mr-1.5"></i> Görükle Çarşı</span>
                         <span class="text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">Hızlı Baskı</span>
                     </div>
                 </div>
 
                 <!-- Sponsor 5: Spor & Fitness Kulübü -->
-                <div class="sponsor-card bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-red-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="hizmet">
+                <div class="sponsor-card bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-red-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="hizmet">
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
@@ -616,14 +758,14 @@
                         </p>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
+                    <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
                         <span class="flex items-center"><i class="fa-solid fa-location-dot text-red-400 mr-1.5"></i> Görükle Girişi</span>
                         <span class="text-red-400 font-semibold bg-red-500/10 px-2.5 py-1 rounded-md border border-red-500/20">Öğrenci Dostu</span>
                     </div>
                 </div>
 
                 <!-- Sponsor 6: Restoran & Lezzet Durağı -->
-                <div class="sponsor-card bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="kafe">
+                <div class="sponsor-card bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-400/50 rounded-3xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between backdrop-blur-sm group" data-category="kafe">
                     <div>
                         <div class="flex justify-between items-start mb-5">
                             <div class="flex items-center gap-3.5">
@@ -648,7 +790,7 @@
                         </p>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
+                    <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
                         <span class="flex items-center"><i class="fa-solid fa-location-dot text-amber-400 mr-1.5"></i> Görükle Ana Cadde</span>
                         <span class="text-amber-400 font-semibold bg-amber-500/10 px-2.5 py-1 rounded-md border border-amber-500/20">Masada Geçerli</span>
                     </div>
@@ -678,81 +820,88 @@
     </section>
 
     <!-- ÜYE OL BÖLÜMÜ -->
-    <section id="uye-ol" class="py-24 relative overflow-hidden bg-ceko-dark scroll-mt-20">
-        <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-ceko-dark z-0"></div>
+    <section id="uye-ol" class="py-24 relative overflow-hidden bg-[#091124] scroll-mt-20 border-t border-slate-800/60">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-950/40 to-slate-950 z-0"></div>
         
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-white/10">
-                <div class="lg:w-2/5 bg-gradient-to-b from-ceko-primary to-ceko-dark p-10 text-white flex flex-col justify-between">
+            <div class="bg-slate-900/90 rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-white/10 backdrop-blur-xl">
+                
+                <!-- Sol Bilgi Kolonu -->
+                <div class="lg:w-2/5 bg-gradient-to-b from-blue-900/70 to-slate-950 p-8 sm:p-10 text-white flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-800">
                     <div>
-                        <h3 class="text-3xl font-bold mb-4">Ailemize<br>Katıl!</h3>
-                        <p class="text-blue-100 text-sm leading-relaxed mb-8">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs font-semibold mb-4 border border-blue-500/30">
+                            <i class="fa-solid fa-user-plus text-xs"></i> 2026-2027 Dönemi
+                        </div>
+                        <h3 class="text-3xl font-extrabold mb-4">Ailemize<br>Katıl!</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-8">
                             Sadece derslerle sınırlı kalma. ULUÇEEİT ile kendini geliştir, sosyalleş, indirimlerden faydalan ve iş hayatına bir adım önde başla. Kulübümüze resmi kayıt işlemleri, üniversitemizin SKS sistemi üzerinden yapılmaktadır.
                         </p>
                         
                         <div class="space-y-6">
                             <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-                                    <i class="fa-solid fa-certificate text-ceko-accent"></i>
+                                <div class="w-11 h-11 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+                                    <i class="fa-solid fa-certificate"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-semibold">Sertifikalı Eğitimler</h4>
-                                    <p class="text-xs text-blue-200">CV'ni güçlendirecek belgeler</p>
+                                    <h4 class="font-bold text-white text-sm">Sertifikalı Eğitimler</h4>
+                                    <p class="text-xs text-slate-400">CV'ni güçlendirecek resmi belgeler</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-                                    <i class="fa-solid fa-tags text-ceko-accent"></i>
+                                <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
+                                    <i class="fa-solid fa-tags"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-semibold">Özel İndirimler</h4>
-                                    <p class="text-xs text-blue-200">Anlaşmalı mekan ve kurslarda %30'a varan indirim</p>
+                                    <h4 class="font-bold text-white text-sm">Özel İndirimler</h4>
+                                    <p class="text-xs text-slate-400">Anlaşmalı mekanlarda %30'a varan indirim</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-                                    <i class="fa-solid fa-people-group text-ceko-accent"></i>
+                                <div class="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+                                    <i class="fa-solid fa-people-group"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-semibold">Güçlü Network</h4>
-                                    <p class="text-xs text-blue-200">Mezunlar ve sektör profesyonelleri</p>
+                                    <h4 class="font-bold text-white text-sm">Güçlü Network</h4>
+                                    <p class="text-xs text-slate-400">Mezunlar ve sektör profesyonelleri</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="mt-12 text-sm text-blue-200 border-t border-white/20 pt-6">
+                    <div class="mt-10 text-xs text-slate-400 border-t border-slate-800 pt-5">
                         Sorularınız için: <br>
-                        <a href="mailto:iletisim@uluceeit.com" class="font-semibold text-white hover:text-ceko-accent transition-colors">iletisim@uluceeit.com</a>
+                        <a href="mailto:iletisim@uluceeit.com" class="font-bold text-white hover:text-amber-400 transition-colors text-sm">iletisim@uluceeit.com</a>
                     </div>
                 </div>
 
-                <div class="lg:w-3/5 p-10 bg-white flex flex-col justify-center items-center text-center">
-                    <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fa-solid fa-id-card text-4xl text-ceko-primary"></i>
+                <!-- Sağ Adımlar & Buton Kolonu -->
+                <div class="lg:w-3/5 p-8 sm:p-12 bg-slate-900/60 flex flex-col justify-center items-center text-center">
+                    <div class="w-20 h-20 bg-blue-600/20 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/30 text-blue-400 shadow-inner">
+                        <i class="fa-solid fa-id-card text-4xl"></i>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">Resmi Üyelik İşlemleri</h3>
-                    <p class="text-gray-600 mb-8 max-w-md text-sm">
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">Resmi Üyelik İşlemleri</h3>
+                    <p class="text-slate-300 mb-8 max-w-md text-sm">
                         ULUÇEEİT ailesinin resmi bir parçası olmak için Uludağ Üniversitesi Topluluk Kayıt Sistemi üzerinden giriş yaparak kulübümüzü seçebilirsiniz.
                     </p>
                     
-                    <div class="bg-gray-50 rounded-2xl p-6 mb-8 w-full max-w-md border border-gray-100">
-                        <h4 class="font-semibold text-gray-800 mb-3 text-left flex items-center text-sm">
-                            <i class="fa-solid fa-circle-info text-ceko-primary mr-2"></i>Nasıl Kayıt Olurum?
+                    <div class="bg-slate-800/80 rounded-2xl p-6 mb-8 w-full max-w-md border border-slate-700/80 text-left">
+                        <h4 class="font-bold text-white mb-3 flex items-center text-sm">
+                            <i class="fa-solid fa-circle-info text-blue-400 mr-2"></i>Nasıl Kayıt Olurum?
                         </h4>
-                        <ol class="text-left text-xs sm:text-sm text-gray-600 space-y-2 list-decimal list-inside">
+                        <ol class="text-xs sm:text-sm text-slate-300 space-y-2 list-decimal list-inside">
                             <li>Aşağıdaki butona tıklayarak SKS sistemine gidin.</li>
                             <li>Öğrenci numaranız ve şifreniz ile giriş yapın.</li>
                             <li>Topluluklar listesinden <strong>Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu</strong>'nu bulun.</li>
-                            <li>"Kayıt Ol" butonuna tıklayarak tamamlayın.</li>
+                            <li>"Kayıt Ol" butonuna tıklayarak başvuruyu tamamlayın.</li>
                         </ol>
                     </div>
 
-                    <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" rel="noopener noreferrer" class="w-full max-w-md flex justify-center items-center py-4 px-6 rounded-xl shadow-md text-base font-bold text-white bg-ceko-primary hover:bg-ceko-dark transition-all transform hover:-translate-y-0.5">
-                        SKS Sistemi Üzerinden Kayıt Ol <i class="fa-solid fa-arrow-up-right-from-square ml-2.5 text-sm"></i>
+                    <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" rel="noopener noreferrer" class="w-full max-w-md flex justify-center items-center py-4 px-6 rounded-2xl shadow-xl text-base font-bold text-white bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 transition-all transform hover:-translate-y-0.5">
+                        <span>SKS Sistemi Üzerinden Kayıt Ol</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square ml-2.5 text-sm"></i>
                     </a>
                     
-                    <p class="mt-4 text-xs text-gray-400">
+                    <p class="mt-4 text-xs text-slate-400">
                         * Resmi Uludağ Üniversitesi sayfasına yönlendirileceksiniz.
                     </p>
                 </div>
@@ -761,90 +910,94 @@
     </section>
 
     <!-- WHATSAPP GRUBU -->
-    <section class="py-12 bg-ceko-light border-y border-gray-200">
+    <section class="py-12 bg-ceko-dark border-y border-slate-800/80">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12 border border-green-100 flex flex-col md:flex-row items-center gap-8 justify-between relative overflow-hidden">
-                <div class="absolute -right-10 -top-10 w-40 h-40 bg-green-50 rounded-full opacity-50 z-0"></div>
+            <div class="bg-slate-900/90 rounded-3xl shadow-2xl p-8 md:p-12 border border-emerald-500/20 flex flex-col md:flex-row items-center gap-8 justify-between relative overflow-hidden backdrop-blur-xl">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl z-0"></div>
                 
                 <div class="text-left relative z-10 flex-1">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold mb-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs font-semibold mb-4 border border-emerald-500/30">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Resmi İletişim Kanalı
                     </div>
-                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">WhatsApp Grubumuza Katılın!</h3>
-                    <p class="text-gray-600 text-sm sm:text-base">
+                    <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3">WhatsApp Grubumuza Katılın!</h3>
+                    <p class="text-slate-300 text-sm sm:text-base">
                         Duyuruları ilk siz öğrenin, üye indirimlerinden anında haberdar olun ve ULUÇEEİT ailesiyle doğrudan iletişime geçin.
                     </p>
                 </div>
                 
                 <div class="relative z-10 flex-shrink-0">
                     <a href="https://chat.whatsapp.com/" target="_blank" rel="noopener noreferrer" 
-                       class="group inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white px-7 py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-green-200 transform hover:-translate-y-0.5">
+                       class="group inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#128C7E] hover:to-[#075E54] text-white px-7 py-3.5 rounded-2xl font-bold text-base transition-all shadow-xl shadow-emerald-600/30 transform hover:-translate-y-0.5">
                         <i class="fa-brands fa-whatsapp text-xl"></i>
                         <span>Gruba Katıl</span>
                     </a>
-                    <p class="text-[11px] text-gray-400 mt-2 text-center">Uludağ Üniversitesi öğrencilerine özeldir.</p>
+                    <p class="text-[11px] text-slate-400 mt-2 text-center">Uludağ Üniversitesi öğrencilerine özeldir.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- YÖNETİM KURULU -->
-    <section id="yonetim-kurulu" class="py-20 bg-gray-50 scroll-mt-20">
+    <section id="yonetim-kurulu" class="py-24 bg-[#091124] scroll-mt-20 border-t border-slate-800/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-ceko-dark mb-4">2026-2027 <span class="text-ceko-primary">Yönetim Kurulumuz</span></h2>
-                <div class="w-24 h-1 bg-ceko-accent mx-auto rounded-full"></div>
-                <p class="mt-6 text-gray-600 max-w-3xl mx-auto text-base sm:text-lg">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs sm:text-sm font-semibold mb-4">
+                    <i class="fa-solid fa-users-gear text-xs"></i> Liderlik Ekibi
+                </div>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4">2026-2027 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300">Yönetim Kurulumuz</span></h2>
+                <div class="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-amber-400 mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg">
                     ULUÇEEİT'i daha ileriye taşımak ve "Geleceğe Yön Ver" mottomuzu yaşatmak için özveriyle çalışan ekibimiz.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 text-center flex flex-col items-center group">
-                    <div class="w-20 h-20 bg-ceko-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-ceko-primary transition-colors">
-                        <i class="fa-solid fa-user-tie text-3xl text-ceko-primary group-hover:text-white transition-colors"></i>
+                
+                <div class="bg-slate-900/90 rounded-3xl p-7 shadow-xl hover:shadow-2xl transition-all border border-slate-800 hover:border-blue-500/50 text-center flex flex-col items-center group hover:-translate-y-2">
+                    <div class="w-20 h-20 bg-blue-600/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white transition-all text-blue-400">
+                        <i class="fa-solid fa-user-tie text-3xl group-hover:text-white transition-colors"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-800">Burak Efe Türk</h3>
-                    <p class="text-ceko-primary text-sm font-medium mt-1">Yönetim Kurulu Başkanı</p>
+                    <h3 class="text-xl font-bold text-white">Burak Efe Türk</h3>
+                    <p class="text-blue-400 text-sm font-semibold mt-1">Yönetim Kurulu Başkanı</p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 text-center flex flex-col items-center group">
-                    <div class="w-20 h-20 bg-ceko-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-ceko-primary transition-colors">
-                        <i class="fa-solid fa-user text-3xl text-ceko-primary group-hover:text-white transition-colors"></i>
+                <div class="bg-slate-900/90 rounded-3xl p-7 shadow-xl hover:shadow-2xl transition-all border border-slate-800 hover:border-blue-500/50 text-center flex flex-col items-center group hover:-translate-y-2">
+                    <div class="w-20 h-20 bg-blue-600/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white transition-all text-blue-400">
+                        <i class="fa-solid fa-user text-3xl group-hover:text-white transition-colors"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-800">Melis Ceyda Öztürk</h3>
-                    <p class="text-ceko-primary text-sm font-medium mt-1">Yönetim Kurulu Başkan Yrd.</p>
+                    <h3 class="text-xl font-bold text-white">Melis Ceyda Öztürk</h3>
+                    <p class="text-blue-400 text-sm font-semibold mt-1">Yönetim Kurulu Başkan Yrd.</p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 text-center flex flex-col items-center group">
-                    <div class="w-20 h-20 bg-ceko-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-ceko-primary transition-colors">
-                        <i class="fa-solid fa-user text-3xl text-ceko-primary group-hover:text-white transition-colors"></i>
+                <div class="bg-slate-900/90 rounded-3xl p-7 shadow-xl hover:shadow-2xl transition-all border border-slate-800 hover:border-blue-500/50 text-center flex flex-col items-center group hover:-translate-y-2">
+                    <div class="w-20 h-20 bg-blue-600/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white transition-all text-blue-400">
+                        <i class="fa-solid fa-user text-3xl group-hover:text-white transition-colors"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-800">Yağmur Yetiş</h3>
-                    <p class="text-ceko-primary text-sm font-medium mt-1">Yönetim Kurulu Başkan Yrd.</p>
+                    <h3 class="text-xl font-bold text-white">Yağmur Yetiş</h3>
+                    <p class="text-blue-400 text-sm font-semibold mt-1">Yönetim Kurulu Başkan Yrd.</p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 text-center flex flex-col items-center group">
-                    <div class="w-20 h-20 bg-ceko-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-ceko-primary transition-colors">
-                        <i class="fa-solid fa-user-gear text-3xl text-ceko-primary group-hover:text-white transition-colors"></i>
+                <div class="bg-slate-900/90 rounded-3xl p-7 shadow-xl hover:shadow-2xl transition-all border border-slate-800 hover:border-blue-500/50 text-center flex flex-col items-center group hover:-translate-y-2">
+                    <div class="w-20 h-20 bg-blue-600/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white transition-all text-blue-400">
+                        <i class="fa-solid fa-user-gear text-3xl group-hover:text-white transition-colors"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-800">Efe Budak</h3>
-                    <p class="text-ceko-primary text-sm font-medium mt-1">Genel Koordinatör</p>
+                    <h3 class="text-xl font-bold text-white">Efe Budak</h3>
+                    <p class="text-blue-400 text-sm font-semibold mt-1">Genel Koordinatör</p>
                 </div>
             </div>
 
             <!-- DEPARTMANLAR -->
             <div class="mt-16">
-                <h3 class="text-xl sm:text-2xl font-bold text-center text-gray-800 mb-8">Departmanlarımız</h3>
+                <h3 class="text-xl sm:text-2xl font-bold text-center text-white mb-8">Departmanlarımız</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
                     
-                    <div class="bg-white border-l-4 border-ceko-accent p-4 shadow-sm rounded-r-xl cursor-pointer group transition-all duration-300 hover:shadow-md komite-karti w-full" onclick="toggleKomite(this)">
+                    <div class="bg-slate-900 border-l-4 border-amber-400 p-5 shadow-lg rounded-r-2xl cursor-pointer group transition-all duration-300 hover:shadow-2xl border-t border-r border-b border-slate-800 komite-karti w-full" onclick="toggleKomite(this)">
                         <div class="flex justify-between items-center">
-                            <p class="font-bold text-gray-700 text-sm">Sponsorluk ve Finans</p>
-                            <i class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-300 transform"></i>
+                            <p class="font-bold text-slate-200 text-sm">Sponsorluk ve Finans</p>
+                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 transform"></i>
                         </div>
                         <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
-                            <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600 pb-1">
+                            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 pb-1">
                                 <ul class="space-y-1.5 list-disc list-inside">
                                     <li>Osman Eren Kahveci</li>
                                     <li>Kemal Göç</li>
@@ -853,13 +1006,13 @@
                         </div>
                     </div>
 
-                    <div class="bg-white border-l-4 border-ceko-secondary p-4 shadow-sm rounded-r-xl cursor-pointer group transition-all duration-300 hover:shadow-md komite-karti w-full" onclick="toggleKomite(this)">
+                    <div class="bg-slate-900 border-l-4 border-sky-400 p-5 shadow-lg rounded-r-2xl cursor-pointer group transition-all duration-300 hover:shadow-2xl border-t border-r border-b border-slate-800 komite-karti w-full" onclick="toggleKomite(this)">
                         <div class="flex justify-between items-center">
-                            <p class="font-bold text-gray-700 text-sm">Organizasyon ve Etkinlik</p>
-                            <i class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-300 transform"></i>
+                            <p class="font-bold text-slate-200 text-sm">Organizasyon ve Etkinlik</p>
+                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 transform"></i>
                         </div>
                         <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
-                            <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600 pb-1">
+                            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 pb-1">
                                 <ul class="space-y-1.5 list-disc list-inside">
                                     <li>İpek Sarıoğlu</li>
                                     <li>Esma Şen</li>
@@ -868,13 +1021,13 @@
                         </div>
                     </div>
 
-                    <div class="bg-white border-l-4 border-ceko-primary p-4 shadow-sm rounded-r-xl cursor-pointer group transition-all duration-300 hover:shadow-md komite-karti w-full" onclick="toggleKomite(this)">
+                    <div class="bg-slate-900 border-l-4 border-blue-500 p-5 shadow-lg rounded-r-2xl cursor-pointer group transition-all duration-300 hover:shadow-2xl border-t border-r border-b border-slate-800 komite-karti w-full" onclick="toggleKomite(this)">
                         <div class="flex justify-between items-center">
-                            <p class="font-bold text-gray-700 text-sm">Sosyal Medya ve Tasarım</p>
-                            <i class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-300 transform"></i>
+                            <p class="font-bold text-slate-200 text-sm">Sosyal Medya ve Tasarım</p>
+                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 transform"></i>
                         </div>
                         <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
-                            <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600 pb-1">
+                            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 pb-1">
                                 <ul class="space-y-1.5 list-disc list-inside">
                                     <li>Nilsu Gülen</li>
                                     <li>Yavuz Selim Ekinci</li>
@@ -883,13 +1036,13 @@
                         </div>
                     </div>
 
-                    <div class="bg-white border-l-4 border-gray-800 p-4 shadow-sm rounded-r-xl cursor-pointer group transition-all duration-300 hover:shadow-md komite-karti w-full" onclick="toggleKomite(this)">
+                    <div class="bg-slate-900 border-l-4 border-emerald-400 p-5 shadow-lg rounded-r-2xl cursor-pointer group transition-all duration-300 hover:shadow-2xl border-t border-r border-b border-slate-800 komite-karti w-full" onclick="toggleKomite(this)">
                         <div class="flex justify-between items-center">
-                            <p class="font-bold text-gray-700 text-sm">Halkla İlişkiler ve İK</p>
-                            <i class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-300 transform"></i>
+                            <p class="font-bold text-slate-200 text-sm">Halkla İlişkiler ve İK</p>
+                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 transform"></i>
                         </div>
                         <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
-                            <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600 pb-1">
+                            <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-400 pb-1">
                                 <ul class="space-y-1.5 list-disc list-inside">
                                     <li>İlayda Şentürk</li>
                                     <li>Şevval Sezgin</li>
@@ -903,7 +1056,7 @@
     </section>
 
     <!-- FOOTER -->
-    <footer id="iletisim" class="bg-ceko-dark text-white pt-16 pb-8 border-t border-gray-800 scroll-mt-20">
+    <footer id="iletisim" class="bg-slate-950 text-white pt-16 pb-8 border-t border-slate-800 scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-12">
                 <div>
@@ -911,47 +1064,48 @@
                         <img src="logo.png" alt="ULUÇEEİT Logo" class="h-11 w-11 object-contain drop-shadow-md" onerror="this.src='logo.jpg'">
                         <span class="font-bold text-xl text-white">ULUÇEEİT</span>
                     </div>
-                    <p class="text-gray-400 text-sm mb-6">
+                    <p class="text-slate-400 text-sm mb-6">
                         Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu (ULUÇEEİT). Geleceğe Yön Ver!
                     </p>
                     <div class="flex space-x-3">
-                        <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-ceko-accent hover:text-ceko-dark transition-colors" aria-label="Instagram">
+                        <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors" aria-label="Instagram">
                             <i class="fa-brands fa-instagram text-lg"></i>
                         </a>
-                        <a href="#" class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-ceko-accent hover:text-ceko-dark transition-colors" aria-label="Twitter">
+                        <a href="#" class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors" aria-label="Twitter">
                             <i class="fa-brands fa-x-twitter text-lg"></i>
                         </a>
-                        <a href="#" class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-ceko-accent hover:text-ceko-dark transition-colors" aria-label="LinkedIn">
+                        <a href="#" class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors" aria-label="LinkedIn">
                             <i class="fa-brands fa-linkedin-in text-lg"></i>
                         </a>
                     </div>
                 </div>
                 <div>
-                    <h4 class="text-base font-bold mb-6 text-white border-b border-gray-800 pb-2 inline-block">Hızlı Bağlantılar</h4>
-                    <ul class="space-y-2.5 text-sm text-gray-400">
-                        <li><a href="#hakkimizda" class="hover:text-ceko-accent transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Hakkımızda</a></li>
-                        <li><a href="#etkinlikler" class="hover:text-ceko-accent transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Geçmiş Etkinlikler</a></li>
-                        <li><a href="#sponsorlar" class="hover:text-ceko-accent transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Sponsorlar & İndirimler</a></li>
-                        <li><a href="#uye-ol" class="hover:text-ceko-accent transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Üyelik Başvurusu</a></li>
-                        <li><a href="#yonetim-kurulu" class="hover:text-ceko-accent transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Yönetim Kurulu</a></li>
+                    <h4 class="text-base font-bold mb-6 text-white border-b border-slate-800 pb-2 inline-block">Hızlı Bağlantılar</h4>
+                    <ul class="space-y-2.5 text-sm text-slate-400">
+                        <li><a href="#hakkimizda" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Hakkımızda</a></li>
+                        <li><a href="#kariyer" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Kariyer Haritası</a></li>
+                        <li><a href="#etkinlikler" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Geçmiş Etkinlikler</a></li>
+                        <li><a href="#sponsorlar" class="hover:text-amber-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Sponsorlar & İndirimler</a></li>
+                        <li><a href="#uye-ol" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Üyelik Başvurusu</a></li>
+                        <li><a href="#yonetim-kurulu" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Yönetim Kurulu</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-base font-bold mb-6 text-white border-b border-gray-800 pb-2 inline-block">Bize Ulaşın</h4>
-                    <ul class="space-y-3.5 text-sm text-gray-400">
+                    <h4 class="text-base font-bold mb-6 text-white border-b border-slate-800 pb-2 inline-block">Bize Ulaşın</h4>
+                    <ul class="space-y-3.5 text-sm text-slate-400">
                         <li class="flex items-start">
-                            <i class="fa-solid fa-location-dot mt-1 mr-3 text-ceko-accent"></i>
+                            <i class="fa-solid fa-location-dot mt-1 mr-3 text-amber-400"></i>
                             <span>Bursa Uludağ Üniversitesi<br>İİBF Öğrenci Kulüpleri Odası, Görükle</span>
                         </li>
                         <li class="flex items-center">
-                            <i class="fa-solid fa-envelope mr-3 text-ceko-accent"></i>
+                            <i class="fa-solid fa-envelope mr-3 text-amber-400"></i>
                             <a href="mailto:iletisim@uluceeit.com" class="hover:text-white transition-colors">iletisim@uluceeit.com</a>
                         </li>
                     </ul>
                 </div>
             </div>
             
-            <div class="border-t border-gray-800/80 pt-8 text-center text-xs text-gray-500 flex flex-col md:flex-row justify-between items-center">
+            <div class="border-t border-slate-800/80 pt-8 text-center text-xs text-slate-500 flex flex-col md:flex-row justify-between items-center">
                 <p>&copy; 2026 Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu. Tüm hakları saklıdır.</p>
                 <p class="mt-2 md:mt-0">Made with <i class="fa-solid fa-heart text-red-500"></i> for BUÜ students.</p>
             </div>
@@ -1053,9 +1207,11 @@
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 20) {
-                navbar.classList.add('shadow-md');
+                navbar.classList.add('shadow-2xl', 'bg-slate-950/95');
+                navbar.classList.remove('bg-slate-950/85');
             } else {
-                navbar.classList.remove('shadow-md');
+                navbar.classList.remove('shadow-2xl', 'bg-slate-950/95');
+                navbar.classList.add('bg-slate-950/85');
             }
         });
 
@@ -1105,6 +1261,8 @@
             const lower = input.toLowerCase();
             if (lower.includes('sponsor') || lower.includes('indirim') || lower.includes('avantaj') || lower.includes('anlaşma') || lower.includes('kafe') || lower.includes('fırsat')) {
                 return "ULUÇEEİT üyeleri Görükle ve Bursa genelindeki anlaşmalı kafeler, dil okulları, fotokopi merkezleri ve akademilerde %15 ile %30 arasında özel indirimlerden faydalanabilir! Detayları sayfamızdaki 'Sponsorlar & İndirimler' bölümünden inceleyebilirsiniz.";
+            } else if (lower.includes('mezun') || lower.includes('kariyer') || lower.includes('iş') || lower.includes('ne iş')) {
+                return "ÇEEİ mezunları kamuda (Bakanlıklar, SGK, İŞKUR, Kaymakamlık, İdari Hakimlik), özel sektörde (İK Direktörlüğü, Bordrolama, Big4 Danışmanlık) ve uluslararası kuruluşlarda (ILO, Akademi, STK) geniş kariyer fırsatlarına sahiptir.";
             } else if (lower.includes('kayıt') || lower.includes('üye') || lower.includes('nasıl katılırım') || lower.includes('sks')) {
                 return "Kayıtlarımız Bursa Uludağ Üniversitesi SKS sistemi üzerinden resmi olarak yapılmaktadır. Sayfamızdaki 'Üye Ol' butonuna tıklayarak doğrudan SKS portalına ulaşabilirsiniz.";
             } else if (lower.includes('etkinlik') || lower.includes('gezi') || lower.includes('ne yapıyorsunuz')) {
@@ -1116,7 +1274,7 @@
             } else if (lower.includes('yönetim') || lower.includes('başkan') || lower.includes('kim')) {
                 return "Yönetim Kurulu Başkanımız Burak Efe Türk, Başkan Yardımcılarımız Melis Ceyda Öztürk ve Yağmur Yetiş, Genel Koordinatörümüz Efe Budak'tır.";
             } else {
-                return "Sorunuz için teşekkürler! ULUÇEEİT hakkında üyelik, etkinlikler, üye indirimleri/sponsorlar veya iletişim konularında bilgi almak için soru sorabilir veya doğrudan iletisim@uluceeit.com adresinden bize ulaşabilirsiniz.";
+                return "Sorunuz için teşekkürler! ULUÇEEİT hakkında üyelik, kariyer rotaları, etkinlikler, üye indirimleri veya iletişim konularında bilgi almak için soru sorabilir veya doğrudan iletisim@uluceeit.com adresinden bize ulaşabilirsiniz.";
             }
         }
 
