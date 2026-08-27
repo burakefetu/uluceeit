@@ -39,15 +39,15 @@
                             sky: '#38bdf8',
                             accent: '#f59e0b',
                             light: '#f1f5f9',
-                            canvas: '#f8fafc'
+                            canvas: '#f4f7fb'
                         }
                     },
                     boxShadow: {
-                        'glass-sm': '0 8px 32px 0 rgba(11, 26, 61, 0.08)',
+                        'glass-sm': '0 8px 32px 0 rgba(11, 26, 61, 0.06)',
                         'glass': '0 20px 50px 0 rgba(5, 12, 26, 0.25)',
-                        'glass-glow': '0 0 40px -10px rgba(29, 78, 216, 0.5)',
-                        'glass-amber': '0 0 40px -10px rgba(245, 158, 11, 0.4)',
-                        'card-dark': '0 25px 60px -15px rgba(5, 12, 26, 0.6)'
+                        'glass-glow': '0 0 45px -10px rgba(29, 78, 216, 0.5)',
+                        'glass-amber': '0 0 45px -10px rgba(245, 158, 11, 0.4)',
+                        'card-dark': '0 25px 60px -15px rgba(5, 12, 26, 0.55)'
                     }
                 }
             }
@@ -178,7 +178,7 @@
     </nav>
 
     <!-- ULTRA-MODERN LIQUID GLASS HERO SECTION -->
-    <section class="relative pt-32 pb-24 lg:pt-44 lg:pb-32 overflow-hidden bg-gradient-to-br from-[#060e20] via-[#0b1a3d] to-[#081226] text-white">
+    <section class="relative pt-32 pb-28 lg:pt-44 lg:pb-36 overflow-hidden bg-gradient-to-br from-[#060e20] via-[#0b1a3d] to-[#081226] text-white">
         
         <!-- Dinamik Sıvı Cam Işık Küreleri (Liquid Glowing Blobs) -->
         <div class="absolute top-1/4 left-10 -translate-x-1/2 w-[650px] h-[650px] bg-blue-600/25 blur-[160px] rounded-full pointer-events-none animate-pulse-glow"></div>
@@ -321,12 +321,12 @@
             </div>
         </div>
 
-        <!-- Alt Yumuşak Geçiş Katmanı -->
-        <div class="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-[#f4f7fb] to-transparent pointer-events-none"></div>
+        <!-- YUMUŞAK VE AKICI GEÇİŞ KATMANI (HERO -> HAKKIMIZDA) -->
+        <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-b from-transparent via-[#060e20]/60 via-[#1e3466]/20 to-[#f4f7fb] pointer-events-none"></div>
     </section>
 
-    <!-- HAKKIMIZDA BÖLÜMÜ (BEYAZ ZEMİN & LIQUID GLASS LACİVERT KARTLAR) -->
-    <section id="hakkimizda" class="py-24 bg-[#f4f7fb] relative overflow-hidden scroll-mt-20">
+    <!-- HAKKIMIZDA BÖLÜMÜ (YUMUŞAK GEÇİŞLİ ZEMİN & LIQUID GLASS LACİVERT KARTLAR) -->
+    <section id="hakkimizda" class="py-24 bg-gradient-to-b from-[#f4f7fb] via-[#eef3f9] to-[#f4f7fb] relative overflow-hidden scroll-mt-20">
         
         <!-- İnce Arka Plan Işımaları -->
         <div class="absolute top-10 left-1/4 w-96 h-96 bg-blue-400/10 blur-[130px] rounded-full pointer-events-none"></div>
@@ -421,7 +421,7 @@
     </section>
 
     <!-- KARİYER & MEZUNİYET ROTASI (LIQUID GLASS MATRİSİ) -->
-    <section id="kariyer" class="py-24 bg-[#eef3f8] relative overflow-hidden scroll-mt-20">
+    <section id="kariyer" class="py-24 bg-gradient-to-b from-[#f4f7fb] via-[#e8eff8] to-[#f4f7fb] relative overflow-hidden scroll-mt-20">
         
         <div class="absolute top-1/3 right-10 w-[450px] h-[450px] bg-blue-600/10 blur-[140px] rounded-full pointer-events-none"></div>
         <div class="absolute bottom-10 left-10 w-[450px] h-[450px] bg-amber-500/10 blur-[130px] rounded-full pointer-events-none"></div>
@@ -551,8 +551,8 @@
         </div>
     </section>
 
-    <!-- ETKİNLİKLER (BEYAZ ZEMİN & LIQUID GLASS ETKİNLİK KARTLARI) -->
-    <section id="etkinlikler" class="py-24 bg-[#f4f7fb] relative overflow-hidden scroll-mt-20">
+    <!-- ETKİNLİKLER (LIQUID GLASS ETKİNLİK KARTLARI) -->
+    <section id="etkinlikler" class="py-24 bg-gradient-to-b from-[#f4f7fb] via-[#edf3fa] to-[#f4f7fb] relative overflow-hidden scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col md:flex-row justify-between items-end mb-14">
                 <div>
@@ -598,6 +598,9 @@
             </div>
         </div>
     </section>
+
+    <!-- YUMUŞAK VE AKICI GEÇİŞ KÖPRÜSÜ (ETKİNLİKLER -> SPONSORLAR) -->
+    <div class="w-full h-32 bg-gradient-to-b from-[#f4f7fb] via-[#16274e] to-[#060e20] pointer-events-none"></div>
 
     <!-- SPONSORLAR & ÜYE AVANTAJLARI (DERİN LACİVERT LIQUID GLASS ZEMİN) -->
     <section id="sponsorlar" class="py-24 bg-gradient-to-br from-[#060e20] via-[#0b1a3d] to-[#081226] text-white relative overflow-hidden scroll-mt-20">
@@ -851,10 +854,13 @@
                 </a>
             </div>
         </div>
+
+        <!-- YUMUŞAK GEÇİŞ (SPONSORLAR -> ÜYE OL) -->
+        <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-b from-transparent via-[#060e20]/60 via-[#182a52]/20 to-[#f4f7fb] pointer-events-none"></div>
     </section>
 
     <!-- ÜYE OL BÖLÜMÜ (LIQUID GLASS HYBRID PANEL) -->
-    <section id="uye-ol" class="py-24 bg-[#f4f7fb] relative overflow-hidden scroll-mt-20">
+    <section id="uye-ol" class="py-24 bg-gradient-to-b from-[#f4f7fb] via-[#eaf0f8] to-[#f4f7fb] relative overflow-hidden scroll-mt-20">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-slate-200/80 bg-white">
                 
@@ -970,7 +976,7 @@
     </section>
 
     <!-- YÖNETİM KURULU (LIQUID GLASS PROFILLER) -->
-    <section id="yonetim-kurulu" class="py-24 bg-[#f4f7fb] scroll-mt-20">
+    <section id="yonetim-kurulu" class="py-24 bg-gradient-to-b from-[#f4f7fb] via-[#eef3f9] to-[#f4f7fb] scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold mb-4 shadow-sm">
@@ -1087,8 +1093,11 @@
         </div>
     </section>
 
+    <!-- YUMUŞAK GEÇİŞ KÖPRÜSÜ (YÖNETİM -> FOOTER) -->
+    <div class="w-full h-24 bg-gradient-to-b from-[#f4f7fb] via-[#101e3b] to-[#050c1a] pointer-events-none"></div>
+
     <!-- FOOTER (DERİN LACİVERT LIQUID GLASS ZEMİN) -->
-    <footer id="iletisim" class="bg-[#050c1a] text-white pt-16 pb-8 border-t border-white/10 scroll-mt-20">
+    <footer id="iletisim" class="bg-[#050c1a] text-white pt-12 pb-8 border-t border-white/10 scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-12">
                 <div>
