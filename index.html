@@ -596,7 +596,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
                 
                 <!-- Etkinlik Kartı 1: Ankara Gezisi -->
                 <div class="liquid-glass-navy text-white rounded-3xl overflow-hidden shadow-card-navy hover:shadow-glass-glow hover:-translate-y-2 transition-all duration-300 flex flex-col group border border-white/15">
@@ -628,7 +628,7 @@
                                     </p>
                                 </div>
 
-                                <button onclick="toggleEventDetails(this, 'ankaraDetails')" class="mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
+                                <button onclick="toggleEventDetails(this, 'ankaraDetails')" class="event-toggle-btn mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
                                     <span>Devamını Oku</span>
                                     <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
                                 </button>
@@ -673,7 +673,7 @@
                                     </p>
                                 </div>
 
-                                <button onclick="toggleEventDetails(this, 'akademekDetails')" class="mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
+                                <button onclick="toggleEventDetails(this, 'akademekDetails')" class="event-toggle-btn mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
                                     <span>Devamını Oku</span>
                                     <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
                                 </button>
@@ -1644,20 +1644,28 @@
         // GENEL SAYFA VE SPONSOR FONKSİYONLARI
         // =========================================================================
         function toggleEventDetails(btn, targetId) {
-            const details = document.getElementById(targetId);
-            if (!details) return;
-            const isHidden = details.classList.contains('hidden');
-            const span = btn.querySelector('span');
-            const icon = btn.querySelector('i');
+            const targetDetails = document.getElementById(targetId);
+            if (!targetDetails) return;
+            const isCurrentlyHidden = targetDetails.classList.contains('hidden');
 
-            if (isHidden) {
-                details.classList.remove('hidden');
-                span.textContent = 'Daha Az Göster';
-                icon.classList.add('rotate-180');
-            } else {
-                details.classList.add('hidden');
-                span.textContent = 'Devamını Oku';
-                icon.classList.remove('rotate-180');
+            // Diğer tüm etkinlik detaylarını kapat
+            document.querySelectorAll('[id$="Details"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+            document.querySelectorAll('.event-toggle-btn').forEach(b => {
+                const span = b.querySelector('span');
+                const icon = b.querySelector('i');
+                if (span) span.textContent = 'Devamını Oku';
+                if (icon) icon.classList.remove('rotate-180');
+            });
+
+            // Tıklanan kapalıysa aç
+            if (isCurrentlyHidden) {
+                targetDetails.classList.remove('hidden');
+                const span = btn.querySelector('span');
+                const icon = btn.querySelector('i');
+                if (span) span.textContent = 'Daha Az Göster';
+                if (icon) icon.classList.add('rotate-180');
             }
         }
 
