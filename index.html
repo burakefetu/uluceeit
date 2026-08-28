@@ -628,7 +628,7 @@
                                     </p>
                                 </div>
 
-                                <button onclick="toggleAnkaraDetails(this)" class="mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
+                                <button onclick="toggleEventDetails(this, 'ankaraDetails')" class="mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
                                     <span>Devamını Oku</span>
                                     <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
                                 </button>
@@ -636,6 +636,51 @@
                         </div>
                         <div class="border-t border-white/10 pt-4 flex justify-between items-center">
                             <span class="text-slate-300 text-sm font-bold"><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Ankara</span>
+                            <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-sky-300 text-sm font-bold transition-colors flex items-center gap-1.5">
+                                <i class="fa-brands fa-instagram text-base"></i> İncele
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Etkinlik Kartı 2: AKAD'EMEK Zonguldak -->
+                <div class="liquid-glass-navy text-white rounded-3xl overflow-hidden shadow-card-navy hover:shadow-glass-glow hover:-translate-y-2 transition-all duration-300 flex flex-col group border border-white/15">
+                    <div class="relative h-64 sm:h-72 overflow-hidden">
+                        <img src="akademek-zonguldak.jpg" alt="AKAD'EMEK Zonguldak Öğrenci Kurultayı" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#060f24] via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-slate-900/80 text-white px-3.5 py-1 rounded-full text-xs font-bold shadow backdrop-blur-md border border-white/15">
+                            Geçmiş Etkinlik
+                        </div>
+                    </div>
+                    <div class="p-7 flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs text-blue-400 font-bold mb-2 flex items-center">
+                                <i class="fa-regular fa-calendar mr-2"></i> 23-26 Nisan
+                            </div>
+                            <h3 class="text-xl font-extrabold text-white mb-3 leading-snug">AKAD'EMEK Zonguldak Etkinliği</h3>
+                            
+                            <div class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
+                                <p>
+                                    AKAD’EMEK’te sadece bir etkinliğe değil; dostluğa, emeğe ve unutulmayacak anılara ev sahipliği yaptık. ✨ Birlikte geçirdiğimiz bu süreç, bizim için yalnızca bir organizasyon değil; aynı zamanda güçlü bağlar kurduğumuz çok özel bir yolculuktu.
+                                </p>
+                                
+                                <div id="akademekDetails" class="hidden mt-3 space-y-2.5 pt-3 border-t border-white/10 text-slate-200">
+                                    <p>
+                                        “Söz Çalışma Ekonomisi Öğrencilerinde” diyerek çıktığımız bu yolda dayanışmanın, ekip ruhunun ve birlikte üretmenin ne kadar kıymetli olduğunu bir kez daha gördük.
+                                    </p>
+                                    <p class="text-amber-300 font-medium">
+                                        Bu güzel süreçte emeği geçen, yanımızda olan herkese gönülden teşekkür ederiz. 🙏🏻 Daha nice güzel organizasyonlarda tekrar bir araya gelmek dileğiyle. 💐
+                                    </p>
+                                </div>
+
+                                <button onclick="toggleEventDetails(this, 'akademekDetails')" class="mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
+                                    <span>Devamını Oku</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="border-t border-white/10 pt-4 flex justify-between items-center">
+                            <span class="text-slate-300 text-sm font-bold"><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Zonguldak</span>
                             <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-sky-300 text-sm font-bold transition-colors flex items-center gap-1.5">
                                 <i class="fa-brands fa-instagram text-base"></i> İncele
                             </a>
@@ -1598,8 +1643,9 @@
         // =========================================================================
         // GENEL SAYFA VE SPONSOR FONKSİYONLARI
         // =========================================================================
-        function toggleAnkaraDetails(btn) {
-            const details = document.getElementById('ankaraDetails');
+        function toggleEventDetails(btn, targetId) {
+            const details = document.getElementById(targetId);
+            if (!details) return;
             const isHidden = details.classList.contains('hidden');
             const span = btn.querySelector('span');
             const icon = btn.querySelector('i');
