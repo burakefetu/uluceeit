@@ -613,13 +613,26 @@
                                 <i class="fa-regular fa-calendar mr-2"></i> 8 Mayıs
                             </div>
                             <h3 class="text-xl font-extrabold text-white mb-3 leading-snug">Ankara Kültür ve Mesleki Gezisi</h3>
-                            <p class="text-slate-300 text-xs sm:text-sm mb-6 leading-relaxed whitespace-pre-line">8 Mayıs’ta gerçekleştirdiğimiz Ankara gezimizden birbirinden güzel anılarla döndük. 🇹🇷🖤
+                            
+                            <div class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
+                                <p>
+                                    8 Mayıs’ta gerçekleştirdiğimiz Ankara gezimizden birbirinden güzel anılarla döndük. 🇹🇷🖤 Tarihin ve emeğin izlerini birlikte keşfettiğimiz bu özel günde hem öğrendik hem de keyifli anlar biriktirdik.
+                                </p>
+                                
+                                <div id="ankaraDetails" class="hidden mt-3 space-y-2.5 pt-3 border-t border-white/10 text-slate-200">
+                                    <p>
+                                        Anıtkabir’in manevi atmosferini hissetmek, Eski Meclis’in tarihine tanıklık etmek ve İLO ziyaretimizle farklı bakış açıları kazanmak bizler için oldukça değerliydi. ✨
+                                    </p>
+                                    <p class="text-amber-300 font-medium">
+                                        Bu etkinlikte bizlere desteklerini eksik etmeyen Türk Metal Sendikasına çok teşekkür ederiz 🙏🏻
+                                    </p>
+                                </div>
 
-Tarihin ve emeğin izlerini birlikte keşfettiğimiz bu özel günde; hem öğrendik hem de keyifli anlar biriktirdik.
-
-Anıtkabir’in manevi atmosferini hissetmek, Eski Meclis’in tarihine tanıklık etmek ve İLO ziyaretimizle farklı bakış açıları kazanmak bizler için oldukça değerliydi. ✨
-
-Bu etkinlikte bizlere desteklerini eksik etmeyen Türk Metal Sendikasına çok teşekkür ederiz 🙏🏻</p>
+                                <button onclick="toggleAnkaraDetails(this)" class="mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
+                                    <span>Devamını Oku</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="border-t border-white/10 pt-4 flex justify-between items-center">
                             <span class="text-slate-300 text-sm font-bold"><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Ankara</span>
@@ -1585,6 +1598,23 @@ Bu etkinlikte bizlere desteklerini eksik etmeyen Türk Metal Sendikasına çok t
         // =========================================================================
         // GENEL SAYFA VE SPONSOR FONKSİYONLARI
         // =========================================================================
+        function toggleAnkaraDetails(btn) {
+            const details = document.getElementById('ankaraDetails');
+            const isHidden = details.classList.contains('hidden');
+            const span = btn.querySelector('span');
+            const icon = btn.querySelector('i');
+
+            if (isHidden) {
+                details.classList.remove('hidden');
+                span.textContent = 'Daha Az Göster';
+                icon.classList.add('rotate-180');
+            } else {
+                details.classList.add('hidden');
+                span.textContent = 'Devamını Oku';
+                icon.classList.remove('rotate-180');
+            }
+        }
+
         function toggleKomite(element) {
             const uyelerDiv = element.querySelector('.komite-uyeler');
             const icon = element.querySelector('.fa-chevron-down');
