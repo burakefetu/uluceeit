@@ -1336,6 +1336,22 @@
 
             </div>
 
+            <!-- 🎟️ ÇEKİLİŞ BİLETİ ROZETİ (ÇEKİLİŞE KATILDIYSA GÖRÜNÜR) -->
+            <div id="cardGiveawayTicketContainer" class="hidden mb-4 p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-slate-900 to-amber-500/10 border border-amber-400/40 text-white flex items-center justify-between shadow-lg">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 font-black flex items-center justify-center text-sm shadow">
+                        <i class="fa-solid fa-ticket"></i>
+                    </div>
+                    <div>
+                        <p class="text-[9px] uppercase font-bold text-amber-300">BÜYÜK ÇEKİLİŞ BİLETİNİZ</p>
+                        <p id="cardGiveawayTicketNumber" class="text-xs sm:text-sm font-mono font-black text-white">BİLET-0000</p>
+                    </div>
+                </div>
+                <a href="cekilis.html" class="text-[10px] bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1 rounded-full font-black flex items-center gap-1 transition-all">
+                    <span>Çekiliş Detayı</span> <i class="fa-solid fa-arrow-right text-[8px]"></i>
+                </a>
+            </div>
+
             <!-- 🎁 KAZANILAN HEDİYE ROZETİ (YÖNETİM TANIMLADIYSA KİŞİYE ÖZEL GÖRÜNÜR) -->
             <div id="wonGiftContainer" class="hidden mb-4 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-2 border-amber-400 text-white shadow-2xl">
                 <div class="flex items-center justify-between mb-2 pb-2 border-b border-white/10">
@@ -1773,6 +1789,29 @@
             
             // Üyeyi buluta kaydet/tazele
             await CloudSync.registerMember(member);
+
+            // Buluttaki güncel üye kaydını kontrol et (bilet veya hediye senkronu)
+            try {
+                const allMembers = await CloudSync.getMembers();
+                const sNo = String(member.studentNo || '').trim();
+                const cloudMem = (allMembers || []).find(m => String(m.studentNo || '').trim() === sNo);
+                if (cloudMem) {
+                    let changed = false;
+                    if (cloudMem.giveawayTicket && !member.giveawayTicket) {
+                        member.giveawayTicket = cloudMem.giveawayTicket;
+                        member.ticketJoinedAt = cloudMem.ticketJoinedAt;
+                        changed = true;
+                    }
+                    if (cloudMem.wonGift && !member.wonGift) {
+                        member.wonGift = cloudMem.wonGift;
+                        changed = true;
+                    }
+                    if (changed) {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+                        updateNavbarCardState();
+                    }
+                }
+            } catch (e) {}
             
             // Hediyesini kontrol et
             const gift = await CloudSync.checkGiftForStudent(member.studentNo);
@@ -1937,7 +1976,17 @@
             document.getElementById('cardSerialNo').textContent = member.serialNo || 'ULU-2026-8492';
 
             const wonGiftCont = document.getElementById('wonGiftContainer');
+            const ticketCont = document.getElementById('cardGiveawayTicketContainer');
+            const ticketEl = document.getElementById('cardGiveawayTicketNumber');
             let assignedGift = member.wonGift;
+
+            // Çekiliş Bileti Kontrolü
+            if (member.giveawayTicket) {
+                if (ticketCont) ticketCont.classList.remove('hidden');
+                if (ticketEl) ticketEl.textContent = member.giveawayTicket;
+            } else {
+                if (ticketCont) ticketCont.classList.add('hidden');
+            }
 
             // 1. Yerel hafıza kontrolü
             if (assignedGift) {

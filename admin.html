@@ -107,7 +107,7 @@
         <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-8">
             
             <!-- Üst İstatistik Kartları -->
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
                 <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
                     <div>
                         <p class="text-[11px] text-slate-400 font-bold uppercase">Toplam Hediye Stoğu</p>
@@ -140,8 +140,18 @@
 
                 <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase">Kayıtlı Cihaz Üyesi</p>
-                        <h3 id="statLocalUser" class="text-base font-black text-white mt-1 truncate">Mevcut</h3>
+                        <p class="text-[11px] text-slate-400 font-bold uppercase">Çekiliş Katılımcısı</p>
+                        <h3 id="statGiveawayParticipants" class="text-2xl font-black text-yellow-400 font-mono mt-1">0</h3>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-ticket-simple"></i>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between col-span-2 sm:col-span-1">
+                    <div>
+                        <p class="text-[11px] text-slate-400 font-bold uppercase">Kayıtlı Canlı Üye</p>
+                        <h3 id="statLocalUser" class="text-base font-black text-white mt-1 truncate">0 Üye</h3>
                     </div>
                     <div class="w-11 h-11 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg">
                         <i class="fa-solid fa-id-card"></i>
@@ -335,6 +345,75 @@
 
             </div>
 
+            <!-- ========================================================================= -->
+            <!-- 🎟️ BÜYÜK ÇEKİLİŞE KATILANLAR (BİLET HAVUZU & CANLI KURA) -->
+            <!-- ========================================================================= -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
+                    <div>
+                        <h3 class="text-lg font-black text-white flex items-center gap-2">
+                            <span>🎟️ Büyük Çekilişe Katılanlar (Bilet Havuzu)</span>
+                            <span id="giveawayCountBadge" class="text-[11px] font-mono font-bold bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-400/30">0 Bilet</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Çekiliş sayfasından (cekilis.html) bilet alan tüm üyeler canlı olarak burada listelenir. Sadece biletli üyeler arasında kura çekebilirsiniz.</p>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <!-- Çekiliş Tarihi Rozeti & Ayar Butonu -->
+                        <button type="button" onclick="openGiveawayConfigModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-amber-500/30 shadow-sm" title="Çekiliş Bitiş Tarihini Ayarla">
+                            <i class="fa-regular fa-clock text-amber-400"></i>
+                            <span id="adminGiveawayTargetBadge">⏱️ 15 Ekim 2026 20:00</span>
+                            <i class="fa-solid fa-pen text-[10px] text-slate-400 ml-1"></i>
+                        </button>
+
+                        <!-- Biletlilerden Canlı Kura Çek Butonu -->
+                        <button type="button" onclick="handleGiveawayLotteryDraw()" class="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-600 hover:to-yellow-500 text-slate-950 font-black rounded-xl text-xs shadow-lg shadow-amber-500/20 transition-all flex items-center gap-1.5 active:scale-95">
+                            <i class="fa-solid fa-dice text-sm"></i>
+                            <span>Biletlilerden Kura Çek</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Arama & Filtreleme Çubuğu -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="setGiveawayFilter('all')" id="filterGiveawayAll" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition-all">Tümü (<span id="countGiveawayAll">0</span>)</button>
+                        <button type="button" onclick="setGiveawayFilter('waiting')" id="filterGiveawayWaiting" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white transition-all">⏳ Bekleyenler (<span id="countGiveawayWaiting">0</span>)</button>
+                        <button type="button" onclick="setGiveawayFilter('won')" id="filterGiveawayWon" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white transition-all">🎁 Kazananlar (<span id="countGiveawayWon">0</span>)</button>
+                    </div>
+                    
+                    <div class="relative">
+                        <input type="text" id="giveawaySearchInput" oninput="renderGiveawayParticipants()" placeholder="🔍 Bilet No, İsim veya Öğrenci No ara..." class="py-2 pl-3 pr-8 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-amber-400 w-full sm:w-64">
+                        <button type="button" onclick="document.getElementById('giveawaySearchInput').value=''; renderGiveawayParticipants();" class="absolute right-2.5 top-2 text-slate-500 hover:text-white text-xs" title="Aramayı Temizle">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Katılımcılar Tablosu -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="text-slate-400 border-b border-slate-800 uppercase text-[10px] tracking-wider">
+                                <th class="py-3 px-3">Bilet No</th>
+                                <th class="py-3 px-3">Katılımcı Üye</th>
+                                <th class="py-3 px-3">Öğrenci No</th>
+                                <th class="py-3 px-3">Bilet Alım Tarihi</th>
+                                <th class="py-3 px-3">Çekiliş Durumu</th>
+                                <th class="py-3 px-3 text-right">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="giveawayParticipantsTableBody" class="divide-y divide-slate-800 text-slate-300">
+                            <!-- Dinamik Çekiliş Katılımcıları Listesi -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="noGiveawayPlaceholder" class="py-8 text-center text-slate-500 text-xs">
+                    Henüz çekiliş sayfası üzerinden bilet almış bir üye bulunmuyor.
+                </div>
+            </div>
+
             <!-- 👥 STANDIMIZDA KAYIT OLAN TÜM CANLI ÜYELER (BULUT LİSTESİ) -->
             <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
@@ -492,6 +571,39 @@
                 </div>
             </div>
 
+            <!-- ========================================================================= -->
+            <!-- ⏱️ ÇEKİLİŞ TARİHİ AYARLAMA MODALI -->
+            <!-- ========================================================================= -->
+            <div id="giveawayConfigModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+                <div class="w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl relative text-left">
+                    <button onclick="closeGiveawayConfigModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-400/30">
+                            <i class="fa-regular fa-clock"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-black text-white">Çekiliş Bitiş Tarihini Ayarla</h3>
+                            <p class="text-xs text-slate-400">Çekiliş sayfasındaki (cekilis.html) geri sayım bu tarihe göre işler.</p>
+                        </div>
+                    </div>
+
+                    <form onsubmit="handleSaveGiveawayConfig(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Hedef Tarih ve Saat</label>
+                            <input type="datetime-local" id="giveawayTargetDateTimeInput" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-sm focus:outline-none focus:border-amber-400">
+                            <p class="text-[11px] text-slate-500 mt-1">Örn: 15 Ekim 2026 Saat 20:00</p>
+                        </div>
+                        <div class="flex justify-end gap-2 pt-2">
+                            <button type="button" onclick="closeGiveawayConfigModal()" class="px-4 py-2 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs hover:bg-slate-700">İptal</button>
+                            <button type="submit" class="px-5 py-2 bg-amber-500 text-slate-950 font-black rounded-xl text-xs hover:bg-amber-400 transition-all">Kaydet & Yayınla</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </main>
     </div>
 
@@ -616,6 +728,38 @@
                 } catch (e) {
                     console.warn('MantleDB pool push error:', e);
                 }
+            },
+
+            async getGiveawayConfig() {
+                try {
+                    const res = await fetch(`${this.API_BASE}/giveaway_config`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.targetTime) {
+                            localStorage.setItem('uluceeit_giveaway_config', JSON.stringify(data));
+                            return data;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('MantleDB giveaway config fetch error:', e);
+                }
+                const cached = localStorage.getItem('uluceeit_giveaway_config');
+                return cached ? JSON.parse(cached) : { targetTime: '2026-10-15T20:00:00+03:00' };
+            },
+
+            async pushGiveawayConfig(config) {
+                try {
+                    localStorage.setItem('uluceeit_giveaway_config', JSON.stringify(config));
+                    await fetch(`${this.API_BASE}/giveaway_config`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(config)
+                    });
+                } catch (e) {
+                    console.warn('MantleDB giveaway config push error:', e);
+                }
             }
         };
 
@@ -731,6 +875,7 @@
 
                 if (membersChanged || giftsChanged || showFeedback) {
                     renderCloudMembers();
+                    renderGiveawayParticipants();
                     renderGiftsList();
                     updateStats();
                     
@@ -740,6 +885,14 @@
                         updateTargetMemberSelect();
                     }
                 }
+
+                // Çekiliş bitiş tarihini arka planda kontrol et
+                try {
+                    const config = await CloudSync.getGiveawayConfig();
+                    if (config && config.targetTime) {
+                        updateAdminGiveawayBadge(config.targetTime);
+                    }
+                } catch (e) {}
 
                 if (showFeedback) {
                     const notify = document.getElementById('cloudSyncStatusNotify');
@@ -832,8 +985,11 @@
                         <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
                             <span class="w-7 h-7 rounded-lg ${isSelected ? 'bg-amber-500 text-slate-950' : 'bg-blue-500/20 text-blue-400'} font-black flex items-center justify-center text-xs border border-blue-400/30 shadow-sm">${(m.fullName || 'Ö').charAt(0).toUpperCase()}</span>
                             <div>
-                                <span class="text-xs">${m.fullName || 'İsimsiz Üye'}</span>
-                                ${isSelected ? '<span class="text-[9px] bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded font-black tracking-wider ml-1.5">SEÇİLDİ</span>' : ''}
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="text-xs">${m.fullName || 'İsimsiz Üye'}</span>
+                                    ${m.giveawayTicket ? `<span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-400/30 px-1.5 py-0.5 rounded font-mono font-bold"><i class="fa-solid fa-ticket text-[8px] mr-0.5"></i>${m.giveawayTicket}</span>` : ''}
+                                </div>
+                                ${isSelected ? '<span class="text-[9px] bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded font-black tracking-wider">SEÇİLDİ</span>' : ''}
                             </div>
                         </td>
                         <td class="py-3 px-3 font-mono font-bold text-amber-300">${sNo}</td>
@@ -843,6 +999,258 @@
                     </tr>
                 `;
             }).join('');
+        }
+
+        // =========================================================================
+        // 🎟️ BÜYÜK ÇEKİLİŞE KATILANLAR TABLOSU VE İŞLEMLERİ
+        // =========================================================================
+        let giveawayFilter = 'all';
+
+        function setGiveawayFilter(filter) {
+            giveawayFilter = filter;
+            const btnAll = document.getElementById('filterGiveawayAll');
+            const btnWaiting = document.getElementById('filterGiveawayWaiting');
+            const btnWon = document.getElementById('filterGiveawayWon');
+
+            [btnAll, btnWaiting, btnWon].forEach(b => {
+                if (b) b.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white transition-all';
+            });
+
+            if (filter === 'all' && btnAll) btnAll.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition-all';
+            if (filter === 'waiting' && btnWaiting) btnWaiting.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition-all';
+            if (filter === 'won' && btnWon) btnWon.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition-all';
+
+            renderGiveawayParticipants();
+        }
+
+        function renderGiveawayParticipants() {
+            const tbody = document.getElementById('giveawayParticipantsTableBody');
+            const placeholder = document.getElementById('noGiveawayPlaceholder');
+            const badge = document.getElementById('giveawayCountBadge');
+            if (!tbody) return;
+
+            const allMembers = cachedCloudData.members || [];
+            const participants = allMembers.filter(m => !!m.giveawayTicket);
+
+            const countAll = participants.length;
+            const countWon = participants.filter(m => !!m.wonGift).length;
+            const countWaiting = countAll - countWon;
+
+            const elAll = document.getElementById('countGiveawayAll');
+            const elWaiting = document.getElementById('countGiveawayWaiting');
+            const elWon = document.getElementById('countGiveawayWon');
+
+            if (elAll) elAll.textContent = countAll;
+            if (elWaiting) elWaiting.textContent = countWaiting;
+            if (elWon) elWon.textContent = countWon;
+            if (badge) badge.textContent = `${countAll} Bilet`;
+
+            let filtered = participants;
+            if (giveawayFilter === 'waiting') {
+                filtered = participants.filter(m => !m.wonGift);
+            } else if (giveawayFilter === 'won') {
+                filtered = participants.filter(m => !!m.wonGift);
+            }
+
+            const searchInput = document.getElementById('giveawaySearchInput');
+            const q = (searchInput ? searchInput.value : '').toLowerCase().trim();
+            if (q) {
+                filtered = filtered.filter(m =>
+                    (m.fullName || '').toLowerCase().includes(q) ||
+                    String(m.studentNo || '').toLowerCase().includes(q) ||
+                    String(m.giveawayTicket || '').toLowerCase().includes(q)
+                );
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                if (placeholder) {
+                    placeholder.classList.remove('hidden');
+                    placeholder.textContent = q ? 'Aranan kritere uygun çekiliş bileti bulunamadı.' : (countAll === 0 ? 'Henüz çekiliş sayfası (cekilis.html) üzerinden bilet almış bir üye bulunmuyor.' : 'Bu filtrede katılımcı bulunmuyor.');
+                }
+                return;
+            }
+
+            if (placeholder) placeholder.classList.add('hidden');
+
+            tbody.innerHTML = filtered.map(m => {
+                const sNo = String(m.studentNo || '').trim();
+                const safeName = (m.fullName || 'Üye').replace(/'/g, "\\'");
+                const ticket = m.giveawayTicket;
+                const joinedDate = m.ticketJoinedAt ? new Date(m.ticketJoinedAt).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' }) : 'Bugün';
+
+                let statusBadge = `
+                    <span class="inline-flex items-center gap-1 bg-amber-500/10 text-amber-300 px-2.5 py-1 rounded-lg font-bold text-[11px] border border-amber-500/20">
+                        <i class="fa-regular fa-clock"></i> <span>Kura Bekliyor</span>
+                    </span>
+                `;
+
+                if (m.wonGift) {
+                    statusBadge = `
+                        <span class="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-lg font-bold text-[11px] border border-emerald-500/30">
+                            <i class="fa-solid fa-gift"></i> <span>${m.wonGift.title}</span>
+                            <span class="text-[9px] font-mono text-amber-300 ml-1">(${m.wonGift.code})</span>
+                        </span>
+                    `;
+                }
+
+                return `
+                    <tr class="hover:bg-slate-800/40 transition-colors">
+                        <td class="py-3 px-3 font-mono font-black text-amber-400">
+                            <span class="px-2.5 py-1 bg-amber-500/10 border border-amber-400/30 rounded-lg inline-flex items-center gap-1.5 shadow-sm">
+                                <i class="fa-solid fa-ticket text-xs"></i> <span>${ticket}</span>
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 font-black flex items-center justify-center text-xs border border-amber-400/30">${(m.fullName || 'Ö').charAt(0).toUpperCase()}</span>
+                            <span>${m.fullName || 'İsimsiz Üye'}</span>
+                        </td>
+                        <td class="py-3 px-3 font-mono font-bold text-slate-300">${sNo}</td>
+                        <td class="py-3 px-3 text-slate-400 text-[11px] font-mono">${joinedDate}</td>
+                        <td class="py-3 px-3">${statusBadge}</td>
+                        <td class="py-3 px-3 text-right">
+                            <div class="flex items-center justify-end gap-1.5">
+                                <button type="button" onclick="openAssignGiftModal('${sNo}', '${safeName}')" class="px-2.5 py-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-lg text-[11px] shadow-sm flex items-center gap-1 transition-all active:scale-95">
+                                    <i class="fa-solid fa-gift"></i> <span>Hediye Ver</span>
+                                </button>
+                                <button type="button" onclick="handleCancelGiveawayTicket('${sNo}', '${safeName}', '${ticket}')" class="px-2 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded-lg text-[11px] border border-rose-400/30 transition-all" title="Bileti İptal Et">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function handleCancelGiveawayTicket(studentNo, fullName, ticket) {
+            if (!confirm(`${fullName} adlı üyenin ${ticket} nolu çekiliş biletini iptal etmek istediğinize emin misiniz?`)) return;
+            const members = cachedCloudData.members || [];
+            const member = members.find(m => String(m.studentNo || '').trim() === String(studentNo).trim());
+            if (member) {
+                delete member.giveawayTicket;
+                delete member.ticketJoinedAt;
+                await CloudSync.pushMembers(members);
+
+                const localRaw = localStorage.getItem(STORAGE_KEY);
+                if (localRaw) {
+                    const localM = JSON.parse(localRaw);
+                    if (String(localM.studentNo || '').trim() === String(studentNo).trim()) {
+                        delete localM.giveawayTicket;
+                        delete localM.ticketJoinedAt;
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(localM));
+                    }
+                }
+                renderGiveawayParticipants();
+                renderCloudMembers();
+                updateStats();
+            }
+        }
+
+        // Biletli Üyeler Arasından Canlı Kura Çekimi
+        async function handleGiveawayLotteryDraw() {
+            const allMembers = cachedCloudData.members || [];
+            const ticketHolders = allMembers.filter(m => !!m.giveawayTicket);
+
+            if (ticketHolders.length === 0) {
+                alert("⚠️ Henüz çekiliş bileti almış bir üye bulunmuyor!\nÖnce öğrencilerin çekiliş sayfasından (cekilis.html) bilet almaları gerekmektedir.");
+                return;
+            }
+
+            const pool = getGiftPool();
+            const availablePool = pool.filter(p => (p.stock || 0) - (p.distributed || 0) > 0);
+            if (availablePool.length === 0) {
+                alert("⚠️ Hediye havuzundaki tüm hediyelerin stoğu tükenmiştir! Lütfen önce havuzdan stok ekleyin.");
+                return;
+            }
+
+            let candidates = ticketHolders.filter(m => !m.wonGift);
+            if (candidates.length === 0) {
+                candidates = ticketHolders;
+            }
+
+            const winner = candidates[Math.floor(Math.random() * candidates.length)];
+            const randomGift = availablePool[Math.floor(Math.random() * availablePool.length)];
+            const code = (randomGift.prefix || 'ULU-CEK') + '-' + Math.floor(1000 + Math.random() * 9000);
+
+            randomGift.distributed = (randomGift.distributed || 0) + 1;
+            saveGiftPool(pool);
+
+            const giftObj = {
+                title: randomGift.title,
+                code: code,
+                assignedAt: new Date().toISOString()
+            };
+
+            winner.wonGift = giftObj;
+
+            const sNo = String(winner.studentNo || '').trim();
+            const newGiftItem = {
+                id: 'GIFT-' + Date.now(),
+                poolItemId: randomGift.id,
+                target: sNo,
+                title: randomGift.title,
+                code: code,
+                date: new Date().toLocaleDateString('tr-TR')
+            };
+
+            if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
+            cachedCloudData.gifts.unshift(newGiftItem);
+
+            await Promise.all([
+                CloudSync.pushMembers(allMembers),
+                CloudSync.pushGifts(cachedCloudData.gifts),
+                CloudSync.pushPool(pool)
+            ]);
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.4 } });
+            }
+
+            alert(`🎉 ÇEKİLİŞ KAZANANI BELİRLENDİ!\n\n🎟️ Bilet No: ${winner.giveawayTicket}\n👤 Öğrenci: ${winner.fullName} (${sNo})\n🎁 Hediye: ${randomGift.title}\n🔑 Kupon Kodu: ${code}\n\nÖğrencinin Dijital Üye Kartına bulut üzerinden anında işlendi!`);
+
+            renderGiveawayParticipants();
+            renderCloudMembers();
+            renderGiftsList();
+            renderGiftPool();
+            updateStats();
+        }
+
+        // Çekiliş Bitiş Tarihi Modal ve Ayar İşlemleri
+        async function openGiveawayConfigModal() {
+            const config = await CloudSync.getGiveawayConfig();
+            const dateInput = document.getElementById('giveawayTargetDateTimeInput');
+            if (dateInput && config && config.targetTime) {
+                const d = new Date(config.targetTime);
+                const localIso = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+                dateInput.value = localIso;
+            }
+            document.getElementById('giveawayConfigModal').classList.remove('hidden');
+        }
+
+        function closeGiveawayConfigModal() {
+            document.getElementById('giveawayConfigModal').classList.add('hidden');
+        }
+
+        async function handleSaveGiveawayConfig(e) {
+            e.preventDefault();
+            const dateInput = document.getElementById('giveawayTargetDateTimeInput').value;
+            if (!dateInput) return;
+
+            const targetTime = new Date(dateInput).toISOString();
+            await CloudSync.pushGiveawayConfig({ targetTime });
+
+            updateAdminGiveawayBadge(targetTime);
+            closeGiveawayConfigModal();
+            alert("✓ Çekiliş bitiş tarihi güncellendi ve tüm siteyle senkronize edildi!");
+        }
+
+        function updateAdminGiveawayBadge(targetTime) {
+            const badge = document.getElementById('adminGiveawayTargetBadge');
+            if (badge && targetTime) {
+                const d = new Date(targetTime);
+                badge.textContent = `⏱️ ${d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}`;
+            }
         }
 
         // =========================================================================
@@ -1295,13 +1703,19 @@
             const totalStock = pool.reduce((sum, item) => sum + (item.stock || 0), 0);
             const totalDistributed = gifts.length;
             const totalRemaining = Math.max(0, totalStock - totalDistributed);
+            const giveawayCount = members.filter(m => !!m.giveawayTicket).length;
 
-            document.getElementById('statTotalStock').textContent = totalStock;
-            document.getElementById('statTotalDistributed').textContent = totalDistributed;
-            document.getElementById('statTotalRemaining').textContent = totalRemaining;
+            const elTotalStock = document.getElementById('statTotalStock');
+            const elTotalDistributed = document.getElementById('statTotalDistributed');
+            const elTotalRemaining = document.getElementById('statTotalRemaining');
+            const elGiveaway = document.getElementById('statGiveawayParticipants');
+            const elLocal = document.getElementById('statLocalUser');
 
-            const statLocal = document.getElementById('statLocalUser');
-            statLocal.textContent = `${members.length} Kayıtlı Üye`;
+            if (elTotalStock) elTotalStock.textContent = totalStock;
+            if (elTotalDistributed) elTotalDistributed.textContent = totalDistributed;
+            if (elTotalRemaining) elTotalRemaining.textContent = totalRemaining;
+            if (elGiveaway) elGiveaway.textContent = giveawayCount;
+            if (elLocal) elLocal.textContent = `${members.length} Üye`;
         }
 
         function toggleTargetMode(mode) {

@@ -243,24 +243,27 @@
 
             <!-- GERİ SAYIM SAYACI -->
             <div class="max-w-xl mx-auto mb-12 bg-white/[0.06] border border-white/15 rounded-3xl p-6 backdrop-blur-xl shadow-2xl">
-                <p class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-4 flex items-center justify-center gap-2">
-                    <i class="fa-regular fa-clock"></i> <span>Çekilişin Açıklanmasına Kalan Süre</span>
-                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-2 mb-4">
+                    <p class="text-xs font-bold uppercase tracking-widest text-amber-400 flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-clock"></i> <span id="countdownStatusText">Çekilişin Açıklanmasına Kalan Süre</span>
+                    </p>
+                    <span id="targetDateBadge" class="text-[11px] font-mono font-bold bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-400/30">15 Ekim 2026 20:00</span>
+                </div>
                 <div class="grid grid-cols-4 gap-3 text-center">
                     <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
-                        <span id="countDays" class="block text-2xl sm:text-3xl font-black text-white font-mono">12</span>
+                        <span id="countDays" class="block text-2xl sm:text-3xl font-black text-white font-mono">--</span>
                         <span class="text-[10px] sm:text-xs text-slate-400 font-bold">GÜN</span>
                     </div>
                     <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
-                        <span id="countHours" class="block text-2xl sm:text-3xl font-black text-amber-400 font-mono">18</span>
+                        <span id="countHours" class="block text-2xl sm:text-3xl font-black text-amber-400 font-mono">--</span>
                         <span class="text-[10px] sm:text-xs text-slate-400 font-bold">SAAT</span>
                     </div>
                     <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
-                        <span id="countMinutes" class="block text-2xl sm:text-3xl font-black text-white font-mono">42</span>
+                        <span id="countMinutes" class="block text-2xl sm:text-3xl font-black text-white font-mono">--</span>
                         <span class="text-[10px] sm:text-xs text-slate-400 font-bold">DAKİKA</span>
                     </div>
                     <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
-                        <span id="countSeconds" class="block text-2xl sm:text-3xl font-black text-amber-400 font-mono">59</span>
+                        <span id="countSeconds" class="block text-2xl sm:text-3xl font-black text-amber-400 font-mono">--</span>
                         <span class="text-[10px] sm:text-xs text-slate-400 font-bold">SANİYE</span>
                     </div>
                 </div>
@@ -611,6 +614,8 @@
         const STORAGE_KEY = 'uluceeit_verified_member';
         const MEMBERS_CACHE_KEY = 'uluceeit_active_members';
         const GIFTS_REGISTRY_KEY = 'uluceeit_active_gifts';
+        const GIVEAWAY_CONFIG_KEY = 'uluceeit_giveaway_config';
+        const DEFAULT_TARGET_TIME = '2026-10-15T20:00:00+03:00';
 
         // MantleDB Bulut Senkronizasyon Katmanı
         const CloudSync = {
@@ -675,6 +680,25 @@
                 return cached ? JSON.parse(cached) : [];
             },
 
+            async getGiveawayConfig() {
+                try {
+                    const res = await fetch(`${this.API_BASE}/giveaway_config`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.targetTime) {
+                            localStorage.setItem(GIVEAWAY_CONFIG_KEY, JSON.stringify(data));
+                            return data;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('MantleDB giveaway config fetch error:', e);
+                }
+                const cached = localStorage.getItem(GIVEAWAY_CONFIG_KEY);
+                return cached ? JSON.parse(cached) : { targetTime: DEFAULT_TARGET_TIME };
+            },
+
             async registerMember(member) {
                 try {
                     if (!member || !member.studentNo) return;
@@ -705,12 +729,58 @@
             }
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             updateNavbarCardState();
             updateGiveawayBtnState();
             setInterval(updateCardClock, 1000);
             startCountdown();
+
+            // Buluttan hedef tarihi ve üye durumunu arka planda eşitle
+            try {
+                const config = await CloudSync.getGiveawayConfig();
+                if (config && config.targetTime) {
+                    updateCountdown();
+                }
+            } catch (e) {}
+
+            syncMemberState();
         });
+
+        // Üyenin bilet ve hediye durumunu bulutla çift taraflı eşitle
+        async function syncMemberState() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (!savedData) return;
+            try {
+                const localMember = JSON.parse(savedData);
+                const members = await CloudSync.getMembers();
+                const sNo = String(localMember.studentNo || '').trim();
+                const cloudMember = members.find(m => String(m.studentNo || '').trim() === sNo);
+                if (cloudMember) {
+                    let changed = false;
+                    if (cloudMember.giveawayTicket && !localMember.giveawayTicket) {
+                        localMember.giveawayTicket = cloudMember.giveawayTicket;
+                        localMember.ticketJoinedAt = cloudMember.ticketJoinedAt;
+                        changed = true;
+                    }
+                    if (cloudMember.wonGift && !localMember.wonGift) {
+                        localMember.wonGift = cloudMember.wonGift;
+                        changed = true;
+                    }
+                    if (localMember.giveawayTicket && !cloudMember.giveawayTicket) {
+                        cloudMember.giveawayTicket = localMember.giveawayTicket;
+                        cloudMember.ticketJoinedAt = localMember.ticketJoinedAt;
+                        await CloudSync.pushMembers(members);
+                    }
+                    if (changed) {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(localMember));
+                        updateNavbarCardState();
+                        updateGiveawayBtnState();
+                    }
+                }
+            } catch (e) {
+                console.warn('Member sync error:', e);
+            }
+        }
 
         // Çekilişe Katılma / Bilet Üretme Motoru
         async function handleJoinGiveaway() {
@@ -734,13 +804,15 @@
             member.ticketJoinedAt = new Date().toISOString();
 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
-            CloudSync.registerMember(member);
+            updateGiveawayBtnState();
+
+            // Buluta gönder
+            await CloudSync.registerMember(member);
 
             if (typeof confetti === 'function') {
                 confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 } });
             }
 
-            updateGiveawayBtnState();
             showMemberCard(member);
         }
 
@@ -882,30 +954,61 @@
             }
         }
 
-        // Geri Sayım Sayacı (15 Gün Sonrası)
-        function startCountdown() {
-            const targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 12);
-            targetDate.setHours(targetDate.getHours() + 18);
+        // Kalıcı Geri Sayım Sayacı Motoru (Sayfa yenilendiğinde sıfırlanmaz)
+        let countdownTimerId = null;
 
-            function update() {
-                const now = new Date().getTime();
-                const diff = targetDate.getTime() - now;
-
-                if (diff > 0) {
-                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                    document.getElementById('countDays').textContent = String(days).padStart(2, '0');
-                    document.getElementById('countHours').textContent = String(hours).padStart(2, '0');
-                    document.getElementById('countMinutes').textContent = String(minutes).padStart(2, '0');
-                    document.getElementById('countSeconds').textContent = String(seconds).padStart(2, '0');
+        function getGiveawayTargetTime() {
+            try {
+                const cached = localStorage.getItem(GIVEAWAY_CONFIG_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (parsed && parsed.targetTime) return new Date(parsed.targetTime).getTime();
                 }
+            } catch (e) {}
+            return new Date(DEFAULT_TARGET_TIME).getTime();
+        }
+
+        function updateCountdown() {
+            const targetTime = getGiveawayTargetTime();
+            const now = Date.now();
+            const diff = targetTime - now;
+
+            const daysEl = document.getElementById('countDays');
+            const hoursEl = document.getElementById('countHours');
+            const minutesEl = document.getElementById('countMinutes');
+            const secondsEl = document.getElementById('countSeconds');
+            const statusEl = document.getElementById('countdownStatusText');
+            const targetBadge = document.getElementById('targetDateBadge');
+
+            if (targetBadge) {
+                const d = new Date(targetTime);
+                targetBadge.textContent = d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
             }
-            setInterval(update, 1000);
-            update();
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+                if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+                if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+                if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+                if (statusEl) statusEl.textContent = 'Çekilişin Açıklanmasına Kalan Süre';
+            } else {
+                if (daysEl) daysEl.textContent = '00';
+                if (hoursEl) hoursEl.textContent = '00';
+                if (minutesEl) minutesEl.textContent = '00';
+                if (secondsEl) secondsEl.textContent = '00';
+                if (statusEl) statusEl.innerHTML = '🎉 <span class="text-emerald-400 font-black">Çekiliş Başladı / Kura Zamanı!</span>';
+            }
+        }
+
+        function startCountdown() {
+            updateCountdown();
+            if (countdownTimerId) clearInterval(countdownTimerId);
+            countdownTimerId = setInterval(updateCountdown, 1000);
         }
 
         // 👑 YÖNETİM HEDİYE ATAMA PANELİ
