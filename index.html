@@ -1310,11 +1310,35 @@
 
             </div>
 
+            <!-- 🎁 KAZANILAN HEDİYE ROZETİ (YÖNETİM TANIMLADIYSA KİŞİYE ÖZEL GÖRÜNÜR) -->
+            <div id="wonGiftContainer" class="hidden mb-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-2 border-amber-400 text-white shadow-2xl animate-pulse">
+                <div class="flex items-center justify-between mb-2 pb-2 border-b border-white/10">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-gift text-amber-400 text-lg"></i>
+                        <span class="text-xs font-black uppercase text-amber-300 tracking-wider">🎉 TEBRİKLER HEDİYE KAZANDINIZ!</span>
+                    </div>
+                    <span class="text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded-full">Kupon Aktif</span>
+                </div>
+                <h4 id="wonGiftTitle" class="text-base font-black text-white mb-2">EspressoLab 1 Aylık Ücretsiz Kahve Paketi</h4>
+                <div class="bg-black/50 p-3 rounded-xl border border-white/10 flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Teslim Alma Kupon Kodu</p>
+                        <p id="wonGiftCode" class="text-sm font-mono font-black text-amber-300">ULU-KAHVE-8492</p>
+                    </div>
+                    <span class="text-[11px] text-emerald-400 font-bold bg-emerald-500/20 px-2.5 py-1 rounded-lg border border-emerald-500/30">
+                        <i class="fa-solid fa-check mr-1"></i> Göster & Teslim Al
+                    </span>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-2.5">
+                    * Hediyenizi İİBF Kulüp Odası'ndan veya ilgili anlaşmalı mekandan bu ekranı göstererek teslim alabilirsiniz.
+                </p>
+            </div>
+
             <!-- Kullanım Bilgisi -->
-            <div class="mt-5 text-center">
+            <div class="mt-4 text-center">
                 <p class="text-xs text-slate-300 mb-4">
                     <i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i>
-                    Anlaşmalı sponsor kafelerde indirim almak için bu ekranı göstermeniz yeterlidir.
+                    Anlaşmalı sponsor kafelerde indirim almak veya hediyenizi teslim almak için bu ekranı göstermeniz yeterlidir.
                 </p>
                 <div class="flex gap-2 justify-center">
                     <button onclick="closeMemberCardModal()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 rounded-xl font-black text-sm shadow-lg hover:shadow-amber-500/40 transition-all">
@@ -1573,6 +1597,28 @@
             document.getElementById('cardHolderName').textContent = member.fullName;
             document.getElementById('cardHolderNo').textContent = member.studentNo;
             document.getElementById('cardSerialNo').textContent = member.serialNo || 'ULU-2026-8492';
+
+            // Kişiye Özel Hediye Kontrolü (Admin Tanımladıysa)
+            const wonGiftCont = document.getElementById('wonGiftContainer');
+            let assignedGift = member.wonGift;
+
+            // Registry Kontrolü (Öğrenci No eşleşmesi)
+            if (!assignedGift && member.studentNo) {
+                const registry = JSON.parse(localStorage.getItem('uluceeit_gifts_registry') || '[]');
+                const found = registry.find(item => item.target === member.studentNo || item.target === 'Mevcut Cihaz' || item.target.includes(member.studentNo));
+                if (found) {
+                    assignedGift = { title: found.title, code: found.code };
+                }
+            }
+
+            if (assignedGift) {
+                wonGiftCont.classList.remove('hidden');
+                document.getElementById('wonGiftTitle').textContent = assignedGift.title;
+                document.getElementById('wonGiftCode').textContent = assignedGift.code;
+            } else {
+                wonGiftCont.classList.add('hidden');
+            }
+
             updateCardClock();
             document.getElementById('memberCardModal').classList.remove('hidden');
         }

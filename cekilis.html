@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ULUÇEEİT - Büyük Üye Çekilişi</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- Meta & SEO Tags -->
+    <meta name="description" content="Bursa Uludağ Üniversitesi ULUÇEEİT Büyük Üye Çekilişi! Kitap setleri, kahve paketleri, İK eğitim bursları ve özel kulüp hediyeleri kazanma şansı.">
+    <meta property="og:title" content="ULUÇEEİT - Büyük Üye Çekilişi">
+    <meta property="og:image" content="logo.png">
+    
+    <!-- Tailwind CSS ve FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- QR Code & Confetti -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ceko: {
+                            dark: '#060f24',
+                            navy: '#0b1d4a',
+                            deep: '#0e245c',
+                            royal: '#1d4ed8',
+                            blue: '#2563eb',
+                            cyan: '#06b6d4',
+                            sky: '#38bdf8',
+                            accent: '#f59e0b',
+                            gold: '#fbbf24',
+                            light: '#f8fafc',
+                            canvas: '#f1f5f9'
+                        }
+                    },
+                    boxShadow: {
+                        'glass-sm': '0 8px 30px 0 rgba(11, 29, 74, 0.08)',
+                        'glass': '0 20px 45px -10px rgba(11, 29, 74, 0.15)',
+                        'glass-glow': '0 0 45px -10px rgba(37, 99, 235, 0.35)',
+                        'glass-amber': '0 0 45px -10px rgba(245, 158, 11, 0.35)',
+                        'card-navy': '0 25px 50px -12px rgba(6, 15, 36, 0.45)',
+                        'card-gold': '0 0 35px rgba(245, 158, 11, 0.3)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #0b1d4a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2563eb; }
+        html { scroll-behavior: smooth; }
+        
+        .liquid-glass-hero {
+            background: linear-gradient(135deg, rgba(11, 29, 74, 0.92) 0%, rgba(6, 15, 36, 0.95) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .liquid-glass-navy {
+            background: linear-gradient(135deg, #0b1d4a 0%, #060f24 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .liquid-glass-navy:hover {
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        /* VIP Liquid Glass Member Card Styling */
+        .vip-member-card {
+            background: radial-gradient(circle at top left, #153275 0%, #081636 50%, #040a1c 100%);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .vip-member-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.08) 45%,
+                rgba(245, 158, 11, 0.15) 50%,
+                rgba(255, 255, 255, 0.08) 55%,
+                transparent 70%
+            );
+            transform: rotate(25deg);
+            animation: holographic-shimmer 6s infinite linear;
+            pointer-events-none;
+        }
+
+        @keyframes holographic-shimmer {
+            0% { transform: translateY(-100%) rotate(25deg); }
+            100% { transform: translateY(100%) rotate(25deg); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.35; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        .animate-pulse-glow { animation: pulse-glow 3.5s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-ceko-navy selection:text-white">
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo -->
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-3.5 group">
+                    <div class="relative flex items-center justify-center">
+                        <img src="logo.png" alt="ULUÇEEİT Logo" class="h-12 w-12 object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300" onerror="this.src='logo.jpg'">
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <span class="font-black text-xl text-ceko-navy tracking-tight leading-none group-hover:text-blue-600 transition-colors">ULUÇEEİT</span>
+                        <span class="text-[11px] text-slate-500 font-semibold mt-1">Bursa Uludağ Üniversitesi</span>
+                    </div>
+                </a>
+
+                <!-- Masaüstü Linkler -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html#hakkimizda" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Hakkımızda</a>
+                    <a href="index.html#etkinlikler" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Etkinlikler</a>
+                    <a href="index.html#sponsorlar" class="text-slate-700 hover:text-amber-600 font-semibold text-sm transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-tags text-xs text-amber-500"></i> Sponsorlar
+                    </a>
+                    <a href="cekilis.html" class="text-amber-600 font-extrabold text-sm transition-colors flex items-center gap-1.5 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
+                        <i class="fa-solid fa-gift text-xs"></i> <span>Çekiliş</span>
+                        <span class="bg-amber-500 text-slate-950 text-[10px] px-1.5 py-0.2 rounded-full font-black">Aktif</span>
+                    </a>
+                    <a href="index.html#yonetim-kurulu" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Yönetim</a>
+                    
+                    <!-- DİJİTAL ÜYE KARTI BUTONU -->
+                    <button onclick="handleMemberCardClick()" id="navCardBtn" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all border shadow-sm bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 border-amber-400 hover:shadow-amber-500/30 transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-id-card text-sm"></i>
+                        <span id="navCardBtnText">🪪 Dijital Üye Kartı</span>
+                    </button>
+                </div>
+
+                <!-- Mobil Menü Butonu -->
+                <div class="md:hidden flex items-center gap-2">
+                    <button onclick="handleMemberCardClick()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 flex items-center gap-1.5">
+                        <i class="fa-solid fa-id-card"></i> <span>Kartım</span>
+                    </button>
+                    <button id="mobileMenuBtn" class="text-slate-700 hover:text-blue-600 p-2.5 rounded-xl hover:bg-slate-100 focus:outline-none transition-colors" aria-label="Menüyü Aç">
+                        <i class="fa-solid fa-bars text-2xl" id="menuIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBİL MENÜ -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-200 shadow-2xl w-full absolute top-full left-0 z-50">
+            <div class="px-5 pt-4 pb-6 space-y-2">
+                <a href="index.html#hakkimizda" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-compass text-blue-600 w-5"></i> Hakkımızda
+                </a>
+                <a href="index.html#etkinlikler" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-calendar-check text-blue-600 w-5"></i> Etkinlikler
+                </a>
+                <a href="index.html#sponsorlar" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-amber-600 hover:bg-amber-50 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-tags text-amber-500 w-5"></i> Sponsorlarımız & İndirimler</span>
+                </a>
+                <a href="cekilis.html" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-amber-700 bg-amber-50 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-gift text-amber-500 w-5"></i> Büyük Çekiliş</span>
+                    <span class="bg-amber-500 text-slate-950 text-xs px-2 py-0.5 rounded-full font-black">Aktif</span>
+                </a>
+                <a href="index.html#yonetim-kurulu" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-users text-blue-600 w-5"></i> Yönetim Kurulu
+                </a>
+                <div class="pt-2">
+                    <button onclick="handleMemberCardClick()" class="w-full text-center bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 px-4 py-3.5 rounded-xl font-black shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-id-card"></i> <span>🪪 Dijital Üye Kartını Aç</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION: BÜYÜK ÇEKİLİŞ VİTRİNİ -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-b from-[#081538] via-[#0b1d4a] to-[#081538] text-white">
+        <div class="absolute top-1/4 left-10 -translate-x-1/2 w-[600px] h-[600px] bg-amber-500/20 blur-[150px] rounded-full pointer-events-none animate-pulse-glow"></div>
+        <div class="absolute top-1/3 right-10 w-[500px] h-[500px] bg-blue-500/20 blur-[140px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            
+            <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-400/30 backdrop-blur-2xl text-xs sm:text-sm text-amber-300 mb-6 shadow-glass-amber">
+                <i class="fa-solid fa-sparkles text-amber-400"></i>
+                <span class="font-extrabold text-white tracking-wide">2026 - 2027 Güz Dönemi</span>
+                <span class="text-amber-400/50">•</span>
+                <span class="font-bold text-amber-300">Büyük Üye Çekilişi</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1] mb-6 text-white max-w-4xl mx-auto">
+                ULUÇEEİT Üyelerine Özel <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-500">
+                    Büyük Hediye Çekilişi Başladı! 🎁
+                </span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-slate-300 mb-10 max-w-2xl mx-auto font-normal leading-relaxed">
+                Kulübümüze kayıtlı resmi üyelerimize özel hazırladığımız muhteşem ödülleri kazanma fırsatını kaçırmayın. Tek tıkla biletinizi alın, kazandığınız hediye doğrudan <strong>Dijital Üye Kartınıza</strong> tanımlansın!
+            </p>
+
+            <!-- GERİ SAYIM SAYACI -->
+            <div class="max-w-xl mx-auto mb-12 bg-white/[0.06] border border-white/15 rounded-3xl p-6 backdrop-blur-xl shadow-2xl">
+                <p class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-4 flex items-center justify-center gap-2">
+                    <i class="fa-regular fa-clock"></i> <span>Çekilişin Açıklanmasına Kalan Süre</span>
+                </p>
+                <div class="grid grid-cols-4 gap-3 text-center">
+                    <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
+                        <span id="countDays" class="block text-2xl sm:text-3xl font-black text-white font-mono">12</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400 font-bold">GÜN</span>
+                    </div>
+                    <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
+                        <span id="countHours" class="block text-2xl sm:text-3xl font-black text-amber-400 font-mono">18</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400 font-bold">SAAT</span>
+                    </div>
+                    <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
+                        <span id="countMinutes" class="block text-2xl sm:text-3xl font-black text-white font-mono">42</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400 font-bold">DAKİKA</span>
+                    </div>
+                    <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
+                        <span id="countSeconds" class="block text-2xl sm:text-3xl font-black text-amber-400 font-mono">59</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400 font-bold">SANİYE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEK TIKLA BİLET ALMA / KATILIM BUTONU -->
+            <div class="max-w-md mx-auto">
+                <button onclick="handleJoinGiveaway()" id="joinGiveawayBtn" class="w-full py-4 px-8 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black text-lg rounded-2xl shadow-xl shadow-amber-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-ticket text-xl"></i>
+                    <span id="joinBtnText">🎟️ Çekilişe Katıl & Biletini Al</span>
+                </button>
+                <p class="text-xs text-slate-400 mt-3">
+                    * Yalnızca doğrulanmış ULUÇEEİT SKS üyeleri katılabilir. Katılım tamamen ücretsizdir.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- HEDİYELER VİTRİNİ -->
+    <section class="py-24 bg-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-black text-ceko-navy tracking-tight mb-4">
+                    Dağıtılacak <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600">Özel Hediyeler</span>
+                </h2>
+                <div class="w-24 h-1.5 bg-gradient-to-r from-amber-500 to-blue-600 mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-600 max-w-2xl mx-auto text-base sm:text-lg">
+                    Çekilişimizde öğrencilerimizin akademik, sosyal ve günlük kampüs hayatına değer katacak hediyeler sizi bekliyor!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Hediye 1: Kitap Seti -->
+                <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy border border-white/15 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 group">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-blue-500/20 border border-blue-400/30 text-blue-300 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                        </div>
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">1. ÖDÜL KATEGORİSİ</span>
+                        <h3 class="text-xl font-black text-white mb-2 mt-1">ÇEEİ & KPSS Kitap Seti</h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
+                            İş Hukuku, Sosyal Güvenlik ve Çalışma Ekonomisi ders özetleri + KPSS A Grubu hazırlık soru bankası seti.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-slate-400 font-semibold">3 Talihliye</span>
+                        <span class="text-amber-400 font-bold bg-amber-500/15 px-2.5 py-1 rounded-md border border-amber-500/30">Akademik Paket</span>
+                    </div>
+                </div>
+
+                <!-- Hediye 2: Kahve Paketi -->
+                <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy border border-white/15 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 group">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/30 text-amber-300 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all shadow-inner">
+                            <i class="fa-solid fa-mug-hot"></i>
+                        </div>
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">2. ÖDÜL KATEGORİSİ</span>
+                        <h3 class="text-xl font-black text-white mb-2 mt-1">1 Aylık Kahve Aboneliği</h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
+                            EspressoLab Görükle şubesinde geçerli, dilediğiniz sıcak/soğuk kahve çeşitlerinden oluşan ücretsiz kupon paketi.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-slate-400 font-semibold">5 Talihliye</span>
+                        <span class="text-amber-400 font-bold bg-amber-500/15 px-2.5 py-1 rounded-md border border-amber-500/30">EspressoLab</span>
+                    </div>
+                </div>
+
+                <!-- Hediye 3: İK Eğitimi -->
+                <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy border border-white/15 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 group">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-purple-500/20 border border-purple-400/30 text-purple-300 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-inner">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">3. ÖDÜL KATEGORİSİ</span>
+                        <h3 class="text-xl font-black text-white mb-2 mt-1">İK & Bordro Eğitim Bursu</h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
+                            Kampüs Kariyer Akademi'den %100 burslu İnsan Kaynakları Uzmanlığı ve Sertifikalı Bordrolama Eğitimi.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-slate-400 font-semibold">2 Talihliye</span>
+                        <span class="text-purple-300 font-bold bg-purple-500/15 px-2.5 py-1 rounded-md border border-purple-500/30">Sertifikalı</span>
+                    </div>
+                </div>
+
+                <!-- Hediye 4: Kulüp Özel Seti -->
+                <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy border border-white/15 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 group">
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
+                            <i class="fa-solid fa-shirt"></i>
+                        </div>
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">4. ÖDÜL KATEGORİSİ</span>
+                        <h3 class="text-xl font-black text-white mb-2 mt-1">ULUÇEEİT VIP Hediye Seti</h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
+                            Özel tasarım ULUÇEEİT çelik termos, kulüp sweatshirt'ü, bez çanta ve özel sticker seti.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-slate-400 font-semibold">10 Talihliye</span>
+                        <span class="text-emerald-300 font-bold bg-emerald-500/15 px-2.5 py-1 rounded-md border border-emerald-500/30">Özel Tasarım</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NASIL İŞLİYOR BÖLÜMÜ -->
+    <section class="py-20 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] border-t border-slate-200">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h3 class="text-2xl sm:text-3xl font-black text-ceko-navy mb-2">Çekiliş ve Hediye Teslimatı Nasıl Çalışır?</h3>
+                <p class="text-slate-600 text-sm">3 basit adımda hediyenizi alın:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="bg-white p-7 rounded-3xl shadow-md border border-slate-200">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl font-black mx-auto mb-4">1</div>
+                    <h4 class="font-bold text-slate-900 mb-2">Biletini Al</h4>
+                    <p class="text-xs text-slate-600">SKS üye kartınla tek tıkla çekilişe katıl. Adına özel çekiliş numarası anında kartına kaydedilir.</p>
+                </div>
+                <div class="bg-white p-7 rounded-3xl shadow-md border border-slate-200">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center text-xl font-black mx-auto mb-4">2</div>
+                    <h4 class="font-bold text-slate-900 mb-2">Sonuçları Bekle</h4>
+                    <p class="text-xs text-slate-600">Çekiliş günü canlı kura çekilir. Kazanan şanslı üyelerin ödülleri doğrudan kartlarına işlenir.</p>
+                </div>
+                <div class="bg-white p-7 rounded-3xl shadow-md border border-slate-200">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl font-black mx-auto mb-4">3</div>
+                    <h4 class="font-bold text-slate-900 mb-2">Hediyeni Teslim Al</h4>
+                    <p class="text-xs text-slate-600">Kartındaki özel kupon kodunu İİBF Kulüp Odası'nda veya anlaşmalı mekanda göstererek hediyeni teslim al!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#050c1a] text-white pt-14 pb-8 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <img src="logo.png" alt="Logo" class="h-10 w-10 object-contain" onerror="this.src='logo.jpg'">
+                <span class="font-bold text-lg text-white">ULUÇEEİT</span>
+            </div>
+            <p class="text-slate-400 text-xs mb-6">Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu</p>
+            <div class="flex justify-center gap-4 text-xs text-slate-400 mb-6">
+                <a href="index.html" class="hover:text-white">Ana Sayfa</a>
+                <span>•</span>
+                <a href="index.html#sponsorlar" class="hover:text-white">Sponsorlar</a>
+                <span>•</span>
+                <button onclick="openAdminGiveawayModal()" class="hover:text-amber-400 text-slate-500">👑 Yönetim Paneli</button>
+            </div>
+            <p class="text-[11px] text-slate-600">&copy; 2026 ULUÇEEİT. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+
+    <!-- ========================================================================= -->
+    <!-- 🪪 DİJİTAL ÜYE KARTI MODALI (HEDİYELER VE BİLETLER ENTEGRELİ) -->
+    <!-- ========================================================================= -->
+    <div id="memberCardModal" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-[999] hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-md bg-slate-900 rounded-3xl p-6 sm:p-7 border border-amber-500/30 shadow-2xl overflow-hidden max-h-[92vh] overflow-y-auto">
+            
+            <button onclick="closeMemberCardModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors z-30">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Ana VIP Üye Kartı -->
+            <div class="vip-member-card rounded-2xl p-6 text-white shadow-2xl border border-amber-400/40 relative mb-5">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="flex items-center gap-3">
+                        <img src="logo.png" alt="Logo" class="w-11 h-11 object-contain drop-shadow-md" onerror="this.src='logo.jpg'">
+                        <div>
+                            <p class="text-[10px] uppercase font-extrabold tracking-widest text-amber-400">BURSA ULUDAĞ ÜNİVERSİTESİ</p>
+                            <h4 class="text-sm font-black text-white tracking-tight">ULUÇEEİT RESMİ ÜYE KARTI</h4>
+                        </div>
+                    </div>
+                    <div class="text-amber-400 text-xl font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-wifi rotate-90 text-sm"></i>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between mb-6">
+                    <div class="w-11 h-8 rounded-md bg-gradient-to-tr from-amber-400 via-yellow-200 to-amber-500 border border-amber-600 shadow-inner flex items-center justify-center">
+                        <div class="w-7 h-5 border border-amber-700/60 rounded flex flex-col justify-between py-0.5 px-1 opacity-70">
+                            <div class="w-full h-px bg-amber-800"></div>
+                            <div class="w-full h-px bg-amber-800"></div>
+                        </div>
+                    </div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-black">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span>SKS ONAYLI ÜYE</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">ÜYE ADI SOYADI</p>
+                        <h3 id="cardHolderName" class="text-xl font-black text-white tracking-wide uppercase">BURAK EFE TÜRK</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">ÖĞRENCİ NO</p>
+                            <p id="cardHolderNo" class="font-mono font-bold text-amber-300 text-sm">022201045</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">DÖNEM</p>
+                            <p class="font-bold text-slate-200">2026 - 2027</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-white/15 flex items-center justify-between">
+                    <div>
+                        <p class="text-[9px] text-slate-400 uppercase font-bold tracking-widest">CANLI DOĞRULAMA</p>
+                        <p id="cardLiveTimestamp" class="font-mono text-[11px] font-bold text-emerald-400">28.08.2026 01:34:20</p>
+                    </div>
+                    <div class="text-right font-mono text-[10px] font-bold text-amber-300/80 tracking-widest" id="cardSerialNo">
+                        ULU-2026-9821
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🎁 KİŞİYE ÖZEL ÇEKİLİŞ BİLETLERİ VE KAZANDIĞI HEDİYELER ALANI -->
+            <div class="bg-slate-800/90 rounded-2xl p-4 border border-amber-400/30 mb-4">
+                <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
+                    <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-gift"></i> Çekiliş Durumu & Hediyeler
+                    </span>
+                    <span id="ticketCountBadge" class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-bold border border-amber-400/30">1 Bilet</span>
+                </div>
+
+                <!-- Kazanılan Hediye Rozeti (Varsa) -->
+                <div id="wonGiftContainer" class="hidden mb-3 p-3 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 border border-emerald-400/50 text-white animate-pulse">
+                    <div class="flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-trophy text-amber-400 text-base"></i>
+                        <span class="text-xs font-extrabold text-amber-300">🎉 TEBRİKLER HEDİYE KAZANDINIZ!</span>
+                    </div>
+                    <p id="wonGiftTitle" class="text-sm font-black text-white mb-1">EspressoLab 1 Aylık Kahve Paketi</p>
+                    <div class="flex justify-between items-center text-[11px] pt-2 border-t border-emerald-700/50">
+                        <span class="text-slate-300">Teslim Kuponu:</span>
+                        <span id="wonGiftCode" class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded">ULU-KAHVE-849</span>
+                    </div>
+                </div>
+
+                <!-- Aktif Bilet Bilgisi -->
+                <div id="activeTicketContainer" class="text-xs text-slate-300 space-y-1.5">
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400">Güz Çekiliş Bileti:</span>
+                        <span id="cardTicketNumber" class="font-mono font-bold text-amber-300 bg-white/5 px-2 py-0.5 rounded border border-white/10">BİLET-7492</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 pt-1">
+                        <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> Çekilişe katılımınız onaylandı.
+                    </p>
+                </div>
+
+                <!-- Bilet Yoksa -->
+                <div id="noTicketContainer" class="hidden text-xs text-slate-400 text-center py-2">
+                    <p>Henüz çekilişe katılmadınız.</p>
+                    <button onclick="handleJoinGiveaway()" class="mt-2 text-xs text-amber-400 font-bold underline">Hemen Biletini Al</button>
+                </div>
+            </div>
+
+            <button onclick="closeMemberCardModal()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 rounded-xl font-black text-sm shadow-lg hover:shadow-amber-500/40 transition-all">
+                Kapat
+            </button>
+        </div>
+    </div>
+
+    <!-- KİLİTLİ KART MODALI -->
+    <div id="unregisteredModal" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-[999] hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-md bg-slate-900 rounded-3xl p-7 border border-white/20 text-white shadow-2xl text-center">
+            <button onclick="closeUnregisteredModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto mb-5 border border-amber-400/30">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h3 class="text-2xl font-black text-white mb-2">Çekilişe Katılmak İçin Üye Olun</h3>
+            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                Çekilişler ve hediyeler yalnızca <strong>ULUÇEEİT doğrulanmış üyelerine</strong> özeldir. Lütfen standımızı ziyaret ederek veya SKS kaydınızı yaparak kartınızı aktif ediniz.
+            </p>
+            <div class="flex flex-col gap-2.5">
+                <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center gap-2">
+                    <span>SKS Portalına Git</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                </a>
+                <button onclick="closeUnregisteredModal()" class="w-full py-3 bg-white/10 hover:bg-white/15 rounded-xl font-bold text-sm text-slate-300 transition-all">
+                    Anladım, Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 👑 YÖNETİM ÇEKİLİŞ VE HEDİYE ATAMA MODALI -->
+    <div id="adminGiveawayModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-[1000] hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-lg bg-slate-900 rounded-3xl p-7 text-white shadow-2xl border border-amber-400/30">
+            <button onclick="closeAdminGiveawayModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-5 border-b border-white/10 pb-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-400/30">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-white">Yönetim Çekiliş Kontrol Paneli</h3>
+                    <p class="text-xs text-slate-400">Üyelere hediye tanımla veya kura çek</p>
+                </div>
+            </div>
+
+            <!-- Hediye Tanımlama Formu -->
+            <form onsubmit="handleAdminAssignGift(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">Hediye Verilecek Üye</label>
+                    <select id="adminSelectTarget" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400">
+                        <option value="current">Mevcut Cihazdaki Üye (Test İçin)</option>
+                        <option value="all_active">Tüm Bilet Sahipleri</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">Kazanılan Hediye Seçin</label>
+                    <select id="adminSelectGift" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400">
+                        <option value="EspressoLab 1 Aylık Ücretsiz Kahve Paketi|ULU-KAHVE-2026">☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi</option>
+                        <option value="ÇEEİ & KPSS A Grubu Kitap Seti|ULU-KITAP-2026">📚 ÇEEİ & KPSS A Grubu Kitap Seti</option>
+                        <option value="Sertifikalı İK & Bordro Eğitim Bursu|ULU-IK-BURS-2026">🎓 Sertifikalı İK & Bordro Eğitim Bursu</option>
+                        <option value="ULUÇEEİT Özel Tasarım Termos & Sweatshirt Seti|ULU-VIP-SET-2026">🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti</option>
+                    </select>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-xl text-sm transition-all shadow-lg">
+                        🎁 Hediyeyi Üye Kartına Tanımla
+                    </button>
+                    <button type="button" onclick="handleAdminResetGifts()" class="py-3 px-4 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-bold rounded-xl text-xs transition-all">
+                        Sıfırla
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT MOTORU -->
+    <script>
+        const STORAGE_KEY = 'uluceeit_verified_member';
+
+        // Yönetim Yetki Kontrolü
+        if (sessionStorage.getItem('uluceeit_admin_auth') !== 'true') {
+            window.location.href = 'admin.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavbarCardState();
+            updateGiveawayBtnState();
+            setInterval(updateCardClock, 1000);
+            startCountdown();
+        });
+
+        // Çekilişe Katılma / Bilet Üretme Motoru
+        function handleJoinGiveaway() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (!savedData) {
+                document.getElementById('unregisteredModal').classList.remove('hidden');
+                return;
+            }
+
+            const member = JSON.parse(savedData);
+
+            if (member.giveawayTicket) {
+                // Zaten bileti var, kartı aç ve göster
+                showMemberCard(member);
+                return;
+            }
+
+            // Yeni Bilet Üret
+            const ticketNo = 'BİLET-' + Math.floor(1000 + Math.random() * 9000);
+            member.giveawayTicket = ticketNo;
+            member.ticketJoinedAt = new Date().toISOString();
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 } });
+            }
+
+            updateGiveawayBtnState();
+            showMemberCard(member);
+        }
+
+        function updateGiveawayBtnState() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            const btnText = document.getElementById('joinBtnText');
+            if (savedData) {
+                const member = JSON.parse(savedData);
+                if (member.giveawayTicket) {
+                    if (btnText) btnText.innerHTML = `🎟️ Biletiniz Alındı (${member.giveawayTicket}) - Kartı Gör`;
+                }
+            }
+        }
+
+        // Navbardaki Kart Durumu
+        function updateNavbarCardState() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            const btnText = document.getElementById('navCardBtnText');
+            const navBtn = document.getElementById('navCardBtn');
+
+            if (savedData) {
+                const member = JSON.parse(savedData);
+                if (btnText) btnText.innerHTML = `🟢 🪪 ${member.fullName.split(' ')[0]} (Kartım)`;
+                if (navBtn) {
+                    navBtn.classList.remove('from-amber-500', 'to-amber-600', 'text-slate-950');
+                    navBtn.classList.add('from-emerald-500', 'to-emerald-600', 'text-white', 'border-emerald-400');
+                }
+            } else {
+                if (btnText) btnText.innerHTML = `🪪 Dijital Üye Kartı`;
+            }
+        }
+
+        function handleMemberCardClick() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                const member = JSON.parse(savedData);
+                showMemberCard(member);
+            } else {
+                document.getElementById('unregisteredModal').classList.remove('hidden');
+            }
+        }
+
+        function showMemberCard(member) {
+            document.getElementById('cardHolderName').textContent = member.fullName;
+            document.getElementById('cardHolderNo').textContent = member.studentNo;
+            document.getElementById('cardSerialNo').textContent = member.serialNo || 'ULU-2026-8492';
+
+            // Çekiliş & Hediye Bilgileri
+            const wonGiftContainer = document.getElementById('wonGiftContainer');
+            const activeTicketContainer = document.getElementById('activeTicketContainer');
+            const noTicketContainer = document.getElementById('noTicketContainer');
+            const ticketCountBadge = document.getElementById('ticketCountBadge');
+
+            if (member.wonGift) {
+                wonGiftContainer.classList.remove('hidden');
+                document.getElementById('wonGiftTitle').textContent = member.wonGift.title;
+                document.getElementById('wonGiftCode').textContent = member.wonGift.code;
+            } else {
+                wonGiftContainer.classList.add('hidden');
+            }
+
+            if (member.giveawayTicket) {
+                activeTicketContainer.classList.remove('hidden');
+                noTicketContainer.classList.add('hidden');
+                document.getElementById('cardTicketNumber').textContent = member.giveawayTicket;
+                ticketCountBadge.textContent = '1 Bilet Aktif';
+            } else {
+                activeTicketContainer.classList.add('hidden');
+                noTicketContainer.classList.remove('hidden');
+                ticketCountBadge.textContent = 'Bilet Yok';
+            }
+
+            updateCardClock();
+            document.getElementById('memberCardModal').classList.remove('hidden');
+        }
+
+        function closeMemberCardModal() {
+            document.getElementById('memberCardModal').classList.add('hidden');
+        }
+
+        function closeUnregisteredModal() {
+            document.getElementById('unregisteredModal').classList.add('hidden');
+        }
+
+        function updateCardClock() {
+            const timeEl = document.getElementById('cardLiveTimestamp');
+            if (timeEl) {
+                const now = new Date();
+                const day = String(now.getDate()).padStart(2, '0');
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const year = now.getFullYear();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                timeEl.textContent = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+            }
+        }
+
+        // Geri Sayım Sayacı (15 Gün Sonrası)
+        function startCountdown() {
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 12);
+            targetDate.setHours(targetDate.getHours() + 18);
+
+            function update() {
+                const now = new Date().getTime();
+                const diff = targetDate.getTime() - now;
+
+                if (diff > 0) {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    document.getElementById('countDays').textContent = String(days).padStart(2, '0');
+                    document.getElementById('countHours').textContent = String(hours).padStart(2, '0');
+                    document.getElementById('countMinutes').textContent = String(minutes).padStart(2, '0');
+                    document.getElementById('countSeconds').textContent = String(seconds).padStart(2, '0');
+                }
+            }
+            setInterval(update, 1000);
+            update();
+        }
+
+        // 👑 YÖNETİM HEDİYE ATAMA PANELİ
+        function openAdminGiveawayModal() {
+            const pin = prompt("🔒 Yönetim Kurulu PIN Kodunu Giriniz:");
+            if (pin !== "2026" && pin !== "1975" && pin !== "CEKO2026") {
+                if (pin !== null) alert("Hatalı PIN!");
+                return;
+            }
+            document.getElementById('adminGiveawayModal').classList.remove('hidden');
+        }
+
+        function closeAdminGiveawayModal() {
+            document.getElementById('adminGiveawayModal').classList.add('hidden');
+        }
+
+        function handleAdminAssignGift(e) {
+            e.preventDefault();
+            const giftVal = document.getElementById('adminSelectGift').value;
+            const [title, code] = giftVal.split('|');
+
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (!savedData) {
+                alert("Önce cihazınızda bir üye kartı oluşturun veya test edin.");
+                return;
+            }
+
+            const member = JSON.parse(savedData);
+            member.wonGift = {
+                title: title,
+                code: code,
+                assignedAt: new Date().toISOString()
+            };
+            if (!member.giveawayTicket) {
+                member.giveawayTicket = 'BİLET-7492';
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+            closeAdminGiveawayModal();
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.4 } });
+            }
+
+            alert(`Tebrikler! "${title}" hediyesi ${member.fullName} adına üye kartına tanımlandı.`);
+            showMemberCard(member);
+        }
+
+        function handleAdminResetGifts() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                const member = JSON.parse(savedData);
+                delete member.wonGift;
+                delete member.giveawayTicket;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+                alert("Çekiliş ve hediye verileri sıfırlandı.");
+                closeAdminGiveawayModal();
+                updateGiveawayBtnState();
+            }
+        }
+
+        // Mobil Menü Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            const isClosed = mobileMenu.classList.contains('hidden');
+            if (isClosed) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+            } else {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            }
+        });
+    </script>
+</body>
+</html>

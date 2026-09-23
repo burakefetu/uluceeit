@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ULUÇEEİT - Yönetim Kurulu Paneli</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ceko: {
+                            dark: '#060f24',
+                            navy: '#0b1d4a',
+                            deep: '#0e245c',
+                            royal: '#1d4ed8',
+                            blue: '#2563eb',
+                            accent: '#f59e0b',
+                            gold: '#fbbf24',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #060f24; }
+        ::-webkit-scrollbar-thumb { background: #1d4ed8; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen selection:bg-amber-500 selection:text-slate-950">
+
+    <!-- ========================================================================= -->
+    <!-- 🔒 GÜVENLİ YÖNETİM PIN GİRİŞ EKRANI -->
+    <!-- ========================================================================= -->
+    <div id="pinScreen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center shadow-2xl">
+            <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto mb-4 border border-amber-400/30">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h2 class="text-xl font-black mb-1 text-white">Yönetim Kurulu Girişi</h2>
+            <p class="text-xs text-slate-400 mb-6">Çekiliş ve hediye yönetimine erişmek için PIN kodunuzu girin.</p>
+
+            <form id="pinForm" onsubmit="handlePinSubmit(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="adminPinInput" autofocus maxlength="8" placeholder="••••" class="w-full py-3.5 px-4 bg-slate-950 border border-slate-700 rounded-2xl text-center text-2xl font-mono tracking-widest text-amber-400 placeholder-slate-600 focus:outline-none focus:border-amber-400">
+                </div>
+                <div id="pinError" class="text-xs font-bold text-rose-400 hidden">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Hatalı PIN Kodu!
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-sm transition-all shadow-lg shadow-amber-500/20">
+                    Giriş Yap
+                </button>
+            </form>
+            <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-500">
+                <a href="index.html" class="hover:text-slate-300 transition-colors">← Ana Sayfaya Dön</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 👑 YÖNETİM KURULU ANA PANELİ (ŞİFRE GİRİLDİĞİNDE AÇILIR) -->
+    <!-- ========================================================================= -->
+    <div id="adminPanel" class="hidden min-h-screen flex flex-col">
+        
+        <!-- Üst Bar -->
+        <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-3">
+                <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='logo.jpg'">
+                <div>
+                    <h1 class="text-base font-black text-white flex items-center gap-2">
+                        <span>ULUÇEEİT Yönetim Paneli</span>
+                        <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/30">V.I.P</span>
+                    </h1>
+                    <p class="text-[11px] text-slate-400">Çekiliş, Hediye Dağıtımı ve Üye Kartı Yönetimi</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="stand-qr.html" target="_blank" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors flex items-center gap-1.5 border border-slate-700">
+                    <i class="fa-solid fa-qrcode text-amber-400"></i> <span class="hidden sm:inline">Stant QR Panosu</span>
+                </a>
+                <a href="index.html" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors flex items-center gap-1.5 border border-slate-700">
+                    <i class="fa-solid fa-globe text-blue-400"></i> <span class="hidden sm:inline">Siteyi Gör</span>
+                </a>
+                <button onclick="logoutAdmin()" class="px-3 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-bold transition-colors" title="Çıkış">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Ana İçerik Alanı -->
+        <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-8">
+            
+            <!-- Üst İstatistik Kartları -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-bold uppercase">Tanımlanan Hediyeler</p>
+                        <h3 id="statTotalGifts" class="text-2xl font-black text-amber-400 font-mono mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-gift"></i>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-bold uppercase">Kayıtlı Cihaz Üyesi</p>
+                        <h3 id="statLocalUser" class="text-2xl font-black text-blue-400 font-mono mt-1">Var</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-bold uppercase">Dönem Durumu</p>
+                        <h3 class="text-xl font-black text-emerald-400 mt-1">2026-2027 Aktif</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-check-double"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB ALANI: HEDİYE TANIMLAMA & KURA ÇEKME -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Sol Kolon: Hediye Tanımlama Formu (7 Kolon) -->
+                <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                    <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-400/30">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-black text-white">Üye Kartına Hediye Tanımla</h2>
+                            <p class="text-xs text-slate-400">Seçtiğiniz hediye, öğrencinin Dijital Üye Kartında anında görünür.</p>
+                        </div>
+                    </div>
+
+                    <form id="assignGiftForm" onsubmit="handleAssignGift(event)" class="space-y-4">
+                        
+                        <!-- Hedef Öğrenci -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase">Kime Tanımlanacak?</label>
+                            <div class="grid grid-cols-2 gap-2 mb-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="targetMode" value="current" checked onchange="toggleTargetMode(this.value)" class="peer sr-only">
+                                    <div class="p-3 bg-slate-950 border border-slate-700 rounded-xl text-center text-xs font-bold text-slate-300 peer-checked:border-amber-400 peer-checked:bg-amber-500/10 peer-checked:text-amber-300 transition-all">
+                                        📱 Bu Cihazdaki Üyeye
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="targetMode" value="studentNo" onchange="toggleTargetMode(this.value)" class="peer sr-only">
+                                    <div class="p-3 bg-slate-950 border border-slate-700 rounded-xl text-center text-xs font-bold text-slate-300 peer-checked:border-amber-400 peer-checked:bg-amber-500/10 peer-checked:text-amber-300 transition-all">
+                                        🔢 Öğrenci Numarasına
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div id="studentNoInputContainer" class="hidden mt-2">
+                                <input type="text" id="targetStudentNo" placeholder="Örn: 022201045" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-sm focus:outline-none focus:border-amber-400">
+                                <p class="text-[11px] text-slate-500 mt-1">Öğrenci siteye bu numarayla girdiğinde kartında hediyesi gözükecektir.</p>
+                            </div>
+                        </div>
+
+                        <!-- Hediye Seçimi -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase">Hediye / Ödül Türü</label>
+                            <select id="giftTypeSelect" onchange="handleGiftTypeChange(this.value)" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400">
+                                <option value="☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi|ULU-KAHVE">☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi</option>
+                                <option value="📚 ÇEEİ & KPSS A Grubu Hazırlık Kitap Seti|ULU-KITAP">📚 ÇEEİ & KPSS A Grubu Hazırlık Kitap Seti</option>
+                                <option value="🎓 Sertifikalı İK & Bordro Eğitim Bursu|ULU-IK-BURS">🎓 Sertifikalı İK & Bordro Eğitim Bursu</option>
+                                <option value="🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti|ULU-VIP-SET">🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti</option>
+                                <option value="custom">✨ Özel / Manuel Hediye Gir...</option>
+                            </select>
+                        </div>
+
+                        <!-- Özel Hediye Alanı (Gizli) -->
+                        <div id="customGiftContainer" class="hidden space-y-3 p-4 bg-slate-950 rounded-2xl border border-slate-800">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-400 mb-1">Özel Hediye Başlığı</label>
+                                <input type="text" id="customGiftTitle" placeholder="Örn: 500 TL Kitap Çeki" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-400 mb-1">Özel Kupon / Teslim Kodu</label>
+                                <input type="text" id="customGiftCode" placeholder="Örn: ULU-CEK-500" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white font-mono text-xs">
+                            </div>
+                        </div>
+
+                        <div class="pt-3">
+                            <button type="submit" class="w-full py-4 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black rounded-xl text-base shadow-xl shadow-amber-500/20 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-gift text-lg"></i>
+                                <span>Hediyeyi Üyenin Kartına Tanımla</span>
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Sağ Kolon: Canlı Kura Çarkı & Hızlı İşlemler (5 Kolon) -->
+                <div class="lg:col-span-5 space-y-6">
+                    
+                    <!-- Canlı Kura / Rastgele Çekiliş Kutusu -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl text-center">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-2xl mx-auto mb-3 border border-blue-400/30">
+                            <i class="fa-solid fa-dice"></i>
+                        </div>
+                        <h3 class="text-base font-black text-white mb-1">Hızlı Kura Çekimi</h3>
+                        <p class="text-xs text-slate-400 mb-4">Mevcut üye için anında rastgele sürpriz bir hediye belirle.</p>
+                        
+                        <button onclick="handleRandomDraw()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-shuffle"></i> <span>Rastgele Şanslı Hediye Ata</span>
+                        </button>
+                    </div>
+
+                    <!-- Tüm Hediyeleri Sıfırla -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+                        <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">Yönetim İşlemleri</h4>
+                        <button onclick="handleResetAllGifts()" class="w-full py-2.5 bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-trash-can"></i> <span>Tüm Tanımlı Hediyeleri Sıfırla</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- AKTİF DAĞITILAN HEDİYELER LİSTESİ -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                <div class="flex items-center justify-between mb-6 border-b border-slate-800 pb-4">
+                    <div>
+                        <h3 class="text-lg font-black text-white">Dağıtılan Hediyeler & Teslim Kodları</h3>
+                        <p class="text-xs text-slate-400">Üye kartlarına tanımlanmış aktif hediyelerin listesi</p>
+                    </div>
+                    <span id="listCountBadge" class="text-xs font-mono font-bold bg-slate-800 px-3 py-1 rounded-full text-amber-400">0 Kayıt</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="text-slate-400 border-b border-slate-800 uppercase text-[10px] tracking-wider">
+                                <th class="py-3 px-3">Hedef Üye</th>
+                                <th class="py-3 px-3">Hediye Adı</th>
+                                <th class="py-3 px-3">Kupon / Teslim Kodu</th>
+                                <th class="py-3 px-3">Tarih</th>
+                                <th class="py-3 px-3 text-right">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="giftsTableBody" class="divide-y divide-slate-800 text-slate-300">
+                            <!-- Dinamik Liste -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="noGiftsPlaceholder" class="py-8 text-center text-slate-500 text-xs">
+                    Henüz tanımlanmış bir hediye bulunmuyor.
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- JAVASCRIPT MOTORU -->
+    <script>
+        const ADMIN_PIN = "2026";
+        const STORAGE_KEY = 'uluceeit_verified_member';
+        const GIFTS_REGISTRY_KEY = 'uluceeit_gifts_registry';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('uluceeit_admin_auth') === 'true') {
+                showAdminPanel();
+            }
+        });
+
+        function handlePinSubmit(e) {
+            e.preventDefault();
+            const pin = document.getElementById('adminPinInput').value.trim();
+            const err = document.getElementById('pinError');
+
+            if (pin === ADMIN_PIN || pin === "1975" || pin === "CEKO2026") {
+                sessionStorage.setItem('uluceeit_admin_auth', 'true');
+                showAdminPanel();
+            } else {
+                err.classList.remove('hidden');
+                document.getElementById('adminPinInput').value = '';
+                document.getElementById('adminPinInput').focus();
+            }
+        }
+
+        function showAdminPanel() {
+            document.getElementById('pinScreen').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            renderGiftsList();
+        }
+
+        function logoutAdmin() {
+            sessionStorage.removeItem('uluceeit_admin_auth');
+            location.reload();
+        }
+
+        function toggleTargetMode(mode) {
+            const inputCont = document.getElementById('studentNoInputContainer');
+            if (mode === 'studentNo') {
+                inputCont.classList.remove('hidden');
+                document.getElementById('targetStudentNo').focus();
+            } else {
+                inputCont.classList.add('hidden');
+            }
+        }
+
+        function handleGiftTypeChange(val) {
+            const customCont = document.getElementById('customGiftContainer');
+            if (val === 'custom') {
+                customCont.classList.remove('hidden');
+            } else {
+                customCont.classList.add('hidden');
+            }
+        }
+
+        // Hediye Tanımlama Fonksiyonu
+        function handleAssignGift(e) {
+            e.preventDefault();
+            const targetMode = document.querySelector('input[name="targetMode"]:checked').value;
+            const giftTypeVal = document.getElementById('giftTypeSelect').value;
+
+            let giftTitle = '';
+            let giftCode = '';
+
+            if (giftTypeVal === 'custom') {
+                giftTitle = document.getElementById('customGiftTitle').value.trim();
+                giftCode = document.getElementById('customGiftCode').value.trim() || ('ULU-HEDIYE-' + Math.floor(1000 + Math.random() * 9000));
+                if (!giftTitle) {
+                    alert("Lütfen hediye başlığını girin.");
+                    return;
+                }
+            } else {
+                const parts = giftTypeVal.split('|');
+                giftTitle = parts[0];
+                giftCode = parts[1] + '-' + Math.floor(1000 + Math.random() * 9000);
+            }
+
+            let targetIdentifier = 'Mevcut Cihaz';
+            if (targetMode === 'studentNo') {
+                const sNo = document.getElementById('targetStudentNo').value.trim();
+                if (!sNo) {
+                    alert("Lütfen öğrenci numarasını girin.");
+                    return;
+                }
+                targetIdentifier = sNo;
+            }
+
+            // Kayıt Havuzuna Ekle
+            let registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
+            const newGiftItem = {
+                id: 'GIFT-' + Date.now(),
+                target: targetIdentifier,
+                title: giftTitle,
+                code: giftCode,
+                date: new Date().toLocaleDateString('tr-TR')
+            };
+            registry.unshift(newGiftItem);
+            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(registry));
+
+            // Eğer hedef "Mevcut Cihaz" veya mevcut cihazın öğrenci numarasıysa yerel üye kartına da hemen yaz
+            const localMemberRaw = localStorage.getItem(STORAGE_KEY);
+            if (localMemberRaw) {
+                const localMember = JSON.parse(localMemberRaw);
+                if (targetIdentifier === 'Mevcut Cihaz' || targetIdentifier === localMember.studentNo) {
+                    localMember.wonGift = {
+                        title: giftTitle,
+                        code: giftCode,
+                        assignedAt: new Date().toISOString()
+                    };
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localMember));
+                }
+            }
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 120, spread: 70, origin: { y: 0.5 } });
+            }
+
+            alert(`✅ BAŞARILI!\n"${giftTitle}" hediyesi (${giftCode}) ${targetIdentifier} adına başarıyla tanımlandı.`);
+            renderGiftsList();
+        }
+
+        // Rastgele Çekiliş
+        function handleRandomDraw() {
+            const gifts = [
+                { title: "☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi", prefix: "ULU-KAHVE" },
+                { title: "📚 ÇEEİ & KPSS A Grubu Hazırlık Kitap Seti", prefix: "ULU-KITAP" },
+                { title: "🎓 Sertifikalı İK & Bordro Eğitim Bursu", prefix: "ULU-IK-BURS" },
+                { title: "🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti", prefix: "ULU-VIP-SET" }
+            ];
+            const randomGift = gifts[Math.floor(Math.random() * gifts.length)];
+            const code = randomGift.prefix + '-' + Math.floor(1000 + Math.random() * 9000);
+
+            // Mevcut üyeye ata
+            const localMemberRaw = localStorage.getItem(STORAGE_KEY);
+            let targetName = 'Mevcut Cihaz';
+            if (localMemberRaw) {
+                const member = JSON.parse(localMemberRaw);
+                member.wonGift = {
+                    title: randomGift.title,
+                    code: code,
+                    assignedAt: new Date().toISOString()
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+                targetName = member.fullName + ` (${member.studentNo})`;
+            }
+
+            let registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
+            registry.unshift({
+                id: 'GIFT-' + Date.now(),
+                target: targetName,
+                title: randomGift.title,
+                code: code,
+                date: new Date().toLocaleDateString('tr-TR')
+            });
+            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(registry));
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 180, spread: 80, origin: { y: 0.5 } });
+            }
+
+            alert(`🎉 KURA ÇEKİLDİ!\nKazanan Hediye: ${randomGift.title}\nTeslim Kodu: ${code}\nÜyenin kartına işlendi.`);
+            renderGiftsList();
+        }
+
+        // Listeyi Çiz
+        function renderGiftsList() {
+            const registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
+            const tbody = document.getElementById('giftsTableBody');
+            const placeholder = document.getElementById('noGiftsPlaceholder');
+            const statTotal = document.getElementById('statTotalGifts');
+            const badge = document.getElementById('listCountBadge');
+
+            statTotal.textContent = registry.length;
+            badge.textContent = `${registry.length} Kayıt`;
+
+            if (registry.length === 0) {
+                tbody.innerHTML = '';
+                placeholder.classList.remove('hidden');
+                return;
+            }
+
+            placeholder.classList.add('hidden');
+            tbody.innerHTML = registry.map(item => `
+                <tr class="hover:bg-slate-800/50 transition-colors">
+                    <td class="py-3 px-3 font-bold text-white">${item.target}</td>
+                    <td class="py-3 px-3 text-amber-300 font-semibold">${item.title}</td>
+                    <td class="py-3 px-3 font-mono text-emerald-400 font-bold">${item.code}</td>
+                    <td class="py-3 px-3 text-slate-400">${item.date}</td>
+                    <td class="py-3 px-3 text-right">
+                        <button onclick="deleteGiftItem('${item.id}')" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/20 transition-colors" title="Sil">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteGiftItem(id) {
+            if (!confirm("Bu hediye kaydını silmek istediğinize emin misiniz?")) return;
+            let registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
+            registry = registry.filter(item => item.id !== id);
+            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(registry));
+            renderGiftsList();
+        }
+
+        function handleResetAllGifts() {
+            if (!confirm("Tüm tanımlanmış hediyeler silinecektir. Onaylıyor musunuz?")) return;
+            localStorage.removeItem(GIFTS_REGISTRY_KEY);
+            const localMemberRaw = localStorage.getItem(STORAGE_KEY);
+            if (localMemberRaw) {
+                const member = JSON.parse(localMemberRaw);
+                delete member.wonGift;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+            }
+            renderGiftsList();
+            alert("Tüm hediye kayıtları sıfırlandı.");
+        }
+    </script>
+</body>
+</html>
