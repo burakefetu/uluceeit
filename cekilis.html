@@ -119,6 +119,23 @@
             50% { opacity: 0.7; transform: scale(1.05); }
         }
         .animate-pulse-glow { animation: pulse-glow 3.5s ease-in-out infinite; }
+
+        /* Modal smooth touch scrollbar */
+        .modal-scrollable {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+        .modal-scrollable::-webkit-scrollbar {
+            width: 4px;
+        }
+        .modal-scrollable::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .modal-scrollable::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 9999px;
+        }
     </style>
 </head>
 <body class="bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-ceko-navy selection:text-white">
@@ -161,8 +178,8 @@
 
                 <!-- Mobil Menü Butonu -->
                 <div class="md:hidden flex items-center gap-2">
-                    <button onclick="handleMemberCardClick()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 flex items-center gap-1.5">
-                        <i class="fa-solid fa-id-card"></i> <span>Kartım</span>
+                    <button onclick="handleMemberCardClick()" id="mobileNavCardBtn" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
+                        <i class="fa-solid fa-id-card"></i> <span id="mobileNavCardBtnText">Kartım</span>
                     </button>
                     <button id="mobileMenuBtn" class="text-slate-700 hover:text-blue-600 p-2.5 rounded-xl hover:bg-slate-100 focus:outline-none transition-colors" aria-label="Menüyü Aç">
                         <i class="fa-solid fa-bars text-2xl" id="menuIcon"></i>
@@ -191,8 +208,8 @@
                     <i class="fa-solid fa-users text-blue-600 w-5"></i> Yönetim Kurulu
                 </a>
                 <div class="pt-2">
-                    <button onclick="handleMemberCardClick()" class="w-full text-center bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 px-4 py-3.5 rounded-xl font-black shadow-md flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-id-card"></i> <span>🪪 Dijital Üye Kartını Aç</span>
+                    <button onclick="handleMemberCardClick()" id="mobileDrawerCardBtn" class="w-full text-center bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 px-4 py-3.5 rounded-xl font-black shadow-md flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-solid fa-id-card"></i> <span id="mobileDrawerCardBtnText">🪪 Dijital Üye Kartını Aç</span>
                     </button>
                 </div>
             </div>
@@ -406,64 +423,64 @@
     <!-- ========================================================================= -->
     <!-- 🪪 DİJİTAL ÜYE KARTI MODALI (HEDİYELER VE BİLETLER ENTEGRELİ) -->
     <!-- ========================================================================= -->
-    <div id="memberCardModal" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-[999] hidden flex items-center justify-center p-4">
-        <div class="relative w-full max-w-md bg-slate-900 rounded-3xl p-6 sm:p-7 border border-amber-500/30 shadow-2xl overflow-hidden max-h-[92vh] overflow-y-auto">
+    <div id="memberCardModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-[999] hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target === this) closeMemberCardModal()">
+        <div class="relative w-full max-w-md bg-slate-900 rounded-3xl p-4 sm:p-7 border border-amber-500/30 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto modal-scrollable overscroll-contain">
             
-            <button onclick="closeMemberCardModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors z-30">
+            <button onclick="closeMemberCardModal()" class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center transition-colors z-30" aria-label="Kapat">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
 
             <!-- Ana VIP Üye Kartı -->
-            <div class="vip-member-card rounded-2xl p-6 text-white shadow-2xl border border-amber-400/40 relative mb-5">
-                <div class="flex justify-between items-start mb-6">
-                    <div class="flex items-center gap-3">
-                        <img src="logo.png" alt="Logo" class="w-11 h-11 object-contain drop-shadow-md" onerror="this.src='logo.jpg'">
+            <div class="vip-member-card rounded-2xl p-4 sm:p-6 text-white shadow-2xl border border-amber-400/40 relative mb-4">
+                <div class="flex justify-between items-start mb-4 sm:mb-6">
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <img src="logo.png" alt="Logo" class="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-md" onerror="this.src='logo.jpg'">
                         <div>
-                            <p class="text-[10px] uppercase font-extrabold tracking-widest text-amber-400">BURSA ULUDAĞ ÜNİVERSİTESİ</p>
-                            <h4 class="text-sm font-black text-white tracking-tight">ULUÇEEİT RESMİ ÜYE KARTI</h4>
+                            <p class="text-[9px] sm:text-[10px] uppercase font-extrabold tracking-widest text-amber-400">BURSA ULUDAĞ ÜNİVERSİTESİ</p>
+                            <h4 class="text-xs sm:text-sm font-black text-white tracking-tight">ULUÇEEİT RESMİ ÜYE KARTI</h4>
                         </div>
                     </div>
-                    <div class="text-amber-400 text-xl font-bold flex items-center gap-1">
-                        <i class="fa-solid fa-wifi rotate-90 text-sm"></i>
+                    <div class="text-amber-400 text-lg sm:text-xl font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-wifi rotate-90 text-xs sm:text-sm"></i>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between mb-6">
-                    <div class="w-11 h-8 rounded-md bg-gradient-to-tr from-amber-400 via-yellow-200 to-amber-500 border border-amber-600 shadow-inner flex items-center justify-center">
-                        <div class="w-7 h-5 border border-amber-700/60 rounded flex flex-col justify-between py-0.5 px-1 opacity-70">
+                <div class="flex items-center justify-between mb-4 sm:mb-6">
+                    <div class="w-10 h-7 sm:w-11 sm:h-8 rounded-md bg-gradient-to-tr from-amber-400 via-yellow-200 to-amber-500 border border-amber-600 shadow-inner flex items-center justify-center">
+                        <div class="w-6 h-4 sm:w-7 sm:h-5 border border-amber-700/60 rounded flex flex-col justify-between py-0.5 px-1 opacity-70">
                             <div class="w-full h-px bg-amber-800"></div>
                             <div class="w-full h-px bg-amber-800"></div>
                         </div>
                     </div>
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-black">
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] sm:text-xs font-black">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                         <span>SKS ONAYLI ÜYE</span>
                     </div>
                 </div>
 
-                <div class="space-y-4 mb-6">
+                <div class="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                     <div>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">ÜYE ADI SOYADI</p>
-                        <h3 id="cardHolderName" class="text-xl font-black text-white tracking-wide uppercase">BURAK EFE TÜRK</h3>
+                        <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">ÜYE ADI SOYADI</p>
+                        <h3 id="cardHolderName" class="text-lg sm:text-xl font-black text-white tracking-wide uppercase break-words leading-tight">BURAK EFE TÜRK</h3>
                     </div>
                     <div class="grid grid-cols-2 gap-2 text-xs">
                         <div>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">ÖĞRENCİ NO</p>
-                            <p id="cardHolderNo" class="font-mono font-bold text-amber-300 text-sm">022201045</p>
+                            <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">ÖĞRENCİ NO</p>
+                            <p id="cardHolderNo" class="font-mono font-bold text-amber-300 text-xs sm:text-sm tracking-wider">022201045</p>
                         </div>
                         <div>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">DÖNEM</p>
-                            <p class="font-bold text-slate-200">2026 - 2027</p>
+                            <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">DÖNEM</p>
+                            <p class="font-bold text-slate-200 text-xs sm:text-sm">2026 - 2027</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-4 border-t border-white/15 flex items-center justify-between">
+                <div class="pt-3 sm:pt-4 border-t border-white/15 flex items-center justify-between">
                     <div>
-                        <p class="text-[9px] text-slate-400 uppercase font-bold tracking-widest">CANLI DOĞRULAMA</p>
-                        <p id="cardLiveTimestamp" class="font-mono text-[11px] font-bold text-emerald-400">28.08.2026 01:34:20</p>
+                        <p class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold tracking-widest">CANLI DOĞRULAMA</p>
+                        <p id="cardLiveTimestamp" class="font-mono text-[10px] sm:text-[11px] font-bold text-emerald-400">28.08.2026 01:34:20</p>
                     </div>
-                    <div class="text-right font-mono text-[10px] font-bold text-amber-300/80 tracking-widest" id="cardSerialNo">
+                    <div class="text-right font-mono text-[9px] sm:text-[10px] font-bold text-amber-300/80 tracking-widest" id="cardSerialNo">
                         ULU-2026-9821
                     </div>
                 </div>
@@ -509,17 +526,17 @@
                 </div>
             </div>
 
-            <button onclick="closeMemberCardModal()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 rounded-xl font-black text-sm shadow-lg hover:shadow-amber-500/40 transition-all">
+            <button onclick="closeMemberCardModal()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 active:scale-95 text-slate-950 rounded-xl font-black text-sm shadow-lg hover:shadow-amber-500/40 transition-all min-h-[44px]">
                 Kapat
             </button>
         </div>
     </div>
 
     <!-- KİLİTLİ KART MODALI -->
-    <div id="unregisteredModal" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-[999] hidden flex items-center justify-center p-4">
-        <div class="relative w-full max-w-md bg-slate-900 rounded-3xl p-7 border border-white/20 text-white shadow-2xl text-center">
-            <button onclick="closeUnregisteredModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
-                <i class="fa-solid fa-xmark"></i>
+    <div id="unregisteredModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-[999] hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target === this) closeUnregisteredModal()">
+        <div class="relative w-full max-w-md bg-slate-900 rounded-3xl p-5 sm:p-7 border border-white/20 text-white shadow-2xl text-center my-auto max-h-[92dvh] overflow-y-auto modal-scrollable overscroll-contain">
+            <button onclick="closeUnregisteredModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors" aria-label="Kapat">
+                <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto mb-5 border border-amber-400/30">
                 <i class="fa-solid fa-shield-halved"></i>
@@ -529,11 +546,11 @@
                 Çekilişler ve hediyeler yalnızca <strong>ULUÇEEİT doğrulanmış üyelerine</strong> özeldir. Lütfen standımızı ziyaret ederek veya SKS kaydınızı yaparak kartınızı aktif ediniz.
             </p>
             <div class="flex flex-col gap-2.5">
-                <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center gap-2">
+                <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center gap-2 min-h-[44px]">
                     <span>SKS Portalına Git</span>
                     <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                 </a>
-                <button onclick="closeUnregisteredModal()" class="w-full py-3 bg-white/10 hover:bg-white/15 rounded-xl font-bold text-sm text-slate-300 transition-all">
+                <button onclick="closeUnregisteredModal()" class="w-full py-3 bg-white/10 hover:bg-white/15 rounded-xl font-bold text-sm text-slate-300 transition-all min-h-[44px]">
                     Anladım, Kapat
                 </button>
             </div>
@@ -541,10 +558,10 @@
     </div>
 
     <!-- 👑 YÖNETİM ÇEKİLİŞ VE HEDİYE ATAMA MODALI -->
-    <div id="adminGiveawayModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-[1000] hidden flex items-center justify-center p-4">
-        <div class="relative w-full max-w-lg bg-slate-900 rounded-3xl p-7 text-white shadow-2xl border border-amber-400/30">
-            <button onclick="closeAdminGiveawayModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
-                <i class="fa-solid fa-xmark"></i>
+    <div id="adminGiveawayModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-[1000] hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target === this) closeAdminGiveawayModal()">
+        <div class="relative w-full max-w-lg bg-slate-900 rounded-3xl p-5 sm:p-7 text-white shadow-2xl border border-amber-400/30 my-auto max-h-[92dvh] overflow-y-auto modal-scrollable overscroll-contain">
+            <button onclick="closeAdminGiveawayModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors" aria-label="Kapat">
+                <i class="fa-solid fa-xmark text-base"></i>
             </button>
             
             <div class="flex items-center gap-3 mb-5 border-b border-white/10 pb-3">
@@ -578,10 +595,10 @@
                 </div>
 
                 <div class="pt-2 flex gap-3">
-                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-xl text-sm transition-all shadow-lg">
+                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-xl text-sm transition-all shadow-lg min-h-[44px]">
                         🎁 Hediyeyi Üye Kartına Tanımla
                     </button>
-                    <button type="button" onclick="handleAdminResetGifts()" class="py-3 px-4 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-bold rounded-xl text-xs transition-all">
+                    <button type="button" onclick="handleAdminResetGifts()" class="py-3 px-4 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-bold rounded-xl text-xs transition-all min-h-[44px]">
                         Sıfırla
                     </button>
                 </div>
@@ -592,11 +609,101 @@
     <!-- JAVASCRIPT MOTORU -->
     <script>
         const STORAGE_KEY = 'uluceeit_verified_member';
+        const MEMBERS_CACHE_KEY = 'uluceeit_active_members';
+        const GIFTS_REGISTRY_KEY = 'uluceeit_active_gifts';
 
-        // Yönetim Yetki Kontrolü
-        if (sessionStorage.getItem('uluceeit_admin_auth') !== 'true') {
-            window.location.href = 'admin.html';
-        }
+        // MantleDB Bulut Senkronizasyon Katmanı
+        const CloudSync = {
+            API_BASE: 'https://mantledb.sh/v2/uluceeit_live_db_2026',
+            API_KEY: '5f6021b53f796c10f4a0cc12d16f6bc2598f1497ed1976e14dc12049f6709c40',
+
+            getHeaders() {
+                return {
+                    'Content-Type': 'application/json',
+                    'X-Mantle-Key': this.API_KEY
+                };
+            },
+
+            async getMembers() {
+                try {
+                    const res = await fetch(`${this.API_BASE}/members`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data)) {
+                            localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(data));
+                            return data;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('MantleDB members fetch error, using local cache:', e);
+                }
+                const cached = localStorage.getItem(MEMBERS_CACHE_KEY);
+                return cached ? JSON.parse(cached) : [];
+            },
+
+            async pushMembers(members) {
+                try {
+                    localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(members));
+                    await fetch(`${this.API_BASE}/members`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(members)
+                    });
+                } catch (e) {
+                    console.warn('MantleDB members push error:', e);
+                }
+            },
+
+            async getGifts() {
+                try {
+                    const res = await fetch(`${this.API_BASE}/gifts`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data)) {
+                            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(data));
+                            return data;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('MantleDB gifts fetch error, using local cache:', e);
+                }
+                const cached = localStorage.getItem(GIFTS_REGISTRY_KEY);
+                return cached ? JSON.parse(cached) : [];
+            },
+
+            async registerMember(member) {
+                try {
+                    if (!member || !member.studentNo) return;
+                    const members = await this.getMembers();
+                    const sNo = String(member.studentNo).trim();
+                    const idx = members.findIndex(m => String(m.studentNo || '').trim() === sNo);
+                    if (idx >= 0) {
+                        members[idx] = { ...members[idx], ...member };
+                    } else {
+                        members.push(member);
+                    }
+                    await this.pushMembers(members);
+                } catch (e) {
+                    console.error('Member cloud sync error:', e);
+                }
+            },
+
+            async checkGiftForStudent(studentNo) {
+                try {
+                    if (!studentNo) return null;
+                    const sNo = String(studentNo).trim();
+                    const gifts = await this.getGifts();
+                    const gift = gifts.find(g => String(g.target || '').trim() === sNo);
+                    return gift || null;
+                } catch (e) {
+                    return null;
+                }
+            }
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
             updateNavbarCardState();
@@ -606,7 +713,7 @@
         });
 
         // Çekilişe Katılma / Bilet Üretme Motoru
-        function handleJoinGiveaway() {
+        async function handleJoinGiveaway() {
             const savedData = localStorage.getItem(STORAGE_KEY);
             if (!savedData) {
                 document.getElementById('unregisteredModal').classList.remove('hidden');
@@ -627,6 +734,7 @@
             member.ticketJoinedAt = new Date().toISOString();
 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+            CloudSync.registerMember(member);
 
             if (typeof confetti === 'function') {
                 confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 } });
@@ -652,20 +760,47 @@
             const savedData = localStorage.getItem(STORAGE_KEY);
             const btnText = document.getElementById('navCardBtnText');
             const navBtn = document.getElementById('navCardBtn');
+            const mobileBtnText = document.getElementById('mobileNavCardBtnText');
+            const mobileBtn = document.getElementById('mobileNavCardBtn');
+            const drawerBtnText = document.getElementById('mobileDrawerCardBtnText');
+            const drawerBtn = document.getElementById('mobileDrawerCardBtn');
 
             if (savedData) {
                 const member = JSON.parse(savedData);
-                if (btnText) btnText.innerHTML = `🟢 🪪 ${member.fullName.split(' ')[0]} (Kartım)`;
+                const firstName = member.fullName ? member.fullName.split(' ')[0] : 'Üye';
+                if (btnText) btnText.innerHTML = `🟢 🪪 ${firstName} (Kartım)`;
                 if (navBtn) {
                     navBtn.classList.remove('from-amber-500', 'to-amber-600', 'text-slate-950');
                     navBtn.classList.add('from-emerald-500', 'to-emerald-600', 'text-white', 'border-emerald-400');
                 }
+                if (mobileBtnText) mobileBtnText.textContent = firstName;
+                if (mobileBtn) {
+                    mobileBtn.classList.remove('bg-amber-500', 'text-slate-950');
+                    mobileBtn.classList.add('bg-emerald-500', 'text-white');
+                }
+                if (drawerBtnText) drawerBtnText.innerHTML = `🟢 🪪 ${member.fullName} (Kartım)`;
+                if (drawerBtn) {
+                    drawerBtn.classList.remove('from-amber-500', 'to-amber-600', 'text-slate-950');
+                    drawerBtn.classList.add('from-emerald-500', 'to-emerald-600', 'text-white');
+                }
             } else {
                 if (btnText) btnText.innerHTML = `🪪 Dijital Üye Kartı`;
+                if (mobileBtnText) mobileBtnText.textContent = `Kartım`;
+                if (drawerBtnText) drawerBtnText.innerHTML = `🪪 Dijital Üye Kartını Aç`;
             }
         }
 
         function handleMemberCardClick() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                if (menuIcon) {
+                    menuIcon.classList.remove('fa-xmark');
+                    menuIcon.classList.add('fa-bars');
+                }
+            }
+
             const savedData = localStorage.getItem(STORAGE_KEY);
             if (savedData) {
                 const member = JSON.parse(savedData);
@@ -675,7 +810,7 @@
             }
         }
 
-        function showMemberCard(member) {
+        async function showMemberCard(member) {
             document.getElementById('cardHolderName').textContent = member.fullName;
             document.getElementById('cardHolderNo').textContent = member.studentNo;
             document.getElementById('cardSerialNo').textContent = member.serialNo || 'ULU-2026-8492';
@@ -686,10 +821,26 @@
             const noTicketContainer = document.getElementById('noTicketContainer');
             const ticketCountBadge = document.getElementById('ticketCountBadge');
 
-            if (member.wonGift) {
+            let activeGift = member.wonGift;
+            try {
+                const cloudGift = await CloudSync.checkGiftForStudent(member.studentNo);
+                if (cloudGift) {
+                    activeGift = {
+                        title: cloudGift.title,
+                        code: cloudGift.code,
+                        assignedAt: cloudGift.assignedAt || new Date().toISOString()
+                    };
+                    member.wonGift = activeGift;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+                }
+            } catch (e) {
+                console.warn('Hediye senkronizasyonu:', e);
+            }
+
+            if (activeGift) {
                 wonGiftContainer.classList.remove('hidden');
-                document.getElementById('wonGiftTitle').textContent = member.wonGift.title;
-                document.getElementById('wonGiftCode').textContent = member.wonGift.code;
+                document.getElementById('wonGiftTitle').textContent = activeGift.title;
+                document.getElementById('wonGiftCode').textContent = activeGift.code;
             } else {
                 wonGiftContainer.classList.add('hidden');
             }

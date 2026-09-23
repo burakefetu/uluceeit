@@ -1399,7 +1399,7 @@
             // 🌐 CANLI BULUT VERİTABANINA YAZ
             if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
             // Önceki varsa sil
-            cachedCloudData.gifts = cachedCloudData.gifts.filter(g => g.target !== targetIdentifier);
+            cachedCloudData.gifts = cachedCloudData.gifts.filter(g => String(g.target || '').trim() !== String(targetIdentifier || '').trim());
             cachedCloudData.gifts.unshift(newGiftItem);
             
             await Promise.all([

@@ -203,6 +203,10 @@
                     <a href="#sponsorlar" class="text-slate-700 hover:text-amber-600 font-semibold text-sm transition-colors flex items-center gap-1.5">
                         <i class="fa-solid fa-tags text-xs text-amber-500"></i> Sponsorlar
                     </a>
+                    <a href="cekilis.html" class="text-amber-600 hover:text-amber-700 font-extrabold text-xs sm:text-sm transition-colors flex items-center gap-1.5 bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-200">
+                        <i class="fa-solid fa-gift text-xs text-amber-500"></i> <span>Çekiliş</span>
+                        <span class="bg-amber-500 text-slate-950 text-[10px] px-1.5 py-0.2 rounded-full font-black">Aktif</span>
+                    </a>
                     <a href="#yonetim-kurulu" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Yönetim</a>
                     <a href="#iletisim" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">İletişim</a>
                     
@@ -242,6 +246,10 @@
                 <a href="#sponsorlar" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-amber-600 hover:bg-amber-50 transition-colors">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-tags text-amber-500 w-5"></i> Sponsorlarımız & İndirimler</span>
                     <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">Fırsatlar</span>
+                </a>
+                <a href="cekilis.html" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-gift text-amber-500 w-5"></i> Büyük Çekiliş</span>
+                    <span class="bg-amber-500 text-slate-950 text-xs px-2.5 py-0.5 rounded-full font-bold">Aktif</span>
                 </a>
                 <a href="#yonetim-kurulu" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
                     <i class="fa-solid fa-users text-blue-600 w-5"></i> Yönetim Kurulu
@@ -1225,6 +1233,7 @@
                         <li><a href="#kariyer" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Kariyer Haritası</a></li>
                         <li><a href="#etkinlikler" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Geçmiş Etkinlikler</a></li>
                         <li><a href="#sponsorlar" class="hover:text-amber-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Sponsorlar & İndirimler</a></li>
+                        <li><a href="cekilis.html" class="hover:text-amber-400 transition-colors"><i class="fa-solid fa-gift text-amber-400 mr-2 text-xs"></i> 🎁 Büyük Üye Çekilişi</a></li>
                         <li><button onclick="handleMemberCardClick()" class="hover:text-amber-400 transition-colors text-left flex items-center"><i class="fa-solid fa-id-card text-amber-400 mr-2 text-xs"></i> 🪪 Dijital Üye Kartım</button></li>
                         <li><a href="#uye-ol" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Üyelik Başvurusu</a></li>
                         <li><a href="#yonetim-kurulu" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right text-[10px] mr-2"></i> Yönetim Kurulu</a></li>
@@ -1705,7 +1714,8 @@
                 try {
                     if (!member || !member.studentNo) return;
                     const members = await this.getMembers();
-                    const idx = members.findIndex(m => m.studentNo === member.studentNo);
+                    const sNo = String(member.studentNo).trim();
+                    const idx = members.findIndex(m => String(m.studentNo || '').trim() === sNo);
                     if (idx >= 0) {
                         members[idx] = { ...members[idx], ...member };
                     } else {
@@ -1733,7 +1743,7 @@
                 try {
                     const sNo = String(studentNo).trim();
                     let gifts = await this.getGifts();
-                    gifts = gifts.filter(g => String(g.target || '').trim() !== sNo && g.code !== giftCode);
+                    gifts = gifts.filter(g => !(String(g.target || '').trim() === sNo && g.code === giftCode));
                     await this.pushGifts(gifts);
                 } catch (e) {
                     console.error('Redeem sync error:', e);
@@ -2091,7 +2101,7 @@
             // Global Hediye Kayıt Havuzundan da temizle
             let registry = JSON.parse(localStorage.getItem('uluceeit_gifts_registry') || '[]');
             const sNo = String(studentNo || '').trim();
-            registry = registry.filter(item => String(item.target || '').trim() !== sNo && item.code !== currentRedeemingCode);
+            registry = registry.filter(item => !(String(item.target || '').trim() === sNo && item.code === currentRedeemingCode));
             localStorage.setItem('uluceeit_gifts_registry', JSON.stringify(registry));
 
             // Karttaki hediye alanını hemen gizle
