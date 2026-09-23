@@ -1575,63 +1575,117 @@
     <script>
         const SECRET_AUTH_TOKEN = 'CEEIT-2026-ONAY';
         const STORAGE_KEY = 'uluceeit_verified_member';
-        const CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff808181a09d98f701a0cee8058d7d5a';
+        const GIFTS_REGISTRY_KEY = 'uluceeit_gifts_registry';
+        const MEMBERS_CACHE_KEY = 'uluceeit_all_members_cache';
 
-        // 🌐 CANLI BULUT SENKRONİZASYON MOTORU
+        // 🌐 CANLI BULUT SENKRONİZASYON MOTORU (MantleDB v2 & Local Fallback)
         const CloudSync = {
-            async fetchCloudData() {
-                try {
-                    const res = await fetch(CLOUD_API_URL);
-                    if (!res.ok) return null;
-                    const json = await res.json();
-                    return json.data || { members: [], gifts: [] };
-                } catch (e) {
-                    console.warn('Cloud sync offline:', e);
-                    return null;
-                }
+            API_BASE: 'https://mantledb.sh/v2/uluceeit_live_db_2026',
+            API_KEY: '5f6021b53f796c10f4a0cc12d16f6bc2598f1497ed1976e14dc12049f6709c40',
+
+            getHeaders() {
+                return {
+                    'Content-Type': 'application/json',
+                    'X-Mantle-Key': this.API_KEY
+                };
             },
-            async pushCloudData(data) {
+
+            async getMembers() {
                 try {
-                    await fetch(CLOUD_API_URL, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: 'uluceeit_cloud_registry', data: data })
+                    const res = await fetch(`${this.API_BASE}/members`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data)) {
+                            localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(data));
+                            return data;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('MantleDB members fetch error, using local cache:', e);
+                }
+                const cached = localStorage.getItem(MEMBERS_CACHE_KEY);
+                return cached ? JSON.parse(cached) : [];
+            },
+
+            async pushMembers(members) {
+                try {
+                    localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(members));
+                    await fetch(`${this.API_BASE}/members`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(members)
                     });
                 } catch (e) {
-                    console.warn('Cloud push error:', e);
+                    console.warn('MantleDB members push error:', e);
                 }
             },
+
+            async getGifts() {
+                try {
+                    const res = await fetch(`${this.API_BASE}/gifts`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data)) {
+                            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(data));
+                            return data;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('MantleDB gifts fetch error, using local cache:', e);
+                }
+                const cached = localStorage.getItem(GIFTS_REGISTRY_KEY);
+                return cached ? JSON.parse(cached) : [];
+            },
+
+            async pushGifts(gifts) {
+                try {
+                    localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(gifts));
+                    await fetch(`${this.API_BASE}/gifts`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(gifts)
+                    });
+                } catch (e) {
+                    console.warn('MantleDB gifts push error:', e);
+                }
+            },
+
             async registerMember(member) {
                 try {
-                    const cloud = await this.fetchCloudData() || { members: [], gifts: [] };
-                    if (!cloud.members) cloud.members = [];
-                    const idx = cloud.members.findIndex(m => m.studentNo === member.studentNo);
+                    if (!member || !member.studentNo) return;
+                    const members = await this.getMembers();
+                    const idx = members.findIndex(m => m.studentNo === member.studentNo);
                     if (idx >= 0) {
-                        cloud.members[idx] = { ...cloud.members[idx], ...member };
+                        members[idx] = { ...members[idx], ...member };
                     } else {
-                        cloud.members.push(member);
+                        members.push(member);
                     }
-                    await this.pushCloudData(cloud);
+                    await this.pushMembers(members);
                 } catch (e) {
                     console.error('Member cloud sync error:', e);
                 }
             },
+
             async checkGiftForStudent(studentNo) {
                 try {
-                    const cloud = await this.fetchCloudData();
-                    if (!cloud || !cloud.gifts) return null;
-                    const gift = cloud.gifts.find(g => g.target === studentNo || (g.target && g.target.includes(studentNo)));
+                    if (!studentNo) return null;
+                    const gifts = await this.getGifts();
+                    const gift = gifts.find(g => g.target === studentNo || (g.target && g.target.includes(studentNo)));
                     return gift || null;
                 } catch (e) {
                     return null;
                 }
             },
+
             async redeemGift(studentNo, giftCode) {
                 try {
-                    const cloud = await this.fetchCloudData();
-                    if (!cloud || !cloud.gifts) return;
-                    cloud.gifts = cloud.gifts.filter(g => !(g.target === studentNo || (g.target && g.target.includes(studentNo))) && g.code !== giftCode);
-                    await this.pushCloudData(cloud);
+                    let gifts = await this.getGifts();
+                    gifts = gifts.filter(g => !(g.target === studentNo || (g.target && g.target.includes(studentNo))) && g.code !== giftCode);
+                    await this.pushGifts(gifts);
                 } catch (e) {
                     console.error('Redeem sync error:', e);
                 }
@@ -1644,13 +1698,46 @@
             updateNavbarCardState();
             setInterval(updateCardClock, 1000);
 
-            // Mevcut bir üye varsa arka planda buluta senkronize et
-            const savedData = localStorage.getItem(STORAGE_KEY);
-            if (savedData) {
-                const member = JSON.parse(savedData);
-                CloudSync.registerMember(member);
-            }
+            // Mevcut bir üye varsa arka planda buluta senkronize et ve hediyesini çek
+            syncCurrentMember();
+            // Periyodik olarak (her 6 sn) yeni hediye var mı kontrol et
+            setInterval(syncCurrentMember, 6000);
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') syncCurrentMember();
+            });
         });
+
+        async function syncCurrentMember() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (!savedData) return;
+            const member = JSON.parse(savedData);
+            
+            // Üyeyi buluta kaydet/tazele
+            await CloudSync.registerMember(member);
+            
+            // Hediyesini kontrol et
+            const gift = await CloudSync.checkGiftForStudent(member.studentNo);
+            const wonGiftCont = document.getElementById('wonGiftContainer');
+            
+            if (gift) {
+                if (!member.wonGift || member.wonGift.code !== gift.code) {
+                    member.wonGift = { title: gift.title, code: gift.code, id: gift.id };
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+                    if (wonGiftCont) {
+                        wonGiftCont.classList.remove('hidden');
+                        document.getElementById('wonGiftTitle').textContent = gift.title;
+                        document.getElementById('wonGiftCode').textContent = gift.code;
+                    }
+                }
+            } else {
+                // Eğer bulutta bu öğrenciye hediye kalmadıysa (kullanılmış veya admin silmişse)
+                if (member.wonGift) {
+                    delete member.wonGift;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+                    if (wonGiftCont) wonGiftCont.classList.add('hidden');
+                }
+            }
+        }
 
         // URL Kontrolü (Öğrenci Stant QR'ını okuttuysa)
         function checkUrlActivation() {

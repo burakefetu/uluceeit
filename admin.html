@@ -324,15 +324,18 @@
                     <div>
                         <h3 class="text-lg font-black text-white flex items-center gap-2">
                             <span>👥 Standımızda Kayıtlı Canlı Üyeler</span>
-                            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-400/30">Bulut Senkronlu</span>
+                            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-400/30 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Canlı Bulut Senkronlu
+                            </span>
                         </h3>
                         <p class="text-xs text-slate-400">Telefonlarından QR okutup üye olan tüm öğrenciler anında burada görünür.</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <button onclick="loadCloudMembersAndGifts()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5">
-                            <i class="fa-solid fa-arrows-rotate"></i> <span>Yenile</span>
+                        <span id="cloudSyncStatusNotify" class="hidden text-[11px] text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/30 animate-fade"></span>
+                        <button id="btnRefreshCloud" onclick="loadCloudMembersAndGifts(true)" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-slate-700 shadow-sm active:scale-95" title="Buluttaki güncel üyeleri çek">
+                            <i class="fa-solid fa-arrows-rotate"></i> <span>Buluttan Yenile</span>
                         </button>
-                        <span id="memberCountBadge" class="text-xs font-mono font-bold bg-slate-800 px-3 py-1 rounded-full text-emerald-400">0 Üye</span>
+                        <span id="memberCountBadge" class="text-xs font-mono font-bold bg-slate-800 px-3 py-1.5 rounded-full text-emerald-400 border border-slate-700">0 Üye</span>
                     </div>
                 </div>
 
@@ -393,13 +396,13 @@
         </main>
     </div>
 
-    <!-- JAVASCRIPT MOTORU (BULUT SENKRONİZASYONLU) -->
+    <!-- JAVASCRIPT MOTORU (BULUT SENKRONİZASYONLU - MANTLEDB v2) -->
     <script>
         const ADMIN_PIN = "2026";
         const STORAGE_KEY = 'uluceeit_verified_member';
         const GIFTS_REGISTRY_KEY = 'uluceeit_gifts_registry';
         const GIFT_POOL_KEY = 'uluceeit_gift_pool';
-        const CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff808181a09d98f701a0cee8058d7d5a';
+        const MEMBERS_CACHE_KEY = 'uluceeit_all_members_cache';
 
         const DEFAULT_POOL = [
             { id: 'POOL-1', title: '☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi', stock: 5, distributed: 0, prefix: 'ULU-KAHVE' },
@@ -408,30 +411,111 @@
             { id: 'POOL-4', title: '🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti', stock: 10, distributed: 0, prefix: 'ULU-VIP-SET' }
         ];
 
-        // 🌐 CANLI BULUT VERİTABANI MOTORU
+        // 🌐 CANLI BULUT VERİTABANI MOTORU (MantleDB v2 & Local Fallback)
         const CloudSync = {
-            async fetchCloudData() {
+            API_BASE: 'https://mantledb.sh/v2/uluceeit_live_db_2026',
+            API_KEY: '5f6021b53f796c10f4a0cc12d16f6bc2598f1497ed1976e14dc12049f6709c40',
+
+            getHeaders() {
+                return {
+                    'Content-Type': 'application/json',
+                    'X-Mantle-Key': this.API_KEY
+                };
+            },
+
+            async getMembers() {
                 try {
-                    const res = await fetch(CLOUD_API_URL);
-                    if (!res.ok) return null;
-                    const json = await res.json();
-                    return json.data || { members: [], gifts: [] };
+                    const res = await fetch(`${this.API_BASE}/members`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data)) {
+                            localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(data));
+                            return data;
+                        }
+                    }
                 } catch (e) {
-                    console.warn('Cloud sync offline:', e);
-                    return null;
+                    console.warn('MantleDB members fetch failed, fallback to local cache:', e);
+                }
+                const cached = localStorage.getItem(MEMBERS_CACHE_KEY);
+                return cached ? JSON.parse(cached) : [];
+            },
+
+            async pushMembers(members) {
+                try {
+                    localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(members));
+                    await fetch(`${this.API_BASE}/members`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(members)
+                    });
+                } catch (e) {
+                    console.warn('MantleDB members push error:', e);
                 }
             },
-            async pushCloudData(data) {
+
+            async getGifts() {
                 try {
-                    const res = await fetch(CLOUD_API_URL, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: 'uluceeit_cloud_registry', data: data })
+                    const res = await fetch(`${this.API_BASE}/gifts`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
                     });
-                    return res.ok;
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data)) {
+                            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(data));
+                            return data;
+                        }
+                    }
                 } catch (e) {
-                    console.warn('Cloud push error:', e);
-                    return false;
+                    console.warn('MantleDB gifts fetch failed, fallback to local cache:', e);
+                }
+                const cached = localStorage.getItem(GIFTS_REGISTRY_KEY);
+                return cached ? JSON.parse(cached) : [];
+            },
+
+            async pushGifts(gifts) {
+                try {
+                    localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(gifts));
+                    await fetch(`${this.API_BASE}/gifts`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(gifts)
+                    });
+                } catch (e) {
+                    console.warn('MantleDB gifts push error:', e);
+                }
+            },
+
+            async getPool() {
+                try {
+                    const res = await fetch(`${this.API_BASE}/pool`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data) && data.length > 0) {
+                            localStorage.setItem(GIFT_POOL_KEY, JSON.stringify(data));
+                            return data;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('MantleDB pool fetch failed, fallback to local cache:', e);
+                }
+                const cached = localStorage.getItem(GIFT_POOL_KEY);
+                return cached ? JSON.parse(cached) : DEFAULT_POOL;
+            },
+
+            async pushPool(pool) {
+                try {
+                    localStorage.setItem(GIFT_POOL_KEY, JSON.stringify(pool));
+                    await fetch(`${this.API_BASE}/pool`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(pool)
+                    });
+                } catch (e) {
+                    console.warn('MantleDB pool push error:', e);
                 }
             }
         };
@@ -457,47 +541,86 @@
             }
         }
 
+        let adminPollInterval = null;
+
         function showAdminPanel() {
             document.getElementById('pinScreen').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden');
-            renderGiftPool();
-            updateGiftSelectDropdown();
             loadCloudMembersAndGifts();
-            updateStats();
+
+            // 5 saniyede bir stanttan üye olanları ve hediyeleri canlı çek
+            if (!adminPollInterval) {
+                adminPollInterval = setInterval(() => {
+                    if (sessionStorage.getItem('uluceeit_admin_auth') === 'true') {
+                        loadCloudMembersAndGifts(false);
+                    }
+                }, 5000);
+            }
         }
 
         function logoutAdmin() {
             sessionStorage.removeItem('uluceeit_admin_auth');
+            if (adminPollInterval) clearInterval(adminPollInterval);
             location.reload();
         }
 
         // =========================================================================
         // 👥 CANLI BULUT ÜYE & HEDİYE YÜKLEME
         // =========================================================================
-        let cachedCloudData = { members: [], gifts: [] };
+        let cachedCloudData = { members: [], gifts: [], pool: [] };
+        let isSyncing = false;
 
-        async function loadCloudMembersAndGifts() {
-            const cloud = await CloudSync.fetchCloudData();
-            if (cloud) {
-                cachedCloudData = cloud;
-                if (!cachedCloudData.members) cachedCloudData.members = [];
-                if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
+        async function loadCloudMembersAndGifts(showFeedback = false) {
+            if (isSyncing) return;
+            isSyncing = true;
 
-                // Yerel kayıtlı üye varsa buluta da ekle
+            const refreshBtn = document.getElementById('btnRefreshCloud');
+            if (refreshBtn && showFeedback) refreshBtn.querySelector('i')?.classList.add('animate-spin');
+
+            try {
+                const [members, gifts, pool] = await Promise.all([
+                    CloudSync.getMembers(),
+                    CloudSync.getGifts(),
+                    CloudSync.getPool()
+                ]);
+
+                cachedCloudData.members = members || [];
+                cachedCloudData.gifts = gifts || [];
+                cachedCloudData.pool = (pool && pool.length > 0) ? pool : getGiftPool();
+
+                // Yerel kayıtlı üye varsa bulutta da yoksa ekle
                 const localMemberRaw = localStorage.getItem(STORAGE_KEY);
                 if (localMemberRaw) {
                     const m = JSON.parse(localMemberRaw);
                     if (!cachedCloudData.members.some(cm => cm.studentNo === m.studentNo)) {
                         cachedCloudData.members.push(m);
-                        CloudSync.pushCloudData(cachedCloudData);
+                        CloudSync.pushMembers(cachedCloudData.members);
                     }
                 }
-            }
 
-            renderCloudMembers();
-            renderGiftsList();
-            updateTargetMemberSelect();
-            updateStats();
+                // Havuzu yerel depolamaya ve UI'ya uygula
+                localStorage.setItem(GIFT_POOL_KEY, JSON.stringify(cachedCloudData.pool));
+                renderGiftPool();
+                updateGiftSelectDropdown();
+                renderCloudMembers();
+                renderGiftsList();
+                updateTargetMemberSelect();
+                updateStats();
+
+                if (showFeedback) {
+                    const notify = document.getElementById('cloudSyncStatusNotify');
+                    if (notify) {
+                        notify.textContent = "✓ Bulut Güncellendi";
+                        notify.classList.remove('hidden');
+                        setTimeout(() => notify.classList.add('hidden'), 2500);
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading cloud data:', err);
+            } finally {
+                isSyncing = false;
+                if (refreshBtn) refreshBtn.querySelector('i')?.classList.remove('animate-spin');
+            }
         }
 
         function renderCloudMembers() {
@@ -519,7 +642,7 @@
                 // Bu üyeye tanımlı aktif hediye var mı?
                 const assignedGift = (cachedCloudData.gifts || []).find(g => g.target === m.studentNo || (g.target && g.target.includes(m.studentNo)));
                 const giftBadge = assignedGift 
-                    ? `<span class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold text-[10px] border border-emerald-500/30">🎁 ${assignedGift.title.split(' ')[1] || 'Hediye'}</span>`
+                    ? `<span class="bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-bold text-[10px] border border-emerald-500/30">🎁 ${assignedGift.title.split(' ')[1] || assignedGift.title}</span>`
                     : `<span class="text-slate-500 text-[10px]">Hediye Yok</span>`;
 
                 const dateStr = m.registeredAt ? new Date(m.registeredAt).toLocaleDateString('tr-TR') : 'Bugün';
@@ -527,8 +650,8 @@
                 return `
                     <tr class="hover:bg-slate-800/50 transition-colors">
                         <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-black flex items-center justify-center text-[10px] border border-blue-400/30">${m.fullName.charAt(0)}</span>
-                            <span>${m.fullName}</span>
+                            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-black flex items-center justify-center text-[10px] border border-blue-400/30">${(m.fullName || 'Ö').charAt(0)}</span>
+                            <span>${m.fullName || 'İsimsiz Üye'}</span>
                         </td>
                         <td class="py-3 px-3 font-mono font-bold text-amber-300">${m.studentNo}</td>
                         <td class="py-3 px-3 text-slate-400">${dateStr}</td>
@@ -577,11 +700,13 @@
             return JSON.parse(raw);
         }
 
-        function saveGiftPool(pool) {
+        async function saveGiftPool(pool) {
+            cachedCloudData.pool = pool;
             localStorage.setItem(GIFT_POOL_KEY, JSON.stringify(pool));
             renderGiftPool();
             updateGiftSelectDropdown();
             updateStats();
+            await CloudSync.pushPool(pool);
         }
 
         function toggleAddGiftPoolModal() {
@@ -592,7 +717,7 @@
             }
         }
 
-        function handleAddGiftToPool(e) {
+        async function handleAddGiftToPool(e) {
             e.preventDefault();
             const title = document.getElementById('poolNewTitle').value.trim();
             const stock = parseInt(document.getElementById('poolNewStock').value) || 1;
@@ -609,7 +734,7 @@
                 prefix: prefix
             });
 
-            saveGiftPool(pool);
+            await saveGiftPool(pool);
             document.getElementById('poolNewTitle').value = '';
             document.getElementById('poolNewStock').value = '5';
             toggleAddGiftPoolModal();
@@ -620,7 +745,7 @@
             alert(`✅ "${title}" (${stock} Adet) hediye havuzuna başarıyla eklendi!`);
         }
 
-        function changePoolStock(poolId, delta) {
+        async function changePoolStock(poolId, delta) {
             const pool = getGiftPool();
             const item = pool.find(p => p.id === poolId);
             if (!item) return;
@@ -631,14 +756,14 @@
                 return;
             }
             item.stock = newStock;
-            saveGiftPool(pool);
+            await saveGiftPool(pool);
         }
 
-        function deleteGiftFromPool(poolId) {
+        async function deleteGiftFromPool(poolId) {
             if (!confirm("Bu hediyeyi ve stok kaydını havuzdan silmek istediğinize emin misiniz?")) return;
             let pool = getGiftPool();
             pool = pool.filter(p => p.id !== poolId);
-            saveGiftPool(pool);
+            await saveGiftPool(pool);
         }
 
         function renderGiftPool() {
@@ -838,7 +963,11 @@
             // Önceki varsa sil
             cachedCloudData.gifts = cachedCloudData.gifts.filter(g => g.target !== targetIdentifier);
             cachedCloudData.gifts.unshift(newGiftItem);
-            await CloudSync.pushCloudData(cachedCloudData);
+            
+            await Promise.all([
+                CloudSync.pushGifts(cachedCloudData.gifts),
+                poolItemId ? CloudSync.pushPool(getGiftPool()) : Promise.resolve()
+            ]);
 
             // Yerel kayıt havuzuna da yaz
             localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(cachedCloudData.gifts));
@@ -904,7 +1033,11 @@
 
             if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
             cachedCloudData.gifts.unshift(newGiftItem);
-            await CloudSync.pushCloudData(cachedCloudData);
+            
+            await Promise.all([
+                CloudSync.pushGifts(cachedCloudData.gifts),
+                CloudSync.pushPool(pool)
+            ]);
 
             if (typeof confetti === 'function') {
                 confetti({ particleCount: 180, spread: 80, origin: { y: 0.5 } });
@@ -964,7 +1097,10 @@
             }
 
             cachedCloudData.gifts = gifts.filter(item => item.id !== id);
-            await CloudSync.pushCloudData(cachedCloudData);
+            await Promise.all([
+                CloudSync.pushGifts(cachedCloudData.gifts),
+                CloudSync.pushPool(getGiftPool())
+            ]);
 
             renderCloudMembers();
             renderGiftsList();
@@ -975,10 +1111,13 @@
             if (!confirm("Tüm tanımlanmış hediyeler silinecektir ve tüm stoklar sıfırlanacaktır. Onaylıyor musunuz?")) return;
             
             cachedCloudData.gifts = [];
-            await CloudSync.pushCloudData(cachedCloudData);
-
             const pool = getGiftPool();
             pool.forEach(p => p.distributed = 0);
+
+            await Promise.all([
+                CloudSync.pushGifts([]),
+                CloudSync.pushPool(pool)
+            ]);
             saveGiftPool(pool);
 
             const localMemberRaw = localStorage.getItem(STORAGE_KEY);
