@@ -1673,8 +1673,9 @@
             async checkGiftForStudent(studentNo) {
                 try {
                     if (!studentNo) return null;
+                    const sNo = String(studentNo).trim();
                     const gifts = await this.getGifts();
-                    const gift = gifts.find(g => g.target === studentNo || (g.target && g.target.includes(studentNo)));
+                    const gift = gifts.find(g => String(g.target || '').trim() === sNo);
                     return gift || null;
                 } catch (e) {
                     return null;
@@ -1683,8 +1684,9 @@
 
             async redeemGift(studentNo, giftCode) {
                 try {
+                    const sNo = String(studentNo).trim();
                     let gifts = await this.getGifts();
-                    gifts = gifts.filter(g => !(g.target === studentNo || (g.target && g.target.includes(studentNo))) && g.code !== giftCode);
+                    gifts = gifts.filter(g => String(g.target || '').trim() !== sNo && g.code !== giftCode);
                     await this.pushGifts(gifts);
                 } catch (e) {
                     console.error('Redeem sync error:', e);
@@ -1901,7 +1903,8 @@
 
             // Global Hediye Kayıt Havuzundan da temizle
             let registry = JSON.parse(localStorage.getItem('uluceeit_gifts_registry') || '[]');
-            registry = registry.filter(item => item.target !== studentNo && item.target !== 'Mevcut Cihaz' && !item.target.includes(studentNo));
+            const sNo = String(studentNo || '').trim();
+            registry = registry.filter(item => String(item.target || '').trim() !== sNo && item.code !== currentRedeemingCode);
             localStorage.setItem('uluceeit_gifts_registry', JSON.stringify(registry));
 
             // Karttaki hediye alanını hemen gizle
