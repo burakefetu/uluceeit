@@ -1570,17 +1570,86 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- JAVASCRIPT: DİJİTAL KART & AKTİVASYON MOTORU -->
+    <!-- JAVASCRIPT: DİJİTAL KART & AKTİVASYON & CLOUD SYNC MOTORU -->
     <!-- ========================================================================= -->
     <script>
         const SECRET_AUTH_TOKEN = 'CEEIT-2026-ONAY';
         const STORAGE_KEY = 'uluceeit_verified_member';
+        const CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff808181a09d98f701a0cee8058d7d5a';
+
+        // 🌐 CANLI BULUT SENKRONİZASYON MOTORU
+        const CloudSync = {
+            async fetchCloudData() {
+                try {
+                    const res = await fetch(CLOUD_API_URL);
+                    if (!res.ok) return null;
+                    const json = await res.json();
+                    return json.data || { members: [], gifts: [] };
+                } catch (e) {
+                    console.warn('Cloud sync offline:', e);
+                    return null;
+                }
+            },
+            async pushCloudData(data) {
+                try {
+                    await fetch(CLOUD_API_URL, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: 'uluceeit_cloud_registry', data: data })
+                    });
+                } catch (e) {
+                    console.warn('Cloud push error:', e);
+                }
+            },
+            async registerMember(member) {
+                try {
+                    const cloud = await this.fetchCloudData() || { members: [], gifts: [] };
+                    if (!cloud.members) cloud.members = [];
+                    const idx = cloud.members.findIndex(m => m.studentNo === member.studentNo);
+                    if (idx >= 0) {
+                        cloud.members[idx] = { ...cloud.members[idx], ...member };
+                    } else {
+                        cloud.members.push(member);
+                    }
+                    await this.pushCloudData(cloud);
+                } catch (e) {
+                    console.error('Member cloud sync error:', e);
+                }
+            },
+            async checkGiftForStudent(studentNo) {
+                try {
+                    const cloud = await this.fetchCloudData();
+                    if (!cloud || !cloud.gifts) return null;
+                    const gift = cloud.gifts.find(g => g.target === studentNo || (g.target && g.target.includes(studentNo)));
+                    return gift || null;
+                } catch (e) {
+                    return null;
+                }
+            },
+            async redeemGift(studentNo, giftCode) {
+                try {
+                    const cloud = await this.fetchCloudData();
+                    if (!cloud || !cloud.gifts) return;
+                    cloud.gifts = cloud.gifts.filter(g => !(g.target === studentNo || (g.target && g.target.includes(studentNo))) && g.code !== giftCode);
+                    await this.pushCloudData(cloud);
+                } catch (e) {
+                    console.error('Redeem sync error:', e);
+                }
+            }
+        };
 
         // Sayfa Yüklendiğinde URL'de Aktivasyon QR Kodu Var mı Kontrol Et
         document.addEventListener('DOMContentLoaded', () => {
             checkUrlActivation();
             updateNavbarCardState();
             setInterval(updateCardClock, 1000);
+
+            // Mevcut bir üye varsa arka planda buluta senkronize et
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                const member = JSON.parse(savedData);
+                CloudSync.registerMember(member);
+            }
         });
 
         // URL Kontrolü (Öğrenci Stant QR'ını okuttuysa)
@@ -1589,7 +1658,6 @@
             const token = urlParams.get('aktivasyon') || urlParams.get('activate');
 
             if (token === SECRET_AUTH_TOKEN) {
-                // Aktivasyon Modalını Aç ve Kutlama Efekti Yap
                 setTimeout(() => {
                     document.getElementById('activationModal').classList.remove('hidden');
                     if (typeof confetti === 'function') {
@@ -1597,7 +1665,6 @@
                     }
                 }, 400);
 
-                // URL'den parametreyi temizle (başkasına link kopyalayıp atamasın)
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         }
@@ -1619,6 +1686,9 @@
 
             // Cihaza kalıcı mühür kaydet
             localStorage.setItem(STORAGE_KEY, JSON.stringify(memberData));
+
+            // Buluta canlı üye olarak kaydet (Yönetim panelinde anında görünmesi için)
+            CloudSync.registerMember(memberData);
 
             // Aktivasyon penceresini kapat
             document.getElementById('activationModal').classList.add('hidden');
@@ -1651,7 +1721,7 @@
             }
         }
 
-        // Kart Butonuna Basıldığında (Doğrulanmış mı Değil mi Kontrolü)
+        // Kart Butonuna Basıldığında
         function handleMemberCardClick() {
             const savedData = localStorage.getItem(STORAGE_KEY);
             if (savedData) {
@@ -1668,25 +1738,29 @@
             document.getElementById('cardHolderNo').textContent = member.studentNo;
             document.getElementById('cardSerialNo').textContent = member.serialNo || 'ULU-2026-8492';
 
-            // Kişiye Özel Hediye Kontrolü (Admin Tanımladıysa)
             const wonGiftCont = document.getElementById('wonGiftContainer');
             let assignedGift = member.wonGift;
 
-            // Registry Kontrolü (Öğrenci No eşleşmesi)
-            if (!assignedGift && member.studentNo) {
-                const registry = JSON.parse(localStorage.getItem('uluceeit_gifts_registry') || '[]');
-                const found = registry.find(item => item.target === member.studentNo || item.target === 'Mevcut Cihaz' || item.target.includes(member.studentNo));
-                if (found) {
-                    assignedGift = { title: found.title, code: found.code };
-                }
-            }
-
+            // 1. Yerel hafıza kontrolü
             if (assignedGift) {
                 wonGiftCont.classList.remove('hidden');
                 document.getElementById('wonGiftTitle').textContent = assignedGift.title;
                 document.getElementById('wonGiftCode').textContent = assignedGift.code;
             } else {
                 wonGiftCont.classList.add('hidden');
+            }
+
+            // 2. 🌐 CANLI BULUT VERİTABANINDAN KONTROL (Admin panelinden tanımlanmış hediyeler için)
+            if (member.studentNo) {
+                CloudSync.checkGiftForStudent(member.studentNo).then(cloudGift => {
+                    if (cloudGift) {
+                        member.wonGift = { title: cloudGift.title, code: cloudGift.code, id: cloudGift.id };
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+                        wonGiftCont.classList.remove('hidden');
+                        document.getElementById('wonGiftTitle').textContent = cloudGift.title;
+                        document.getElementById('wonGiftCode').textContent = cloudGift.code;
+                    }
+                });
             }
 
             updateCardClock();
@@ -1705,11 +1779,14 @@
         // TEK KULLANIMLIK HEDİYE TESLİM ALMA & İPTAL ETME MOTORU
         // =========================================================================
         let currentRedeemingGift = null;
+        let currentRedeemingCode = null;
 
         function promptRedeemGift() {
             const giftTitle = document.getElementById('wonGiftTitle').textContent;
+            const giftCode = document.getElementById('wonGiftCode').textContent;
             document.getElementById('redeemModalGiftTitle').textContent = giftTitle;
             currentRedeemingGift = giftTitle;
+            currentRedeemingCode = giftCode;
             document.getElementById('redeemConfirmModal').classList.remove('hidden');
         }
 
@@ -1728,6 +1805,11 @@
                 // Karttan hediyeyi kalıcı olarak sil
                 delete member.wonGift;
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+            }
+
+            // 🌐 Buluttan da kalıcı olarak sil / iptal et
+            if (studentNo) {
+                CloudSync.redeemGift(studentNo, currentRedeemingCode);
             }
 
             // Global Hediye Kayıt Havuzundan da temizle

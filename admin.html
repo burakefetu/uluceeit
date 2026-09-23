@@ -225,21 +225,35 @@
                         <!-- Hedef Öğrenci -->
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase">Kime Tanımlanacak?</label>
-                            <div class="grid grid-cols-2 gap-2 mb-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
                                 <label class="cursor-pointer">
-                                    <input type="radio" name="targetMode" value="current" checked onchange="toggleTargetMode(this.value)" class="peer sr-only">
+                                    <input type="radio" name="targetMode" value="memberList" checked onchange="toggleTargetMode(this.value)" class="peer sr-only">
                                     <div class="p-3 bg-slate-950 border border-slate-700 rounded-xl text-center text-xs font-bold text-slate-300 peer-checked:border-amber-400 peer-checked:bg-amber-500/10 peer-checked:text-amber-300 transition-all">
-                                        📱 Bu Cihazdaki Üyeye
+                                        📋 Kayıtlı Üyelerden Seç
                                     </div>
                                 </label>
                                 <label class="cursor-pointer">
                                     <input type="radio" name="targetMode" value="studentNo" onchange="toggleTargetMode(this.value)" class="peer sr-only">
                                     <div class="p-3 bg-slate-950 border border-slate-700 rounded-xl text-center text-xs font-bold text-slate-300 peer-checked:border-amber-400 peer-checked:bg-amber-500/10 peer-checked:text-amber-300 transition-all">
-                                        🔢 Öğrenci Numarasına
+                                        🔢 Numara Yaz
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="targetMode" value="current" onchange="toggleTargetMode(this.value)" class="peer sr-only">
+                                    <div class="p-3 bg-slate-950 border border-slate-700 rounded-xl text-center text-xs font-bold text-slate-300 peer-checked:border-amber-400 peer-checked:bg-amber-500/10 peer-checked:text-amber-300 transition-all">
+                                        📱 Bu Cihaza
                                     </div>
                                 </label>
                             </div>
 
+                            <!-- Kayıtlı Üye Listesi Dropdown -->
+                            <div id="memberListSelectContainer" class="mt-2">
+                                <select id="targetMemberSelect" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400">
+                                    <option value="">Yükleniyor...</option>
+                                </select>
+                            </div>
+
+                            <!-- Manuel Numara Girişi -->
                             <div id="studentNoInputContainer" class="hidden mt-2">
                                 <input type="text" id="targetStudentNo" placeholder="Örn: 022201045" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-sm focus:outline-none focus:border-amber-400">
                                 <p class="text-[11px] text-slate-500 mt-1">Öğrenci siteye bu numarayla girdiğinde kartında hediyesi gözükecektir.</p>
@@ -269,7 +283,7 @@
                         <div class="pt-3">
                             <button type="submit" class="w-full py-4 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black rounded-xl text-base shadow-xl shadow-amber-500/20 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-gift text-lg"></i>
-                                <span>Hediyeyi Üyenin Kartına Tanımla</span>
+                                <span>🌐 Hediyeyi Üyenin Telefonuna Tanımla</span>
                             </button>
                         </div>
 
@@ -285,7 +299,7 @@
                             <i class="fa-solid fa-dice"></i>
                         </div>
                         <h3 class="text-base font-black text-white mb-1">Hızlı Kura Çekimi</h3>
-                        <p class="text-xs text-slate-400 mb-4">Mevcut stok havuzundan rastgele şanslı bir hediye seç ve ata.</p>
+                        <p class="text-xs text-slate-400 mb-4">Kayıtlı üyeler arasından veya mevcut cihaz için rastgele hediye ata.</p>
                         
                         <button onclick="handleRandomDraw()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
                             <i class="fa-solid fa-shuffle"></i> <span>Havuzdan Rastgele Hediye Ata</span>
@@ -304,12 +318,52 @@
 
             </div>
 
+            <!-- 👥 STANDIMIZDA KAYIT OLAN TÜM CANLI ÜYELER (BULUT LİSTESİ) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
+                    <div>
+                        <h3 class="text-lg font-black text-white flex items-center gap-2">
+                            <span>👥 Standımızda Kayıtlı Canlı Üyeler</span>
+                            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-400/30">Bulut Senkronlu</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Telefonlarından QR okutup üye olan tüm öğrenciler anında burada görünür.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="loadCloudMembersAndGifts()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrows-rotate"></i> <span>Yenile</span>
+                        </button>
+                        <span id="memberCountBadge" class="text-xs font-mono font-bold bg-slate-800 px-3 py-1 rounded-full text-emerald-400">0 Üye</span>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="text-slate-400 border-b border-slate-800 uppercase text-[10px] tracking-wider">
+                                <th class="py-3 px-3">Üye Adı Soyadı</th>
+                                <th class="py-3 px-3">Öğrenci No</th>
+                                <th class="py-3 px-3">Kayıt Tarihi</th>
+                                <th class="py-3 px-3">Tanımlı Hediye</th>
+                                <th class="py-3 px-3 text-right">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cloudMembersTableBody" class="divide-y divide-slate-800 text-slate-300">
+                            <!-- Dinamik Liste -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="noMembersPlaceholder" class="py-8 text-center text-slate-500 text-xs">
+                    Henüz stantta QR okutmuş üye bulunmuyor.
+                </div>
+            </div>
+
             <!-- AKTİF DAĞITILAN HEDİYELER LİSTESİ -->
             <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
                 <div class="flex items-center justify-between mb-6 border-b border-slate-800 pb-4">
                     <div>
                         <h3 class="text-lg font-black text-white">Dağıtılan Hediyeler & Teslim Kodları</h3>
-                        <p class="text-xs text-slate-400">Üye kartlarına tanımlanmış aktif hediyelerin listesi</p>
+                        <p class="text-xs text-slate-400">Öğrencilerin telefonlarına gönderilmiş aktif hediyeler</p>
                     </div>
                     <span id="listCountBadge" class="text-xs font-mono font-bold bg-slate-800 px-3 py-1 rounded-full text-amber-400">0 Kayıt</span>
                 </div>
@@ -318,7 +372,7 @@
                     <table class="w-full text-left text-xs">
                         <thead>
                             <tr class="text-slate-400 border-b border-slate-800 uppercase text-[10px] tracking-wider">
-                                <th class="py-3 px-3">Hedef Üye</th>
+                                <th class="py-3 px-3">Hedef Öğrenci</th>
                                 <th class="py-3 px-3">Hediye Adı</th>
                                 <th class="py-3 px-3">Kupon / Teslim Kodu</th>
                                 <th class="py-3 px-3">Tarih</th>
@@ -339,12 +393,13 @@
         </main>
     </div>
 
-    <!-- JAVASCRIPT MOTORU -->
+    <!-- JAVASCRIPT MOTORU (BULUT SENKRONİZASYONLU) -->
     <script>
         const ADMIN_PIN = "2026";
         const STORAGE_KEY = 'uluceeit_verified_member';
         const GIFTS_REGISTRY_KEY = 'uluceeit_gifts_registry';
         const GIFT_POOL_KEY = 'uluceeit_gift_pool';
+        const CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff808181a09d98f701a0cee8058d7d5a';
 
         const DEFAULT_POOL = [
             { id: 'POOL-1', title: '☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi', stock: 5, distributed: 0, prefix: 'ULU-KAHVE' },
@@ -352,6 +407,34 @@
             { id: 'POOL-3', title: '🎓 Sertifikalı İK & Bordro Eğitim Bursu', stock: 2, distributed: 0, prefix: 'ULU-IK-BURS' },
             { id: 'POOL-4', title: '🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti', stock: 10, distributed: 0, prefix: 'ULU-VIP-SET' }
         ];
+
+        // 🌐 CANLI BULUT VERİTABANI MOTORU
+        const CloudSync = {
+            async fetchCloudData() {
+                try {
+                    const res = await fetch(CLOUD_API_URL);
+                    if (!res.ok) return null;
+                    const json = await res.json();
+                    return json.data || { members: [], gifts: [] };
+                } catch (e) {
+                    console.warn('Cloud sync offline:', e);
+                    return null;
+                }
+            },
+            async pushCloudData(data) {
+                try {
+                    const res = await fetch(CLOUD_API_URL, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: 'uluceeit_cloud_registry', data: data })
+                    });
+                    return res.ok;
+                } catch (e) {
+                    console.warn('Cloud push error:', e);
+                    return false;
+                }
+            }
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('uluceeit_admin_auth') === 'true') {
@@ -379,7 +462,7 @@
             document.getElementById('adminPanel').classList.remove('hidden');
             renderGiftPool();
             updateGiftSelectDropdown();
-            renderGiftsList();
+            loadCloudMembersAndGifts();
             updateStats();
         }
 
@@ -389,7 +472,101 @@
         }
 
         // =========================================================================
-        // 🎁 HEDİYE HAVUZU & STOK (ADET) YÖNETİMİ
+        // 👥 CANLI BULUT ÜYE & HEDİYE YÜKLEME
+        // =========================================================================
+        let cachedCloudData = { members: [], gifts: [] };
+
+        async function loadCloudMembersAndGifts() {
+            const cloud = await CloudSync.fetchCloudData();
+            if (cloud) {
+                cachedCloudData = cloud;
+                if (!cachedCloudData.members) cachedCloudData.members = [];
+                if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
+
+                // Yerel kayıtlı üye varsa buluta da ekle
+                const localMemberRaw = localStorage.getItem(STORAGE_KEY);
+                if (localMemberRaw) {
+                    const m = JSON.parse(localMemberRaw);
+                    if (!cachedCloudData.members.some(cm => cm.studentNo === m.studentNo)) {
+                        cachedCloudData.members.push(m);
+                        CloudSync.pushCloudData(cachedCloudData);
+                    }
+                }
+            }
+
+            renderCloudMembers();
+            renderGiftsList();
+            updateTargetMemberSelect();
+            updateStats();
+        }
+
+        function renderCloudMembers() {
+            const tbody = document.getElementById('cloudMembersTableBody');
+            const placeholder = document.getElementById('noMembersPlaceholder');
+            const badge = document.getElementById('memberCountBadge');
+
+            const members = cachedCloudData.members || [];
+            badge.textContent = `${members.length} Üye`;
+
+            if (members.length === 0) {
+                tbody.innerHTML = '';
+                placeholder.classList.remove('hidden');
+                return;
+            }
+
+            placeholder.classList.add('hidden');
+            tbody.innerHTML = members.map(m => {
+                // Bu üyeye tanımlı aktif hediye var mı?
+                const assignedGift = (cachedCloudData.gifts || []).find(g => g.target === m.studentNo || (g.target && g.target.includes(m.studentNo)));
+                const giftBadge = assignedGift 
+                    ? `<span class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold text-[10px] border border-emerald-500/30">🎁 ${assignedGift.title.split(' ')[1] || 'Hediye'}</span>`
+                    : `<span class="text-slate-500 text-[10px]">Hediye Yok</span>`;
+
+                const dateStr = m.registeredAt ? new Date(m.registeredAt).toLocaleDateString('tr-TR') : 'Bugün';
+
+                return `
+                    <tr class="hover:bg-slate-800/50 transition-colors">
+                        <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-black flex items-center justify-center text-[10px] border border-blue-400/30">${m.fullName.charAt(0)}</span>
+                            <span>${m.fullName}</span>
+                        </td>
+                        <td class="py-3 px-3 font-mono font-bold text-amber-300">${m.studentNo}</td>
+                        <td class="py-3 px-3 text-slate-400">${dateStr}</td>
+                        <td class="py-3 px-3">${giftBadge}</td>
+                        <td class="py-3 px-3 text-right">
+                            <button onclick="selectMemberForGift('${m.studentNo}', '${m.fullName}')" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold rounded-lg text-[11px] border border-amber-400/30 transition-colors flex items-center gap-1 ml-auto">
+                                <i class="fa-solid fa-gift"></i> <span>Hediye Ver</span>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateTargetMemberSelect() {
+            const select = document.getElementById('targetMemberSelect');
+            if (!select) return;
+
+            const members = cachedCloudData.members || [];
+            if (members.length === 0) {
+                select.innerHTML = `<option value="">Henüz kayıtlı üye yok (Manuel numara yazabilirsiniz)</option>`;
+                return;
+            }
+
+            select.innerHTML = members.map(m => `
+                <option value="${m.studentNo}">${m.fullName} (No: ${m.studentNo})</option>
+            `).join('');
+        }
+
+        function selectMemberForGift(studentNo, fullName) {
+            document.querySelector('input[name="targetMode"][value="memberList"]').checked = true;
+            toggleTargetMode('memberList');
+            document.getElementById('targetMemberSelect').value = studentNo;
+            document.getElementById('assignGiftForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // =========================================================================
+        // 🎁 HEDİYE HAVUZU & STOK YÖNETİMİ
         // =========================================================================
         function getGiftPool() {
             const raw = localStorage.getItem(GIFT_POOL_KEY);
@@ -449,8 +626,8 @@
             if (!item) return;
 
             const newStock = (item.stock || 0) + delta;
-            if (newStock < item.distributed) {
-                alert(`Kontenjan halihazırda dağıtılmış olan ${item.distributed} adetten daha az olamaz.`);
+            if (newStock < (item.distributed || 0)) {
+                alert(`Kontenjan halihazırda dağıtılmış olan ${item.distributed || 0} adetten daha az olamaz.`);
                 return;
             }
             item.stock = newStock;
@@ -476,7 +653,7 @@
 
             grid.innerHTML = pool.map(item => {
                 const remaining = Math.max(0, (item.stock || 0) - (item.distributed || 0));
-                const percent = item.stock > 0 ? Math.min(100, Math.round((item.distributed / item.stock) * 100)) : 0;
+                const percent = item.stock > 0 ? Math.min(100, Math.round(((item.distributed || 0) / item.stock) * 100)) : 0;
                 
                 let badgeClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
                 let badgeText = `${remaining} Adet Kaldı`;
@@ -515,13 +692,11 @@
                                 </div>
                             </div>
 
-                            <!-- Doluluk Barı -->
                             <div class="w-full bg-slate-800 rounded-full h-1.5 mb-3 overflow-hidden">
                                 <div class="bg-gradient-to-r from-amber-500 to-emerald-500 h-1.5 rounded-full" style="width: ${percent}%"></div>
                             </div>
                         </div>
 
-                        <!-- Hızlı Stok Arttırma / Azaltma Butonları -->
                         <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs">
                             <span class="text-[10px] text-slate-400 font-bold">Stok Ayarla:</span>
                             <div class="flex gap-1">
@@ -552,33 +727,35 @@
 
         function updateStats() {
             const pool = getGiftPool();
-            const registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
+            const gifts = cachedCloudData.gifts || [];
+            const members = cachedCloudData.members || [];
             
             const totalStock = pool.reduce((sum, item) => sum + (item.stock || 0), 0);
-            const totalDistributed = pool.reduce((sum, item) => sum + (item.distributed || 0), 0);
+            const totalDistributed = gifts.length;
             const totalRemaining = Math.max(0, totalStock - totalDistributed);
 
             document.getElementById('statTotalStock').textContent = totalStock;
-            document.getElementById('statTotalDistributed').textContent = registry.length || totalDistributed;
+            document.getElementById('statTotalDistributed').textContent = totalDistributed;
             document.getElementById('statTotalRemaining').textContent = totalRemaining;
 
-            const localMemberRaw = localStorage.getItem(STORAGE_KEY);
             const statLocal = document.getElementById('statLocalUser');
-            if (localMemberRaw) {
-                const m = JSON.parse(localMemberRaw);
-                statLocal.textContent = m.fullName.split(' ')[0] + ` (${m.studentNo})`;
-            } else {
-                statLocal.textContent = 'Yok';
-            }
+            statLocal.textContent = `${members.length} Kayıtlı Üye`;
         }
 
         function toggleTargetMode(mode) {
-            const inputCont = document.getElementById('studentNoInputContainer');
-            if (mode === 'studentNo') {
-                inputCont.classList.remove('hidden');
+            const memberListCont = document.getElementById('memberListSelectContainer');
+            const studentNoCont = document.getElementById('studentNoInputContainer');
+
+            if (mode === 'memberList') {
+                memberListCont.classList.remove('hidden');
+                studentNoCont.classList.add('hidden');
+            } else if (mode === 'studentNo') {
+                memberListCont.classList.add('hidden');
+                studentNoCont.classList.remove('hidden');
                 document.getElementById('targetStudentNo').focus();
             } else {
-                inputCont.classList.add('hidden');
+                memberListCont.classList.add('hidden');
+                studentNoCont.classList.add('hidden');
             }
         }
 
@@ -592,9 +769,9 @@
         }
 
         // =========================================================================
-        // HEDİYE TANIMLAMA & STOKTAN DÜŞME
+        // 🌐 CANLI BULUTA HEDİYE TANIMLAMA & TELEFONA GÖNDERME
         // =========================================================================
-        function handleAssignGift(e) {
+        async function handleAssignGift(e) {
             e.preventDefault();
             const targetMode = document.querySelector('input[name="targetMode"]:checked').value;
             const giftTypeVal = document.getElementById('giftTypeSelect').value;
@@ -626,14 +803,19 @@
                         alert(`⚠️ "${giftTitle}" hediyesinin kontenjanı dolmuştur (0 Adet kaldı). Lütfen hediye havuzundan stok arttırın.`);
                         return;
                     }
-                    // Stoktan 1 düş
                     poolItem.distributed = (poolItem.distributed || 0) + 1;
                     saveGiftPool(pool);
                 }
             }
 
             let targetIdentifier = 'Mevcut Cihaz';
-            if (targetMode === 'studentNo') {
+            if (targetMode === 'memberList') {
+                targetIdentifier = document.getElementById('targetMemberSelect').value;
+                if (!targetIdentifier) {
+                    alert("Lütfen listeden bir üye seçin veya numara yazın.");
+                    return;
+                }
+            } else if (targetMode === 'studentNo') {
                 const sNo = document.getElementById('targetStudentNo').value.trim();
                 if (!sNo) {
                     alert("Lütfen öğrenci numarasını girin.");
@@ -642,8 +824,6 @@
                 targetIdentifier = sNo;
             }
 
-            // Kayıt Havuzuna Ekle
-            let registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
             const newGiftItem = {
                 id: 'GIFT-' + Date.now(),
                 poolItemId: poolItemId,
@@ -652,10 +832,18 @@
                 code: giftCode,
                 date: new Date().toLocaleDateString('tr-TR')
             };
-            registry.unshift(newGiftItem);
-            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(registry));
 
-            // Eğer hedef "Mevcut Cihaz" veya mevcut cihazın öğrenci numarasıysa yerel üye kartına da yaz
+            // 🌐 CANLI BULUT VERİTABANINA YAZ
+            if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
+            // Önceki varsa sil
+            cachedCloudData.gifts = cachedCloudData.gifts.filter(g => g.target !== targetIdentifier);
+            cachedCloudData.gifts.unshift(newGiftItem);
+            await CloudSync.pushCloudData(cachedCloudData);
+
+            // Yerel kayıt havuzuna da yaz
+            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(cachedCloudData.gifts));
+
+            // Eğer hedef bu cihazsa yerel üye kartına da yaz
             const localMemberRaw = localStorage.getItem(STORAGE_KEY);
             if (localMemberRaw) {
                 const localMember = JSON.parse(localMemberRaw);
@@ -663,7 +851,7 @@
                     localMember.wonGift = {
                         title: giftTitle,
                         code: giftCode,
-                        assignedAt: new Date().toISOString()
+                        id: newGiftItem.id
                     };
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(localMember));
                 }
@@ -673,19 +861,29 @@
                 confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 } });
             }
 
-            alert(`✅ BAŞARILI!\n"${giftTitle}" hediyesi (${giftCode}) ${targetIdentifier} adına başarıyla tanımlandı ve stoktan 1 adet düşüldü.`);
+            alert(`🎉 BAŞARILI!\n"${giftTitle}" hediyesi (${giftCode}) ${targetIdentifier} numaralı öğrencinin telefonuna başarıyla tanımlandı!\nÖğrenci kartını açtığında hediyesini anında görecektir.`);
+            
+            renderCloudMembers();
             renderGiftsList();
             updateStats();
         }
 
         // Rastgele Havuzdan Çekiliş
-        function handleRandomDraw() {
+        async function handleRandomDraw() {
             const pool = getGiftPool();
             const availablePool = pool.filter(p => (p.stock || 0) - (p.distributed || 0) > 0);
 
             if (availablePool.length === 0) {
                 alert("⚠️ Hediye havuzundaki tüm hediyelerin stoğu tükenmiştir! Lütfen hediye havuzundan stok ekleyiniz.");
                 return;
+            }
+
+            const members = cachedCloudData.members || [];
+            let targetIdentifier = 'Mevcut Cihaz';
+
+            if (members.length > 0) {
+                const randomMember = members[Math.floor(Math.random() * members.length)];
+                targetIdentifier = randomMember.studentNo;
             }
 
             const randomGift = availablePool[Math.floor(Math.random() * availablePool.length)];
@@ -695,59 +893,49 @@
             randomGift.distributed = (randomGift.distributed || 0) + 1;
             saveGiftPool(pool);
 
-            // Mevcut üyeye ata
-            const localMemberRaw = localStorage.getItem(STORAGE_KEY);
-            let targetName = 'Mevcut Cihaz';
-            if (localMemberRaw) {
-                const member = JSON.parse(localMemberRaw);
-                member.wonGift = {
-                    title: randomGift.title,
-                    code: code,
-                    assignedAt: new Date().toISOString()
-                };
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
-                targetName = member.fullName + ` (${member.studentNo})`;
-            }
-
-            let registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
-            registry.unshift({
+            const newGiftItem = {
                 id: 'GIFT-' + Date.now(),
                 poolItemId: randomGift.id,
-                target: targetName,
+                target: targetIdentifier,
                 title: randomGift.title,
                 code: code,
                 date: new Date().toLocaleDateString('tr-TR')
-            });
-            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(registry));
+            };
+
+            if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
+            cachedCloudData.gifts.unshift(newGiftItem);
+            await CloudSync.pushCloudData(cachedCloudData);
 
             if (typeof confetti === 'function') {
                 confetti({ particleCount: 180, spread: 80, origin: { y: 0.5 } });
             }
 
-            alert(`🎉 KURA ÇEKİLDİ!\nKazanan Hediye: ${randomGift.title}\nTeslim Kodu: ${code}\nStoktan 1 adet düşülerek üyenin kartına işlendi.`);
+            alert(`🎉 KURA ÇEKİLDİ!\nKazanan Öğrenci: ${targetIdentifier}\nHediye: ${randomGift.title}\nTeslim Kodu: ${code}\nÖğrencinin telefonundaki karta bulut üzerinden işlendi.`);
+            
+            renderCloudMembers();
             renderGiftsList();
             updateStats();
         }
 
         // Dağıtılan Hediyeler Listesi
         function renderGiftsList() {
-            const registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
+            const gifts = cachedCloudData.gifts || [];
             const tbody = document.getElementById('giftsTableBody');
             const placeholder = document.getElementById('noGiftsPlaceholder');
             const badge = document.getElementById('listCountBadge');
 
-            badge.textContent = `${registry.length} Kayıt`;
+            badge.textContent = `${gifts.length} Kayıt`;
 
-            if (registry.length === 0) {
+            if (gifts.length === 0) {
                 tbody.innerHTML = '';
                 placeholder.classList.remove('hidden');
                 return;
             }
 
             placeholder.classList.add('hidden');
-            tbody.innerHTML = registry.map(item => `
+            tbody.innerHTML = gifts.map(item => `
                 <tr class="hover:bg-slate-800/50 transition-colors">
-                    <td class="py-3 px-3 font-bold text-white">${item.target}</td>
+                    <td class="py-3 px-3 font-bold text-white font-mono">${item.target}</td>
                     <td class="py-3 px-3 text-amber-300 font-semibold">${item.title}</td>
                     <td class="py-3 px-3 font-mono text-emerald-400 font-bold">${item.code}</td>
                     <td class="py-3 px-3 text-slate-400">${item.date}</td>
@@ -760,31 +948,35 @@
             `).join('');
         }
 
-        function deleteGiftItem(id) {
+        async function deleteGiftItem(id) {
             if (!confirm("Bu hediye kaydını silmek istediğinize emin misiniz? (Stoğa +1 iade edilecektir)")) return;
-            let registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
-            const itemToDelete = registry.find(item => item.id === id);
+            
+            const gifts = cachedCloudData.gifts || [];
+            const itemToDelete = gifts.find(item => item.id === id);
 
             if (itemToDelete && itemToDelete.poolItemId) {
                 const pool = getGiftPool();
                 const poolItem = pool.find(p => p.id === itemToDelete.poolItemId);
-                if (poolItem && poolItem.distributed > 0) {
+                if (poolItem && (poolItem.distributed || 0) > 0) {
                     poolItem.distributed -= 1;
                     saveGiftPool(pool);
                 }
             }
 
-            registry = registry.filter(item => item.id !== id);
-            localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(registry));
+            cachedCloudData.gifts = gifts.filter(item => item.id !== id);
+            await CloudSync.pushCloudData(cachedCloudData);
+
+            renderCloudMembers();
             renderGiftsList();
             updateStats();
         }
 
-        function handleResetAllGifts() {
+        async function handleResetAllGifts() {
             if (!confirm("Tüm tanımlanmış hediyeler silinecektir ve tüm stoklar sıfırlanacaktır. Onaylıyor musunuz?")) return;
-            localStorage.removeItem(GIFTS_REGISTRY_KEY);
             
-            // Havuzdaki dağıtılanları da sıfırla
+            cachedCloudData.gifts = [];
+            await CloudSync.pushCloudData(cachedCloudData);
+
             const pool = getGiftPool();
             pool.forEach(p => p.distributed = 0);
             saveGiftPool(pool);
@@ -795,6 +987,8 @@
                 delete member.wonGift;
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
             }
+
+            renderCloudMembers();
             renderGiftsList();
             updateStats();
             alert("Tüm hediye ve dağıtım kayıtları sıfırlandı.");
