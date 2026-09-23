@@ -107,35 +107,101 @@
         <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-8">
             
             <!-- Üst İstatistik Kartları -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-xs text-slate-400 font-bold uppercase">Tanımlanan Hediyeler</p>
-                        <h3 id="statTotalGifts" class="text-2xl font-black text-amber-400 font-mono mt-1">0</h3>
+                        <p class="text-[11px] text-slate-400 font-bold uppercase">Toplam Hediye Stoğu</p>
+                        <h3 id="statTotalStock" class="text-2xl font-black text-amber-400 font-mono mt-1">0</h3>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
+                    <div class="w-11 h-11 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-[11px] text-slate-400 font-bold uppercase">Dağıtılan Hediyeler</p>
+                        <h3 id="statTotalDistributed" class="text-2xl font-black text-emerald-400 font-mono mt-1">0</h3>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg">
                         <i class="fa-solid fa-gift"></i>
                     </div>
                 </div>
 
                 <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-xs text-slate-400 font-bold uppercase">Kayıtlı Cihaz Üyesi</p>
-                        <h3 id="statLocalUser" class="text-2xl font-black text-blue-400 font-mono mt-1">Var</h3>
+                        <p class="text-[11px] text-slate-400 font-bold uppercase">Kalan Toplam Hediye</p>
+                        <h3 id="statTotalRemaining" class="text-2xl font-black text-sky-400 font-mono mt-1">0</h3>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl">
-                        <i class="fa-solid fa-id-card"></i>
+                    <div class="w-11 h-11 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-ticket"></i>
                     </div>
                 </div>
 
                 <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-xs text-slate-400 font-bold uppercase">Dönem Durumu</p>
-                        <h3 class="text-xl font-black text-emerald-400 mt-1">2026-2027 Aktif</h3>
+                        <p class="text-[11px] text-slate-400 font-bold uppercase">Kayıtlı Cihaz Üyesi</p>
+                        <h3 id="statLocalUser" class="text-base font-black text-white mt-1 truncate">Mevcut</h3>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
-                        <i class="fa-solid fa-check-double"></i>
+                    <div class="w-11 h-11 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-id-card"></i>
                     </div>
+                </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- 🎁 HEDİYE HAVUZU & STOK (ADET) YÖNETİM MODÜLÜ -->
+            <!-- ========================================================================= -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-400/30">
+                            <i class="fa-solid fa-cubes-stacked"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-black text-white">Hediye Havuzu & Adet (Stok) Yönetimi</h2>
+                            <p class="text-xs text-slate-400">Dağıtılacak hediyeleri ve toplam kontenjan / adet sayılarını belirleyin.</p>
+                        </div>
+                    </div>
+                    
+                    <button onclick="toggleAddGiftPoolModal()" class="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                        <span>Yeni Hediye & Adet Ekle</span>
+                    </button>
+                </div>
+
+                <!-- Yeni Hediye Ekleme Form Alanı (Açılır/Kapanır) -->
+                <div id="addGiftPoolFormContainer" class="hidden mb-6 p-5 bg-slate-950 rounded-2xl border border-amber-500/40">
+                    <h3 class="text-xs font-black text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-plus"></i> Yeni Hediye Tanımla
+                    </h3>
+                    <form onsubmit="handleAddGiftToPool(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-bold text-slate-400 mb-1">Hediye Adı / Başlığı</label>
+                            <input type="text" id="poolNewTitle" required placeholder="Örn: EspressoLab 1 Aylık Ücretsiz Kahve Paketi" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-amber-400">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 mb-1">Toplam Kontenjan (Adet)</label>
+                            <input type="number" id="poolNewStock" required min="1" max="1000" value="5" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono font-bold focus:outline-none focus:border-amber-400">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 mb-1">Kupon Kodu Öneki</label>
+                            <input type="text" id="poolNewPrefix" required placeholder="Örn: ULU-KAHVE" value="ULU-HEDIYE" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-amber-400">
+                        </div>
+                        <div class="sm:col-span-4 flex justify-end gap-2 pt-2">
+                            <button type="button" onclick="toggleAddGiftPoolModal()" class="px-4 py-2 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs hover:bg-slate-700">
+                                İptal
+                            </button>
+                            <button type="submit" class="px-5 py-2 bg-amber-500 text-slate-950 font-black rounded-xl text-xs hover:bg-amber-400 transition-all">
+                                ➕ Hediyeyi Havuza Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Hediye Kartları Grid -->
+                <div id="giftPoolGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Dinamik Olarak JavaScript ile Çizilir -->
                 </div>
             </div>
 
@@ -149,8 +215,8 @@
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-black text-white">Üye Kartına Hediye Tanımla</h2>
-                            <p class="text-xs text-slate-400">Seçtiğiniz hediye, öğrencinin Dijital Üye Kartında anında görünür.</p>
+                            <h2 class="text-lg font-black text-white">Üye Kartına Hediye Dağıt</h2>
+                            <p class="text-xs text-slate-400">Seçtiğiniz hediye, öğrencinin Dijital Üye Kartında anında görünür ve stoktan düşer.</p>
                         </div>
                     </div>
 
@@ -180,15 +246,11 @@
                             </div>
                         </div>
 
-                        <!-- Hediye Seçimi -->
+                        <!-- Hediye Seçimi (Havuzdan Dinamik Beslenir) -->
                         <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase">Hediye / Ödül Türü</label>
+                            <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase">Hediye Seçin (Stoktan Düşer)</label>
                             <select id="giftTypeSelect" onchange="handleGiftTypeChange(this.value)" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400">
-                                <option value="☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi|ULU-KAHVE">☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi</option>
-                                <option value="📚 ÇEEİ & KPSS A Grubu Hazırlık Kitap Seti|ULU-KITAP">📚 ÇEEİ & KPSS A Grubu Hazırlık Kitap Seti</option>
-                                <option value="🎓 Sertifikalı İK & Bordro Eğitim Bursu|ULU-IK-BURS">🎓 Sertifikalı İK & Bordro Eğitim Bursu</option>
-                                <option value="🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti|ULU-VIP-SET">🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti</option>
-                                <option value="custom">✨ Özel / Manuel Hediye Gir...</option>
+                                <!-- Dinamik JavaScript ile doldurulur -->
                             </select>
                         </div>
 
@@ -223,10 +285,10 @@
                             <i class="fa-solid fa-dice"></i>
                         </div>
                         <h3 class="text-base font-black text-white mb-1">Hızlı Kura Çekimi</h3>
-                        <p class="text-xs text-slate-400 mb-4">Mevcut üye için anında rastgele sürpriz bir hediye belirle.</p>
+                        <p class="text-xs text-slate-400 mb-4">Mevcut stok havuzundan rastgele şanslı bir hediye seç ve ata.</p>
                         
                         <button onclick="handleRandomDraw()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-shuffle"></i> <span>Rastgele Şanslı Hediye Ata</span>
+                            <i class="fa-solid fa-shuffle"></i> <span>Havuzdan Rastgele Hediye Ata</span>
                         </button>
                     </div>
 
@@ -234,7 +296,7 @@
                     <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
                         <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">Yönetim İşlemleri</h4>
                         <button onclick="handleResetAllGifts()" class="w-full py-2.5 bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-trash-can"></i> <span>Tüm Tanımlı Hediyeleri Sıfırla</span>
+                            <i class="fa-solid fa-trash-can"></i> <span>Tüm Dağıtılmış Hediyeleri Sıfırla</span>
                         </button>
                     </div>
 
@@ -282,6 +344,14 @@
         const ADMIN_PIN = "2026";
         const STORAGE_KEY = 'uluceeit_verified_member';
         const GIFTS_REGISTRY_KEY = 'uluceeit_gifts_registry';
+        const GIFT_POOL_KEY = 'uluceeit_gift_pool';
+
+        const DEFAULT_POOL = [
+            { id: 'POOL-1', title: '☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi', stock: 5, distributed: 0, prefix: 'ULU-KAHVE' },
+            { id: 'POOL-2', title: '📚 ÇEEİ & KPSS A Grubu Hazırlık Kitap Seti', stock: 3, distributed: 0, prefix: 'ULU-KITAP' },
+            { id: 'POOL-3', title: '🎓 Sertifikalı İK & Bordro Eğitim Bursu', stock: 2, distributed: 0, prefix: 'ULU-IK-BURS' },
+            { id: 'POOL-4', title: '🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti', stock: 10, distributed: 0, prefix: 'ULU-VIP-SET' }
+        ];
 
         document.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('uluceeit_admin_auth') === 'true') {
@@ -307,12 +377,199 @@
         function showAdminPanel() {
             document.getElementById('pinScreen').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden');
+            renderGiftPool();
+            updateGiftSelectDropdown();
             renderGiftsList();
+            updateStats();
         }
 
         function logoutAdmin() {
             sessionStorage.removeItem('uluceeit_admin_auth');
             location.reload();
+        }
+
+        // =========================================================================
+        // 🎁 HEDİYE HAVUZU & STOK (ADET) YÖNETİMİ
+        // =========================================================================
+        function getGiftPool() {
+            const raw = localStorage.getItem(GIFT_POOL_KEY);
+            if (!raw) {
+                localStorage.setItem(GIFT_POOL_KEY, JSON.stringify(DEFAULT_POOL));
+                return DEFAULT_POOL;
+            }
+            return JSON.parse(raw);
+        }
+
+        function saveGiftPool(pool) {
+            localStorage.setItem(GIFT_POOL_KEY, JSON.stringify(pool));
+            renderGiftPool();
+            updateGiftSelectDropdown();
+            updateStats();
+        }
+
+        function toggleAddGiftPoolModal() {
+            const cont = document.getElementById('addGiftPoolFormContainer');
+            cont.classList.toggle('hidden');
+            if (!cont.classList.contains('hidden')) {
+                document.getElementById('poolNewTitle').focus();
+            }
+        }
+
+        function handleAddGiftToPool(e) {
+            e.preventDefault();
+            const title = document.getElementById('poolNewTitle').value.trim();
+            const stock = parseInt(document.getElementById('poolNewStock').value) || 1;
+            const prefix = document.getElementById('poolNewPrefix').value.trim() || 'ULU-HEDIYE';
+
+            if (!title) return;
+
+            const pool = getGiftPool();
+            pool.push({
+                id: 'POOL-' + Date.now(),
+                title: title,
+                stock: stock,
+                distributed: 0,
+                prefix: prefix
+            });
+
+            saveGiftPool(pool);
+            document.getElementById('poolNewTitle').value = '';
+            document.getElementById('poolNewStock').value = '5';
+            toggleAddGiftPoolModal();
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 60, origin: { y: 0.4 } });
+            }
+            alert(`✅ "${title}" (${stock} Adet) hediye havuzuna başarıyla eklendi!`);
+        }
+
+        function changePoolStock(poolId, delta) {
+            const pool = getGiftPool();
+            const item = pool.find(p => p.id === poolId);
+            if (!item) return;
+
+            const newStock = (item.stock || 0) + delta;
+            if (newStock < item.distributed) {
+                alert(`Kontenjan halihazırda dağıtılmış olan ${item.distributed} adetten daha az olamaz.`);
+                return;
+            }
+            item.stock = newStock;
+            saveGiftPool(pool);
+        }
+
+        function deleteGiftFromPool(poolId) {
+            if (!confirm("Bu hediyeyi ve stok kaydını havuzdan silmek istediğinize emin misiniz?")) return;
+            let pool = getGiftPool();
+            pool = pool.filter(p => p.id !== poolId);
+            saveGiftPool(pool);
+        }
+
+        function renderGiftPool() {
+            const pool = getGiftPool();
+            const grid = document.getElementById('giftPoolGrid');
+            if (!grid) return;
+
+            if (pool.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-500 text-xs">Henüz havuza eklenmiş hediye bulunmuyor. "Yeni Hediye & Adet Ekle" butonundan ekleyebilirsiniz.</div>`;
+                return;
+            }
+
+            grid.innerHTML = pool.map(item => {
+                const remaining = Math.max(0, (item.stock || 0) - (item.distributed || 0));
+                const percent = item.stock > 0 ? Math.min(100, Math.round((item.distributed / item.stock) * 100)) : 0;
+                
+                let badgeClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
+                let badgeText = `${remaining} Adet Kaldı`;
+
+                if (remaining === 0) {
+                    badgeClass = "bg-rose-500/15 text-rose-400 border-rose-500/30";
+                    badgeText = "Stok Tükendi";
+                } else if (remaining <= 2) {
+                    badgeClass = "bg-amber-500/15 text-amber-400 border-amber-500/30";
+                    badgeText = `Son ${remaining} Adet!`;
+                }
+
+                return `
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between hover:border-amber-400/40 transition-all group">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${badgeClass}">${badgeText}</span>
+                                <button onclick="deleteGiftFromPool('${item.id}')" class="text-slate-500 hover:text-rose-400 text-xs transition-colors" title="Hediyeyi Sil">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                            <h4 class="text-xs font-black text-white mb-3 line-clamp-2 leading-snug">${item.title}</h4>
+                            
+                            <div class="grid grid-cols-3 gap-1 text-center bg-slate-900 p-2.5 rounded-xl border border-slate-800 mb-3 text-[11px]">
+                                <div>
+                                    <p class="text-[9px] text-slate-400 font-bold uppercase">Toplam</p>
+                                    <p class="font-mono font-bold text-white text-sm">${item.stock}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] text-slate-400 font-bold uppercase">Verilen</p>
+                                    <p class="font-mono font-bold text-amber-400 text-sm">${item.distributed || 0}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] text-slate-400 font-bold uppercase">Kalan</p>
+                                    <p class="font-mono font-black text-emerald-400 text-sm">${remaining}</p>
+                                </div>
+                            </div>
+
+                            <!-- Doluluk Barı -->
+                            <div class="w-full bg-slate-800 rounded-full h-1.5 mb-3 overflow-hidden">
+                                <div class="bg-gradient-to-r from-amber-500 to-emerald-500 h-1.5 rounded-full" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Hızlı Stok Arttırma / Azaltma Butonları -->
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs">
+                            <span class="text-[10px] text-slate-400 font-bold">Stok Ayarla:</span>
+                            <div class="flex gap-1">
+                                <button onclick="changePoolStock('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono font-black flex items-center justify-center transition-colors" title="1 Adet Azalt">-1</button>
+                                <button onclick="changePoolStock('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-mono font-black flex items-center justify-center border border-amber-400/30 transition-colors" title="1 Adet Arttır">+1</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateGiftSelectDropdown() {
+            const pool = getGiftPool();
+            const select = document.getElementById('giftTypeSelect');
+            if (!select) return;
+
+            let html = pool.map(item => {
+                const remaining = Math.max(0, (item.stock || 0) - (item.distributed || 0));
+                const disabled = remaining <= 0 ? 'disabled' : '';
+                const stockNotice = remaining <= 0 ? ' (STOK TÜKENDİ)' : ` (Kalan: ${remaining} Adet)`;
+                return `<option value="${item.id}|${item.title}|${item.prefix}" ${disabled}>${item.title} ${stockNotice}</option>`;
+            }).join('');
+
+            html += `<option value="custom">✨ Özel / Manuel Hediye Gir...</option>`;
+            select.innerHTML = html;
+        }
+
+        function updateStats() {
+            const pool = getGiftPool();
+            const registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
+            
+            const totalStock = pool.reduce((sum, item) => sum + (item.stock || 0), 0);
+            const totalDistributed = pool.reduce((sum, item) => sum + (item.distributed || 0), 0);
+            const totalRemaining = Math.max(0, totalStock - totalDistributed);
+
+            document.getElementById('statTotalStock').textContent = totalStock;
+            document.getElementById('statTotalDistributed').textContent = registry.length || totalDistributed;
+            document.getElementById('statTotalRemaining').textContent = totalRemaining;
+
+            const localMemberRaw = localStorage.getItem(STORAGE_KEY);
+            const statLocal = document.getElementById('statLocalUser');
+            if (localMemberRaw) {
+                const m = JSON.parse(localMemberRaw);
+                statLocal.textContent = m.fullName.split(' ')[0] + ` (${m.studentNo})`;
+            } else {
+                statLocal.textContent = 'Yok';
+            }
         }
 
         function toggleTargetMode(mode) {
@@ -334,7 +591,9 @@
             }
         }
 
-        // Hediye Tanımlama Fonksiyonu
+        // =========================================================================
+        // HEDİYE TANIMLAMA & STOKTAN DÜŞME
+        // =========================================================================
         function handleAssignGift(e) {
             e.preventDefault();
             const targetMode = document.querySelector('input[name="targetMode"]:checked').value;
@@ -342,6 +601,7 @@
 
             let giftTitle = '';
             let giftCode = '';
+            let poolItemId = null;
 
             if (giftTypeVal === 'custom') {
                 giftTitle = document.getElementById('customGiftTitle').value.trim();
@@ -352,8 +612,24 @@
                 }
             } else {
                 const parts = giftTypeVal.split('|');
-                giftTitle = parts[0];
-                giftCode = parts[1] + '-' + Math.floor(1000 + Math.random() * 9000);
+                poolItemId = parts[0];
+                giftTitle = parts[1];
+                const prefix = parts[2] || 'ULU-HEDIYE';
+                giftCode = prefix + '-' + Math.floor(1000 + Math.random() * 9000);
+
+                // Stok Kontrolü
+                const pool = getGiftPool();
+                const poolItem = pool.find(p => p.id === poolItemId);
+                if (poolItem) {
+                    const remaining = (poolItem.stock || 0) - (poolItem.distributed || 0);
+                    if (remaining <= 0) {
+                        alert(`⚠️ "${giftTitle}" hediyesinin kontenjanı dolmuştur (0 Adet kaldı). Lütfen hediye havuzundan stok arttırın.`);
+                        return;
+                    }
+                    // Stoktan 1 düş
+                    poolItem.distributed = (poolItem.distributed || 0) + 1;
+                    saveGiftPool(pool);
+                }
             }
 
             let targetIdentifier = 'Mevcut Cihaz';
@@ -370,6 +646,7 @@
             let registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
             const newGiftItem = {
                 id: 'GIFT-' + Date.now(),
+                poolItemId: poolItemId,
                 target: targetIdentifier,
                 title: giftTitle,
                 code: giftCode,
@@ -378,7 +655,7 @@
             registry.unshift(newGiftItem);
             localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(registry));
 
-            // Eğer hedef "Mevcut Cihaz" veya mevcut cihazın öğrenci numarasıysa yerel üye kartına da hemen yaz
+            // Eğer hedef "Mevcut Cihaz" veya mevcut cihazın öğrenci numarasıysa yerel üye kartına da yaz
             const localMemberRaw = localStorage.getItem(STORAGE_KEY);
             if (localMemberRaw) {
                 const localMember = JSON.parse(localMemberRaw);
@@ -393,23 +670,30 @@
             }
 
             if (typeof confetti === 'function') {
-                confetti({ particleCount: 120, spread: 70, origin: { y: 0.5 } });
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 } });
             }
 
-            alert(`✅ BAŞARILI!\n"${giftTitle}" hediyesi (${giftCode}) ${targetIdentifier} adına başarıyla tanımlandı.`);
+            alert(`✅ BAŞARILI!\n"${giftTitle}" hediyesi (${giftCode}) ${targetIdentifier} adına başarıyla tanımlandı ve stoktan 1 adet düşüldü.`);
             renderGiftsList();
+            updateStats();
         }
 
-        // Rastgele Çekiliş
+        // Rastgele Havuzdan Çekiliş
         function handleRandomDraw() {
-            const gifts = [
-                { title: "☕ EspressoLab 1 Aylık Ücretsiz Kahve Paketi", prefix: "ULU-KAHVE" },
-                { title: "📚 ÇEEİ & KPSS A Grubu Hazırlık Kitap Seti", prefix: "ULU-KITAP" },
-                { title: "🎓 Sertifikalı İK & Bordro Eğitim Bursu", prefix: "ULU-IK-BURS" },
-                { title: "🎒 ULUÇEEİT VIP Termos & Sweatshirt Seti", prefix: "ULU-VIP-SET" }
-            ];
-            const randomGift = gifts[Math.floor(Math.random() * gifts.length)];
-            const code = randomGift.prefix + '-' + Math.floor(1000 + Math.random() * 9000);
+            const pool = getGiftPool();
+            const availablePool = pool.filter(p => (p.stock || 0) - (p.distributed || 0) > 0);
+
+            if (availablePool.length === 0) {
+                alert("⚠️ Hediye havuzundaki tüm hediyelerin stoğu tükenmiştir! Lütfen hediye havuzundan stok ekleyiniz.");
+                return;
+            }
+
+            const randomGift = availablePool[Math.floor(Math.random() * availablePool.length)];
+            const code = (randomGift.prefix || 'ULU-HEDIYE') + '-' + Math.floor(1000 + Math.random() * 9000);
+
+            // Stoktan 1 düş
+            randomGift.distributed = (randomGift.distributed || 0) + 1;
+            saveGiftPool(pool);
 
             // Mevcut üyeye ata
             const localMemberRaw = localStorage.getItem(STORAGE_KEY);
@@ -428,6 +712,7 @@
             let registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
             registry.unshift({
                 id: 'GIFT-' + Date.now(),
+                poolItemId: randomGift.id,
                 target: targetName,
                 title: randomGift.title,
                 code: code,
@@ -439,19 +724,18 @@
                 confetti({ particleCount: 180, spread: 80, origin: { y: 0.5 } });
             }
 
-            alert(`🎉 KURA ÇEKİLDİ!\nKazanan Hediye: ${randomGift.title}\nTeslim Kodu: ${code}\nÜyenin kartına işlendi.`);
+            alert(`🎉 KURA ÇEKİLDİ!\nKazanan Hediye: ${randomGift.title}\nTeslim Kodu: ${code}\nStoktan 1 adet düşülerek üyenin kartına işlendi.`);
             renderGiftsList();
+            updateStats();
         }
 
-        // Listeyi Çiz
+        // Dağıtılan Hediyeler Listesi
         function renderGiftsList() {
             const registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
             const tbody = document.getElementById('giftsTableBody');
             const placeholder = document.getElementById('noGiftsPlaceholder');
-            const statTotal = document.getElementById('statTotalGifts');
             const badge = document.getElementById('listCountBadge');
 
-            statTotal.textContent = registry.length;
             badge.textContent = `${registry.length} Kayıt`;
 
             if (registry.length === 0) {
@@ -468,7 +752,7 @@
                     <td class="py-3 px-3 font-mono text-emerald-400 font-bold">${item.code}</td>
                     <td class="py-3 px-3 text-slate-400">${item.date}</td>
                     <td class="py-3 px-3 text-right">
-                        <button onclick="deleteGiftItem('${item.id}')" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/20 transition-colors" title="Sil">
+                        <button onclick="deleteGiftItem('${item.id}')" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/20 transition-colors" title="Kaydı Sil & Stoğa İade Et">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </td>
@@ -477,16 +761,34 @@
         }
 
         function deleteGiftItem(id) {
-            if (!confirm("Bu hediye kaydını silmek istediğinize emin misiniz?")) return;
+            if (!confirm("Bu hediye kaydını silmek istediğinize emin misiniz? (Stoğa +1 iade edilecektir)")) return;
             let registry = JSON.parse(localStorage.getItem(GIFTS_REGISTRY_KEY) || '[]');
+            const itemToDelete = registry.find(item => item.id === id);
+
+            if (itemToDelete && itemToDelete.poolItemId) {
+                const pool = getGiftPool();
+                const poolItem = pool.find(p => p.id === itemToDelete.poolItemId);
+                if (poolItem && poolItem.distributed > 0) {
+                    poolItem.distributed -= 1;
+                    saveGiftPool(pool);
+                }
+            }
+
             registry = registry.filter(item => item.id !== id);
             localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(registry));
             renderGiftsList();
+            updateStats();
         }
 
         function handleResetAllGifts() {
-            if (!confirm("Tüm tanımlanmış hediyeler silinecektir. Onaylıyor musunuz?")) return;
+            if (!confirm("Tüm tanımlanmış hediyeler silinecektir ve tüm stoklar sıfırlanacaktır. Onaylıyor musunuz?")) return;
             localStorage.removeItem(GIFTS_REGISTRY_KEY);
+            
+            // Havuzdaki dağıtılanları da sıfırla
+            const pool = getGiftPool();
+            pool.forEach(p => p.distributed = 0);
+            saveGiftPool(pool);
+
             const localMemberRaw = localStorage.getItem(STORAGE_KEY);
             if (localMemberRaw) {
                 const member = JSON.parse(localMemberRaw);
@@ -494,7 +796,8 @@
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
             }
             renderGiftsList();
-            alert("Tüm hediye kayıtları sıfırlandı.");
+            updateStats();
+            alert("Tüm hediye ve dağıtım kayıtları sıfırlandı.");
         }
     </script>
 </body>
