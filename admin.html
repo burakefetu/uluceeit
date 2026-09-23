@@ -246,9 +246,26 @@
                                 </label>
                             </div>
 
-                            <!-- Kayıtlı Üye Listesi Dropdown -->
+                            <!-- Kayıtlı Üye Listesi Dropdown & Seçilen Kişi Kartı -->
                             <div id="memberListSelectContainer" class="mt-2">
-                                <select id="targetMemberSelect" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400">
+                                <!-- Seçilen Üye Canlı Bilgi Kartı -->
+                                <div id="selectedMemberInfoCard" class="hidden mb-3 p-3.5 bg-gradient-to-r from-amber-500/15 via-blue-500/10 to-transparent border border-amber-400/40 rounded-2xl flex items-center justify-between shadow-lg">
+                                    <div class="flex items-center gap-3">
+                                        <div id="selectedMemberAvatar" class="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center justify-center border border-amber-400/40 text-sm shadow-md">A</div>
+                                        <div>
+                                            <p class="text-[10px] uppercase font-black text-amber-400 flex items-center gap-1">
+                                                <i class="fa-solid fa-circle-check text-emerald-400"></i> HEDİYEYİ ALACAK ÖĞRENCİ
+                                            </p>
+                                            <h4 id="selectedMemberNameDisplay" class="text-sm font-black text-white">Ahmet Yılmaz</h4>
+                                            <p id="selectedMemberNoDisplay" class="text-[11px] font-mono text-slate-300">Öğrenci No: 022201045</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="clearSelectedMember()" class="px-2.5 py-1 bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 rounded-lg text-[11px] font-bold transition-colors border border-slate-700 flex items-center gap-1" title="Seçimi İptal Et">
+                                        <i class="fa-solid fa-xmark"></i> <span>Temizle</span>
+                                    </button>
+                                </div>
+
+                                <select id="targetMemberSelect" onchange="onTargetMemberSelectChange(this.value)" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400">
                                     <option value="">Yükleniyor...</option>
                                 </select>
                             </div>
@@ -263,7 +280,7 @@
                         <!-- Hediye Seçimi (Havuzdan Dinamik Beslenir) -->
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase">Hediye Seçin (Stoktan Düşer)</label>
-                            <select id="giftTypeSelect" onchange="handleGiftTypeChange(this.value)" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400">
+                            <select id="giftTypeSelect" onchange="onGiftTypeSelectChange(this.value)" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400">
                                 <!-- Dinamik JavaScript ile doldurulur -->
                             </select>
                         </div>
@@ -623,6 +640,57 @@
             }
         }
 
+        // Seçili Üye ve Hediye Durumunu Koruma Değişkenleri (Bulut Güncellemesinde Sıfırlanmayı Önler)
+        let selectedTargetMemberNo = '';
+        let selectedGiftTypeId = '';
+
+        function onTargetMemberSelectChange(val) {
+            selectedTargetMemberNo = val;
+            updateSelectedMemberBanner();
+            renderCloudMembers();
+        }
+
+        function onGiftTypeSelectChange(val) {
+            selectedGiftTypeId = val;
+            handleGiftTypeChange(val);
+        }
+
+        function updateSelectedMemberBanner() {
+            const card = document.getElementById('selectedMemberInfoCard');
+            if (!card) return;
+
+            const select = document.getElementById('targetMemberSelect');
+            const currentNo = selectedTargetMemberNo || (select ? select.value : '');
+
+            if (!currentNo) {
+                card.classList.add('hidden');
+                return;
+            }
+
+            const members = cachedCloudData.members || [];
+            const member = members.find(m => m.studentNo === currentNo);
+
+            if (member) {
+                card.classList.remove('hidden');
+                const avatarEl = document.getElementById('selectedMemberAvatar');
+                if (avatarEl) avatarEl.textContent = (member.fullName || 'Ö').charAt(0);
+                const nameEl = document.getElementById('selectedMemberNameDisplay');
+                if (nameEl) nameEl.textContent = member.fullName || 'İsimsiz Üye';
+                const noEl = document.getElementById('selectedMemberNoDisplay');
+                if (noEl) noEl.textContent = `Öğrenci No: ${member.studentNo}`;
+            } else {
+                card.classList.add('hidden');
+            }
+        }
+
+        function clearSelectedMember() {
+            selectedTargetMemberNo = '';
+            const select = document.getElementById('targetMemberSelect');
+            if (select) select.value = '';
+            updateSelectedMemberBanner();
+            renderCloudMembers();
+        }
+
         function renderCloudMembers() {
             const tbody = document.getElementById('cloudMembersTableBody');
             const placeholder = document.getElementById('noMembersPlaceholder');
@@ -646,19 +714,25 @@
                     : `<span class="text-slate-500 text-[10px]">Hediye Yok</span>`;
 
                 const dateStr = m.registeredAt ? new Date(m.registeredAt).toLocaleDateString('tr-TR') : 'Bugün';
+                const isSelected = (selectedTargetMemberNo === m.studentNo);
+                const rowClass = isSelected ? 'bg-amber-500/15 border-l-4 border-l-amber-400' : 'hover:bg-slate-800/50';
+
+                // Escape single quotes for inline JS
+                const safeName = (m.fullName || 'Üye').replace(/'/g, "\\'");
 
                 return `
-                    <tr class="hover:bg-slate-800/50 transition-colors">
+                    <tr class="${rowClass} transition-all">
                         <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 font-black flex items-center justify-center text-[10px] border border-blue-400/30">${(m.fullName || 'Ö').charAt(0)}</span>
+                            <span class="w-6 h-6 rounded-full ${isSelected ? 'bg-amber-500 text-slate-950' : 'bg-blue-500/20 text-blue-400'} font-black flex items-center justify-center text-[10px] border border-blue-400/30">${(m.fullName || 'Ö').charAt(0)}</span>
                             <span>${m.fullName || 'İsimsiz Üye'}</span>
+                            ${isSelected ? '<span class="text-[9px] bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded font-black tracking-wider">SEÇİLDİ ✓</span>' : ''}
                         </td>
                         <td class="py-3 px-3 font-mono font-bold text-amber-300">${m.studentNo}</td>
                         <td class="py-3 px-3 text-slate-400">${dateStr}</td>
                         <td class="py-3 px-3">${giftBadge}</td>
                         <td class="py-3 px-3 text-right">
-                            <button onclick="selectMemberForGift('${m.studentNo}', '${m.fullName}')" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold rounded-lg text-[11px] border border-amber-400/30 transition-colors flex items-center gap-1 ml-auto">
-                                <i class="fa-solid fa-gift"></i> <span>Hediye Ver</span>
+                            <button onclick="selectMemberForGift('${m.studentNo}', '${safeName}')" class="px-2.5 py-1 ${isSelected ? 'bg-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/20 ring-2 ring-amber-300' : 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold'} rounded-lg text-[11px] border border-amber-400/30 transition-all flex items-center gap-1 ml-auto">
+                                <i class="fa-solid fa-gift"></i> <span>${isSelected ? '✓ Seçili' : 'Hediye Ver'}</span>
                             </button>
                         </td>
                     </tr>
@@ -670,22 +744,51 @@
             const select = document.getElementById('targetMemberSelect');
             if (!select) return;
 
+            const currentVal = selectedTargetMemberNo || select.value;
             const members = cachedCloudData.members || [];
+            
             if (members.length === 0) {
                 select.innerHTML = `<option value="">Henüz kayıtlı üye yok (Manuel numara yazabilirsiniz)</option>`;
+                updateSelectedMemberBanner();
                 return;
             }
 
-            select.innerHTML = members.map(m => `
-                <option value="${m.studentNo}">${m.fullName} (No: ${m.studentNo})</option>
-            `).join('');
+            let html = `<option value="" disabled ${!currentVal ? 'selected' : ''}>-- Listeden Öğrenci Seçiniz (${members.length} Kayıtlı Üye) --</option>`;
+            html += members.map(m => {
+                const isSelected = (m.studentNo === currentVal);
+                return `<option value="${m.studentNo}" ${isSelected ? 'selected' : ''}>${m.fullName} (No: ${m.studentNo})</option>`;
+            }).join('');
+
+            select.innerHTML = html;
+
+            if (currentVal && members.some(m => m.studentNo === currentVal)) {
+                select.value = currentVal;
+            }
+            updateSelectedMemberBanner();
         }
 
         function selectMemberForGift(studentNo, fullName) {
-            document.querySelector('input[name="targetMode"][value="memberList"]').checked = true;
+            selectedTargetMemberNo = studentNo;
+            
+            const radioMemberList = document.querySelector('input[name="targetMode"][value="memberList"]');
+            if (radioMemberList) radioMemberList.checked = true;
             toggleTargetMode('memberList');
-            document.getElementById('targetMemberSelect').value = studentNo;
-            document.getElementById('assignGiftForm').scrollIntoView({ behavior: 'smooth' });
+            
+            const select = document.getElementById('targetMemberSelect');
+            if (select) select.value = studentNo;
+            
+            updateSelectedMemberBanner();
+            renderCloudMembers();
+
+            const formCard = document.getElementById('assignGiftForm');
+            if (formCard) {
+                formCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const container = formCard.closest('.bg-slate-900');
+                if (container) {
+                    container.classList.add('ring-2', 'ring-amber-400');
+                    setTimeout(() => container.classList.remove('ring-2', 'ring-amber-400'), 1500);
+                }
+            }
         }
 
         // =========================================================================
@@ -839,15 +942,23 @@
             const select = document.getElementById('giftTypeSelect');
             if (!select) return;
 
+            const currentGiftVal = selectedGiftTypeId || select.value;
+
             let html = pool.map(item => {
                 const remaining = Math.max(0, (item.stock || 0) - (item.distributed || 0));
                 const disabled = remaining <= 0 ? 'disabled' : '';
                 const stockNotice = remaining <= 0 ? ' (STOK TÜKENDİ)' : ` (Kalan: ${remaining} Adet)`;
-                return `<option value="${item.id}|${item.title}|${item.prefix}" ${disabled}>${item.title} ${stockNotice}</option>`;
+                const optVal = `${item.id}|${item.title}|${item.prefix}`;
+                const isSelected = (optVal === currentGiftVal || item.id === currentGiftVal);
+                return `<option value="${optVal}" ${disabled} ${isSelected ? 'selected' : ''}>${item.title} ${stockNotice}</option>`;
             }).join('');
 
-            html += `<option value="custom">✨ Özel / Manuel Hediye Gir...</option>`;
+            html += `<option value="custom" ${currentGiftVal === 'custom' ? 'selected' : ''}>✨ Özel / Manuel Hediye Gir...</option>`;
             select.innerHTML = html;
+
+            if (currentGiftVal) {
+                select.value = currentGiftVal;
+            }
         }
 
         function updateStats() {
@@ -885,6 +996,7 @@
         }
 
         function handleGiftTypeChange(val) {
+            selectedGiftTypeId = val;
             const customCont = document.getElementById('customGiftContainer');
             if (val === 'custom') {
                 customCont.classList.remove('hidden');
@@ -935,7 +1047,7 @@
 
             let targetIdentifier = 'Mevcut Cihaz';
             if (targetMode === 'memberList') {
-                targetIdentifier = document.getElementById('targetMemberSelect').value;
+                targetIdentifier = selectedTargetMemberNo || document.getElementById('targetMemberSelect').value;
                 if (!targetIdentifier) {
                     alert("Lütfen listeden bir üye seçin veya numara yazın.");
                     return;
@@ -992,6 +1104,7 @@
 
             alert(`🎉 BAŞARILI!\n"${giftTitle}" hediyesi (${giftCode}) ${targetIdentifier} numaralı öğrencinin telefonuna başarıyla tanımlandı!\nÖğrenci kartını açtığında hediyesini anında görecektir.`);
             
+            clearSelectedMember();
             renderCloudMembers();
             renderGiftsList();
             updateStats();
