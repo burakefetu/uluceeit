@@ -1462,6 +1462,33 @@
                     Anladım, Kapat
                 </button>
             </div>
+
+            <!-- 🔄 KARTIMI GERİ YÜKLE (TARAYICI VERİSİ SIFIRLANDIYSA) -->
+            <div class="mt-6 pt-5 border-t border-slate-800 text-left">
+                <button type="button" onclick="toggleRestoreCardForm()" class="w-full text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center justify-between p-3 rounded-2xl bg-amber-500/10 border border-amber-400/30 transition-all">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+                        <span>Önceden Kayıtlı mısın? Kartını Geri Yükle</span>
+                    </span>
+                    <i id="restoreChevron" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+                </button>
+
+                <div id="restoreCardContainer" class="hidden mt-3 p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-3">
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                        Tarayıcı geçmişinizi temizlediyseniz, standımızda kayıt olduğunuz <strong>Öğrenci Numaranızı</strong> yazarak kartınızı ve varsa tanımlı hediyenizi bu telefona anında geri mühürleyebilirsiniz:
+                    </p>
+                    <form onsubmit="handleRestoreMemberCard(event)" class="space-y-2.5">
+                        <div>
+                            <input type="text" id="restoreStudentNoInput" required placeholder="Örn: 09260088" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:outline-none focus:border-amber-400">
+                        </div>
+                        <div id="restoreStatusMsg" class="hidden text-[11px] font-bold"></div>
+                        <button type="submit" id="btnRestoreCardSubmit" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/20 active:scale-95">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span>Kartımı Bu Telefona Geri Mühürle</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1862,6 +1889,91 @@
 
         function closeUnregisteredModal() {
             document.getElementById('unregisteredModal').classList.add('hidden');
+        }
+
+        // =========================================================================
+        // 🔄 KARTIMI GERİ YÜKLE / KURTAR MOTORU (TARAYICI SIFIRLANDIĞINDA)
+        // =========================================================================
+        function toggleRestoreCardForm() {
+            const cont = document.getElementById('restoreCardContainer');
+            const chev = document.getElementById('restoreChevron');
+            if (!cont) return;
+            cont.classList.toggle('hidden');
+            if (chev) {
+                chev.classList.toggle('rotate-180');
+            }
+            if (!cont.classList.contains('hidden')) {
+                document.getElementById('restoreStudentNoInput')?.focus();
+            }
+        }
+
+        async function handleRestoreMemberCard(e) {
+            e.preventDefault();
+            const input = document.getElementById('restoreStudentNoInput');
+            const msg = document.getElementById('restoreStatusMsg');
+            const btn = document.getElementById('btnRestoreCardSubmit');
+            const sNo = String(input ? input.value : '').trim();
+
+            if (!sNo) return;
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Buluttan Doğrulanıyor...</span>`;
+            }
+            if (msg) msg.classList.add('hidden');
+
+            try {
+                const members = await CloudSync.getMembers();
+                const member = (members || []).find(m => String(m.studentNo || '').trim() === sNo);
+
+                if (!member) {
+                    if (msg) {
+                        msg.textContent = `❌ "${sNo}" numarasına ait stant kaydı bulunamadı. Lütfen okul numaranızı kontrol edin veya standımızdaki QR kodu okutun.`;
+                        msg.className = "text-[11px] font-bold text-rose-400";
+                        msg.classList.remove('hidden');
+                    }
+                    return;
+                }
+
+                // Bulutta bulundu! Cihaza yeniden mühürle
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+
+                // Tanımlı hediyesi var mı kontrol et
+                const cloudGift = await CloudSync.checkGiftForStudent(sNo);
+                if (cloudGift) {
+                    member.wonGift = { title: cloudGift.title, code: cloudGift.code, id: cloudGift.id };
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+                }
+
+                if (msg) {
+                    msg.textContent = `✅ Harika! Hoş geldin ${member.fullName}, üye kartın bu cihaza başarıyla yeniden mühürlendi!`;
+                    msg.className = "text-[11px] font-bold text-emerald-400";
+                    msg.classList.remove('hidden');
+                }
+
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 130, spread: 75, origin: { y: 0.5 } });
+                }
+
+                setTimeout(() => {
+                    closeUnregisteredModal();
+                    updateNavbarCardState();
+                    showMemberCard(member);
+                }, 1200);
+
+            } catch (err) {
+                console.error('Restore error:', err);
+                if (msg) {
+                    msg.textContent = "Bağlantı hatası oluştu, lütfen tekrar deneyin.";
+                    msg.className = "text-[11px] font-bold text-rose-400";
+                    msg.classList.remove('hidden');
+                }
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-id-card"></i> <span>Kartımı Bu Telefona Geri Mühürle</span>`;
+                }
+            }
         }
 
         // =========================================================================
