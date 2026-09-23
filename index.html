@@ -1311,26 +1311,32 @@
             </div>
 
             <!-- 🎁 KAZANILAN HEDİYE ROZETİ (YÖNETİM TANIMLADIYSA KİŞİYE ÖZEL GÖRÜNÜR) -->
-            <div id="wonGiftContainer" class="hidden mb-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-2 border-amber-400 text-white shadow-2xl animate-pulse">
+            <div id="wonGiftContainer" class="hidden mb-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-2 border-amber-400 text-white shadow-2xl">
                 <div class="flex items-center justify-between mb-2 pb-2 border-b border-white/10">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-gift text-amber-400 text-lg"></i>
                         <span class="text-xs font-black uppercase text-amber-300 tracking-wider">🎉 TEBRİKLER HEDİYE KAZANDINIZ!</span>
                     </div>
-                    <span class="text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded-full">Kupon Aktif</span>
+                    <span class="text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded-full">Tek Kullanımlık</span>
                 </div>
                 <h4 id="wonGiftTitle" class="text-base font-black text-white mb-2">EspressoLab 1 Aylık Ücretsiz Kahve Paketi</h4>
-                <div class="bg-black/50 p-3 rounded-xl border border-white/10 flex items-center justify-between">
+                <div class="bg-black/50 p-3 rounded-xl border border-white/10 flex items-center justify-between mb-3">
                     <div>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase">Teslim Alma Kupon Kodu</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Teslim Kupon Kodu</p>
                         <p id="wonGiftCode" class="text-sm font-mono font-black text-amber-300">ULU-KAHVE-8492</p>
                     </div>
                     <span class="text-[11px] text-emerald-400 font-bold bg-emerald-500/20 px-2.5 py-1 rounded-lg border border-emerald-500/30">
-                        <i class="fa-solid fa-check mr-1"></i> Göster & Teslim Al
+                        <i class="fa-solid fa-shield-check mr-1"></i> Aktif Kupon
                     </span>
                 </div>
-                <p class="text-[11px] text-slate-300 mt-2.5">
-                    * Hediyenizi İİBF Kulüp Odası'ndan veya ilgili anlaşmalı mekandan bu ekranı göstererek teslim alabilirsiniz.
+
+                <!-- TEK KULLANIMLIK TESLİM BUTONU -->
+                <button onclick="promptRedeemGift()" class="w-full py-3 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm shadow-lg transition-all flex items-center justify-center gap-2 transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-check-to-slot text-base"></i>
+                    <span>Görevli Yanında Kuponu Kullan & İptal Et</span>
+                </button>
+                <p class="text-[10px] text-slate-400 text-center mt-2">
+                    * Yalnızca garsonun / yetkilinin yanında basınız. Kullandıktan sonra karttan silinir.
                 </p>
             </div>
 
@@ -1341,12 +1347,76 @@
                     Anlaşmalı sponsor kafelerde indirim almak veya hediyenizi teslim almak için bu ekranı göstermeniz yeterlidir.
                 </p>
                 <div class="flex gap-2 justify-center">
-                    <button onclick="closeMemberCardModal()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 rounded-xl font-black text-sm shadow-lg hover:shadow-amber-500/40 transition-all">
+                    <button onclick="closeMemberCardModal()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold text-sm border border-white/10 transition-all">
                         Kapat
                     </button>
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- ⚠️ TEK KULLANIMLIK KUPON KULLANMA ONAY MODALI -->
+    <!-- ========================================================================= -->
+    <div id="redeemConfirmModal" class="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[1001] hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-sm bg-slate-900 border-2 border-amber-500 rounded-3xl p-6 text-white text-center shadow-2xl">
+            <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto mb-4 border border-amber-400/40">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            
+            <h3 class="text-xl font-black text-white mb-2">Kuponu Kullanmak Üzeresiniz</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                Bu kupon <strong class="text-amber-400 font-bold">TEK KULLANIMLIKTIR</strong>. Lütfen yalnızca mekan görevlisinin / garsonun yanında onaylayınız.
+            </p>
+
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-left text-xs mb-5 space-y-1.5">
+                <p class="text-slate-400 text-[11px] uppercase font-bold">Kullanılacak Hediye:</p>
+                <p id="redeemModalGiftTitle" class="font-black text-amber-300">EspressoLab 1 Aylık Kahve</p>
+                <p class="text-slate-500 text-[10px]">Onaylandıktan sonra bu hediye kartınızdan kalıcı olarak silinecektir.</p>
+            </div>
+
+            <div class="flex flex-col gap-2.5">
+                <button onclick="confirmRedeemGift()" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-slate-950 font-black rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition-all">
+                    ✅ Görevlinin Yanındayım, Şimdi Kullan
+                </button>
+                <button onclick="closeRedeemConfirmModal()" class="w-full py-2.5 bg-white/10 hover:bg-white/15 text-slate-300 font-bold rounded-xl text-xs transition-colors">
+                    Vazgeç / İptal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- ✅ BAŞARILI KULLANIM VE İPTAL EKRANI (GARSONUN GÖRMESİ İÇİN) -->
+    <!-- ========================================================================= -->
+    <div id="redeemSuccessModal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[1002] hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-sm bg-gradient-to-b from-emerald-950 to-slate-900 border-2 border-emerald-400 rounded-3xl p-7 text-white text-center shadow-2xl">
+            <div class="w-20 h-20 rounded-3xl bg-emerald-500 text-slate-950 flex items-center justify-center text-4xl mx-auto mb-4 shadow-xl shadow-emerald-500/40 animate-bounce">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            
+            <h3 class="text-2xl font-black text-emerald-400 mb-1">Kupon Kullanıldı!</h3>
+            <p class="text-xs text-slate-300 mb-4">Hediye başarıyla teslim alınmış ve sistemden silinmiştir.</p>
+
+            <div class="bg-slate-950/80 p-4 rounded-2xl border border-emerald-500/30 text-xs mb-5 space-y-2 text-left font-mono">
+                <div class="flex justify-between border-b border-slate-800 pb-1.5">
+                    <span class="text-slate-400">Hediye:</span>
+                    <span id="successModalGiftTitle" class="font-bold text-white">Kahve Paketi</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-800 pb-1.5">
+                    <span class="text-slate-400">Kullanım Zamanı:</span>
+                    <span id="successModalTimestamp" class="font-bold text-emerald-400">23.09.2026 18:07</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Durum:</span>
+                    <span class="text-amber-400 font-bold">KULLANILDI (GEÇERSİZ)</span>
+                </div>
+            </div>
+
+            <button onclick="closeRedeemSuccessModal()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded-xl text-sm transition-all shadow-lg">
+                Tamamla & Kapat
+            </button>
         </div>
     </div>
 
@@ -1629,6 +1699,63 @@
 
         function closeUnregisteredModal() {
             document.getElementById('unregisteredModal').classList.add('hidden');
+        }
+
+        // =========================================================================
+        // TEK KULLANIMLIK HEDİYE TESLİM ALMA & İPTAL ETME MOTORU
+        // =========================================================================
+        let currentRedeemingGift = null;
+
+        function promptRedeemGift() {
+            const giftTitle = document.getElementById('wonGiftTitle').textContent;
+            document.getElementById('redeemModalGiftTitle').textContent = giftTitle;
+            currentRedeemingGift = giftTitle;
+            document.getElementById('redeemConfirmModal').classList.remove('hidden');
+        }
+
+        function closeRedeemConfirmModal() {
+            document.getElementById('redeemConfirmModal').classList.add('hidden');
+        }
+
+        function confirmRedeemGift() {
+            closeRedeemConfirmModal();
+
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            let studentNo = '';
+            if (savedData) {
+                const member = JSON.parse(savedData);
+                studentNo = member.studentNo;
+                // Karttan hediyeyi kalıcı olarak sil
+                delete member.wonGift;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+            }
+
+            // Global Hediye Kayıt Havuzundan da temizle
+            let registry = JSON.parse(localStorage.getItem('uluceeit_gifts_registry') || '[]');
+            registry = registry.filter(item => item.target !== studentNo && item.target !== 'Mevcut Cihaz' && !item.target.includes(studentNo));
+            localStorage.setItem('uluceeit_gifts_registry', JSON.stringify(registry));
+
+            // Karttaki hediye alanını hemen gizle
+            const wonGiftCont = document.getElementById('wonGiftContainer');
+            if (wonGiftCont) wonGiftCont.classList.add('hidden');
+
+            // Garson / Görevli için başarı ekranını hazırla
+            document.getElementById('successModalGiftTitle').textContent = currentRedeemingGift || 'Hediye Paketi';
+            
+            const now = new Date();
+            const timeStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            document.getElementById('successModalTimestamp').textContent = timeStr;
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 } });
+            }
+
+            // Başarı ekranını aç
+            document.getElementById('redeemSuccessModal').classList.remove('hidden');
+        }
+
+        function closeRedeemSuccessModal() {
+            document.getElementById('redeemSuccessModal').classList.add('hidden');
         }
 
         // Kart Üzerindeki Canlı Saati Güncelle (Kopyalamayı/Ekran Görüntüsünü Engeller)
