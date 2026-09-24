@@ -9,6 +9,15 @@
     
     <!-- Meta & SEO Tags -->
     <link rel="canonical" href="https://uluceeit.com.tr/cekilis.html">
+    
+    <!-- Google Analytics 4 (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ULUCEEIT26"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ULUCEEIT26');
+    </script>
     <meta name="description" content="Bursa Uludağ Üniversitesi ULUÇEEİT Büyük Üye Çekilişi! Kitap setleri, kahve paketleri, İK eğitim bursları ve özel kulüp hediyeleri kazanma şansı.">
     <meta name="keywords" content="ULUÇEEİT Çekiliş, Uludağ Üniversitesi Çekiliş, Öğrenci Kulübü Ödüller, Bursa ÇEEİ">
     <meta name="robots" content="index, follow">
@@ -734,6 +743,35 @@
                 } catch (e) {
                     return null;
                 }
+            },
+
+            async recordVisit(pageName) {
+                try {
+                    const sessionKey = `visited_session_${pageName}`;
+                    if (sessionStorage.getItem(sessionKey)) return;
+                    sessionStorage.setItem(sessionKey, 'true');
+
+                    const res = await fetch(`${this.API_BASE}/analytics`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    let stats = { totalViews: 0, indexViews: 0, cekilisViews: 0, lastVisit: new Date().toISOString() };
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && typeof data === 'object') stats = { ...stats, ...data };
+                    }
+                    stats.totalViews = (stats.totalViews || 0) + 1;
+                    if (pageName === 'index') stats.indexViews = (stats.indexViews || 0) + 1;
+                    if (pageName === 'cekilis') stats.cekilisViews = (stats.cekilisViews || 0) + 1;
+                    stats.lastVisit = new Date().toISOString();
+
+                    await fetch(`${this.API_BASE}/analytics`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(stats)
+                    });
+                } catch (e) {
+                    // silent fallback
+                }
             }
         };
 
@@ -742,6 +780,9 @@
             updateGiveawayBtnState();
             setInterval(updateCardClock, 1000);
             startCountdown();
+
+            // Çekiliş Sayfası Ziyaretini Kaydet
+            CloudSync.recordVisit('cekilis');
 
             // Buluttan hedef tarihi ve üye durumunu arka planda eşitle
             try {

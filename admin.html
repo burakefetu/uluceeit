@@ -159,6 +159,51 @@
                 </div>
             </div>
 
+            <!-- 🌐 CANLI WEB ZİYARETÇİ VE TRAFİK ANALİZİ -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-black text-white flex items-center gap-2">
+                                Canlı Web Sitesi Trafiği
+                                <span class="relative flex h-2 w-2">
+                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                  <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                </span>
+                            </h2>
+                            <p class="text-xs text-slate-400">uluceeit.com.tr ziyaretçi ve sayfa görüntüleme istatistikleri</p>
+                        </div>
+                    </div>
+                    <span id="analyticsLastVisitBadge" class="text-[11px] font-mono px-3 py-1 rounded-full bg-slate-800 text-slate-400">Son Ziyaret: Canlı İzleniyor</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
+                    <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400 font-semibold">Toplam Sayfa Görüntüleme</p>
+                            <h4 id="statTotalViews" class="text-2xl font-black text-white font-mono mt-1">0</h4>
+                        </div>
+                        <i class="fa-solid fa-eye text-2xl text-purple-400/30"></i>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400 font-semibold">Ana Sayfa Ziyareti</p>
+                            <h4 id="statIndexViews" class="text-2xl font-black text-sky-400 font-mono mt-1">0</h4>
+                        </div>
+                        <i class="fa-solid fa-house text-2xl text-sky-400/30"></i>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400 font-semibold">Çekiliş Sayfası Trafiği</p>
+                            <h4 id="statCekilisViews" class="text-2xl font-black text-amber-400 font-mono mt-1">0</h4>
+                        </div>
+                        <i class="fa-solid fa-gift text-2xl text-amber-400/30"></i>
+                    </div>
+                </div>
+            </div>
+
             <!-- ========================================================================= -->
             <!-- 🎁 HEDİYE HAVUZU & STOK (ADET) YÖNETİM MODÜLÜ -->
             <!-- ========================================================================= -->
@@ -760,6 +805,20 @@
                 } catch (e) {
                     console.warn('MantleDB giveaway config push error:', e);
                 }
+            },
+
+            async getAnalytics() {
+                try {
+                    const res = await fetch(`${this.API_BASE}/analytics`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    if (res.ok) {
+                        return await res.json();
+                    }
+                } catch (e) {
+                    console.warn('MantleDB analytics fetch error:', e);
+                }
+                return { totalViews: 0, indexViews: 0, cekilisViews: 0 };
             }
         };
 
@@ -1716,6 +1775,26 @@
             if (elTotalRemaining) elTotalRemaining.textContent = totalRemaining;
             if (elGiveaway) elGiveaway.textContent = giveawayCount;
             if (elLocal) elLocal.textContent = `${members.length} Üye`;
+
+            // 🌐 Canlı Web Trafik İstatistiklerini Güncelle
+            CloudSync.getAnalytics().then(analytics => {
+                if (analytics) {
+                    const elTotalViews = document.getElementById('statTotalViews');
+                    const elIndexViews = document.getElementById('statIndexViews');
+                    const elCekilisViews = document.getElementById('statCekilisViews');
+                    const elLastVisit = document.getElementById('analyticsLastVisitBadge');
+
+                    if (elTotalViews) elTotalViews.textContent = analytics.totalViews || 0;
+                    if (elIndexViews) elIndexViews.textContent = analytics.indexViews || 0;
+                    if (elCekilisViews) elCekilisViews.textContent = analytics.cekilisViews || 0;
+                    if (elLastVisit && analytics.lastVisit) {
+                        try {
+                            const d = new Date(analytics.lastVisit);
+                            elLastVisit.textContent = `Son Ziyaret: ${d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
+                        } catch (e) {}
+                    }
+                }
+            });
         }
 
         function toggleTargetMode(mode) {

@@ -9,6 +9,16 @@
     
     <!-- Meta & SEO Tags -->
     <meta name="google-site-verification" content="4TRHd8JcNm-hQZwi2wl0Z07e3URYmu64kxQNRQQ6CEc" />
+    
+    <!-- Google Analytics 4 (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ULUCEEIT26"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ULUCEEIT26');
+    </script>
+    
     <link rel="canonical" href="https://uluceeit.com.tr/">
     <meta name="description" content="Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu (ULUÇEEİT) Resmi Web Sitesi. Geleceğe Yön Ver! Kulüp etkinlikleri, indirimli anlaşmalar ve duyurular.">
     <meta name="keywords" content="ULUÇEEİT, Uludağ Üniversitesi, ÇEEİ, Çalışma Ekonomisi, Öğrenci Kulübü, Bursa, İndirimler, Sponsorlar, İİBF, uluceeit.com.tr">
@@ -44,7 +54,10 @@
         "@type": "CollegeOrUniversity",
         "name": "Bursa Uludağ Üniversitesi",
         "url": "https://uludag.edu.tr"
-      }
+      },
+      "sameAs": [
+        "https://www.instagram.com/uludagceeit/"
+      ]
     }
     </script>
     
@@ -1797,6 +1810,35 @@
                 } catch (e) {
                     console.error('Redeem sync error:', e);
                 }
+            },
+
+            async recordVisit(pageName) {
+                try {
+                    const sessionKey = `visited_session_${pageName}`;
+                    if (sessionStorage.getItem(sessionKey)) return;
+                    sessionStorage.setItem(sessionKey, 'true');
+
+                    const res = await fetch(`${this.API_BASE}/analytics`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    });
+                    let stats = { totalViews: 0, indexViews: 0, cekilisViews: 0, lastVisit: new Date().toISOString() };
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && typeof data === 'object') stats = { ...stats, ...data };
+                    }
+                    stats.totalViews = (stats.totalViews || 0) + 1;
+                    if (pageName === 'index') stats.indexViews = (stats.indexViews || 0) + 1;
+                    if (pageName === 'cekilis') stats.cekilisViews = (stats.cekilisViews || 0) + 1;
+                    stats.lastVisit = new Date().toISOString();
+
+                    await fetch(`${this.API_BASE}/analytics`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(stats)
+                    });
+                } catch (e) {
+                    // silent fallback
+                }
             }
         };
 
@@ -1805,6 +1847,9 @@
             checkUrlActivation();
             updateNavbarCardState();
             setInterval(updateCardClock, 1000);
+
+            // Ziyaret İstatistiğini Kaydet
+            CloudSync.recordVisit('index');
 
             // Mevcut bir üye varsa arka planda buluta senkronize et ve hediyesini çek
             syncCurrentMember();
