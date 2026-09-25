@@ -7,6 +7,15 @@
     
     <link rel="icon" type="image/png" href="logo.png">
     
+    <!-- PWA & Mobil Web Uygulama Entegrasyonu -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b1d4a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ULUÇEEİT">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
     <!-- Meta & SEO Tags -->
     <link rel="canonical" href="https://uluceeit.com.tr/cekilis.html">
     
@@ -1136,6 +1145,15 @@
                 menuIcon.classList.add('fa-bars');
             }
         });
+
+        // PWA Service Worker Kaydı
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => {
+                    console.warn('PWA SW kaydı hatası:', err);
+                });
+            });
+        }
     </script>
 </body>
 </html>
