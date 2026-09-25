@@ -169,10 +169,10 @@
                         <span id="navCardBtnText">🪪 Dijital Üye Kartı</span>
                     </button>
 
-                    <button onclick="openActivationModal()" class="bg-gradient-to-r from-ceko-navy via-blue-900 to-blue-700 hover:from-blue-700 hover:to-ceko-navy text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-blue-600/30 transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <a href="#sks-uye" class="bg-gradient-to-r from-ceko-navy via-blue-900 to-blue-700 hover:from-blue-700 hover:to-ceko-navy text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-blue-600/30 transform hover:-translate-y-0.5 flex items-center gap-2">
                         <span>Üye Ol</span>
                         <i class="fa-solid fa-arrow-right text-xs"></i>
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Mobil Menü Butonu & Hızlı Kart -->
@@ -214,9 +214,9 @@
                     <button onclick="handleMemberCardClick()" id="mobileDrawerCardBtn" class="w-full text-center bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 px-4 py-3.5 rounded-xl font-black shadow-md flex items-center justify-center gap-2 transition-all">
                         <i class="fa-solid fa-id-card"></i> <span id="mobileDrawerCardBtnText">🪪 Dijital Üye Kartını Aç / Tanımla</span>
                     </button>
-                    <button onclick="openActivationModal()" class="block w-full text-center bg-gradient-to-r from-ceko-navy to-blue-700 text-white px-4 py-3.5 rounded-xl font-bold shadow-md hover:shadow-lg transition-all">
-                        Hemen Üye Ol (Stant Kaydı)
-                    </button>
+                    <a href="#sks-uye" class="block w-full text-center bg-gradient-to-r from-ceko-navy to-blue-700 text-white px-4 py-3.5 rounded-xl font-bold shadow-md hover:shadow-lg transition-all">
+                        Hemen Üye Ol (SKS)
+                    </a>
                 </div>
             </div>
         </div>
@@ -987,15 +987,11 @@
             </div>
 
             <div class="flex flex-col gap-2.5">
-                <button onclick="openActivationModal()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-xl text-sm shadow-xl shadow-amber-500/20 transition-all flex items-center justify-center gap-2 min-h-[44px]">
-                    <i class="fa-solid fa-user-plus"></i>
-                    <span>Stanttayım, Hemen Yeni Kayıt Oluştur</span>
-                </button>
-                <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-xl font-bold text-sm text-white shadow-lg transition-all flex items-center justify-center gap-2 min-h-[44px]">
+                <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-xl font-bold text-sm text-white shadow-lg transition-all flex items-center justify-center gap-2 min-h-[44px]">
                     <span>SKS Portalına Git</span>
                     <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                 </a>
-                <button onclick="closeUnregisteredModal()" class="w-full py-2.5 bg-white/10 hover:bg-white/15 rounded-xl font-bold text-xs text-slate-300 transition-all min-h-[40px]">
+                <button onclick="closeUnregisteredModal()" class="w-full py-3 bg-white/10 hover:bg-white/15 rounded-xl font-bold text-sm text-slate-300 transition-all min-h-[44px]">
                     Anladım, Kapat
                 </button>
             </div>
