@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etkinlikler & Geziler - ULUÇEEİT</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- PWA & Mobil Web Uygulama Entegrasyonu -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b1d4a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ULUÇEEİT">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <!-- Meta & SEO Tags -->
+    <link rel="canonical" href="https://uluceeit.com.tr/etkinlikler.html">
+    <meta name="description" content="Bursa Uludağ Üniversitesi ULUÇEEİT topluluğu mesleki gezileri, Ankara kültür gezisi, Zonguldak Akademek zirvesi ve kariyer panelleri.">
+    <meta name="keywords" content="ULUÇEEİT Etkinlikler, Uludağ Üniversitesi Geziler, ÇEEİ Ankara Gezisi, Zonguldak Akademek, Öğrenci Topluluğu Etkinlik">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Etkinlikler & Geziler - ULUÇEEİT">
+    <meta property="og:description" content="ULUÇEEİT ile dopdolu bir dönem! Mesleki geziler, kariyer zirveleri ve sosyal etkinlikler.">
+    <meta property="og:url" content="https://uluceeit.com.tr/etkinlikler.html">
+    <meta property="og:image" content="https://uluceeit.com.tr/ankara-gezisi.jpg">
+    <meta property="og:type" content="website">
+
+    <!-- Google Analytics 4 (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ULUCEEIT26"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ULUCEEIT26');
+    </script>
+    
+    <!-- Tailwind CSS ve FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ceko: {
+                            dark: '#060f24',
+                            navy: '#0b1d4a',
+                            deep: '#0e245c',
+                            royal: '#1d4ed8',
+                            blue: '#2563eb',
+                            cyan: '#06b6d4',
+                            sky: '#38bdf8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .liquid-glass-navy {
+            background: linear-gradient(135deg, rgba(11, 29, 74, 0.95) 0%, rgba(6, 15, 36, 0.98) 100%);
+            backdrop-filter: blur(16px);
+        }
+        .shadow-glass-glow {
+            box-shadow: 0 16px 36px -10px rgba(37, 99, 235, 0.25);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-amber-500 selection:text-slate-950 pb-20 md:pb-0">
+
+    <!-- ========================================================================= -->
+    <!-- 🧭 ORTAK ÜST MENÜ (NAVBAR) -->
+    <!-- ========================================================================= -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo & İsim -->
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-3.5 group">
+                    <img src="logo.png" alt="ULUÇEEİT Logo" class="h-12 w-12 object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300" onerror="this.src='logo.jpg'">
+                    <div class="flex flex-col justify-center">
+                        <span class="font-black text-xl text-ceko-navy tracking-tight leading-none group-hover:text-blue-600 transition-colors">ULUÇEEİT</span>
+                        <span class="text-[11px] text-slate-500 font-semibold mt-1">Bursa Uludağ Üniversitesi</span>
+                    </div>
+                </a>
+
+                <!-- Masaüstü Menü Linkleri -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Ana Sayfa</a>
+                    <a href="sponsorlar.html" class="text-slate-700 hover:text-amber-600 font-semibold text-sm transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-tags text-xs text-amber-500"></i> Sponsorlar
+                    </a>
+                    <a href="etkinlikler.html" class="text-blue-600 font-extrabold text-sm transition-colors border-b-2 border-blue-600 pb-1">Etkinlikler</a>
+                    <a href="cekilis.html" class="text-amber-600 hover:text-amber-700 font-extrabold text-xs sm:text-sm transition-colors flex items-center gap-1.5 bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-200">
+                        <i class="fa-solid fa-gift text-xs text-amber-500"></i> <span>Çekiliş</span>
+                        <span class="bg-amber-500 text-slate-950 text-[10px] px-1.5 py-0.2 rounded-full font-black">Aktif</span>
+                    </a>
+                    <a href="hakkimizda.html" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Hakkımızda</a>
+                    
+                    <!-- DİJİTAL ÜYE KARTI BUTONU -->
+                    <button onclick="handleMemberCardClick()" id="navCardBtn" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all border shadow-sm bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 border-amber-400 hover:shadow-amber-500/30 transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-id-card text-sm"></i>
+                        <span id="navCardBtnText">🪪 Dijital Üye Kartı</span>
+                    </button>
+                </nav>
+
+                <!-- Mobil Menü Butonu & Hızlı Kart -->
+                <div class="md:hidden flex items-center gap-2">
+                    <button onclick="handleMemberCardClick()" id="mobileNavCardBtn" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
+                        <i class="fa-solid fa-id-card"></i> <span id="mobileNavCardBtnText">Kartım</span>
+                    </button>
+                    <button id="mobileMenuBtn" class="text-slate-700 hover:text-blue-600 p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Menüyü Aç">
+                        <i class="fa-solid fa-bars text-2xl" id="menuIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobil Açılır Drawer Menü -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-200 shadow-2xl w-full absolute top-full left-0 z-50">
+            <div class="px-5 pt-4 pb-6 space-y-2">
+                <a href="index.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-house text-blue-600 w-5"></i> Ana Sayfa
+                </a>
+                <a href="sponsorlar.html" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-amber-600 hover:bg-amber-50 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-tags text-amber-500 w-5"></i> Sponsorlar & İndirimler</span>
+                    <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">Fırsatlar</span>
+                </a>
+                <a href="etkinlikler.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-blue-600 bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-calendar-check text-blue-600 w-5"></i> Etkinlikler & Geziler
+                </a>
+                <a href="cekilis.html" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-gift text-amber-500 w-5"></i> Büyük Çekiliş</span>
+                    <span class="bg-amber-500 text-slate-950 text-xs px-2.5 py-0.5 rounded-full font-bold">Aktif</span>
+                </a>
+                <a href="hakkimizda.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-users text-blue-600 w-5"></i> Hakkımızda & Yönetim
+                </a>
+                <div class="pt-2">
+                    <button onclick="handleMemberCardClick()" class="w-full text-center bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 px-4 py-3.5 rounded-xl font-black shadow-md flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-solid fa-id-card"></i> <span>🪪 Dijital Üye Kartını Aç</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========================================================================= -->
+    <!-- 📅 ETKİNLİKLER VE GEZİLER SAYFASI -->
+    <!-- ========================================================================= -->
+    <main class="pt-28 pb-16">
+        
+        <!-- Üst Başlık Bannerı -->
+        <section class="relative py-12 md:py-16 bg-gradient-to-b from-[#081538] via-[#0b1d4a] to-[#081538] text-white overflow-hidden mb-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-400/30 text-xs font-bold mb-4">
+                    <i class="fa-solid fa-calendar-check"></i> Mesleki Geziler & Zirveler
+                </span>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
+                    Kulüp <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-cyan-400">Etkinliklerimiz</span>
+                </h1>
+                <p class="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
+                    Tarihi mekanlar, kurum ziyaretleri, sendikal temaslar ve akademik öğrenci kurultayları ile dolu dolu geçen etkinliklerimizden kareler.
+                </p>
+            </div>
+        </section>
+
+        <!-- Etkinlik Kartları Izgarası -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-16">
+                
+                <!-- Etkinlik Kartı 1: Ankara Gezisi -->
+                <div class="liquid-glass-navy text-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-glass-glow hover:-translate-y-2 transition-all duration-300 flex flex-col group border border-white/15">
+                    <div class="relative h-72 sm:h-80 overflow-hidden">
+                        <img src="ankara-gezisi.jpg" alt="ULUÇEEİT Ankara Gezisi - Anıtkabir" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#060f24] via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-slate-900/80 text-white px-3.5 py-1 rounded-full text-xs font-bold shadow backdrop-blur-md border border-white/15">
+                            Geçmiş Etkinlik
+                        </div>
+                    </div>
+                    <div class="p-7 sm:p-8 flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs text-blue-400 font-bold mb-2 flex items-center">
+                                <i class="fa-regular fa-calendar mr-2"></i> 8 Mayıs
+                            </div>
+                            <h3 class="text-2xl font-extrabold text-white mb-3 leading-snug">Ankara Kültür ve Mesleki Gezisi</h3>
+                            
+                            <div class="text-slate-300 text-sm leading-relaxed mb-4">
+                                <p>
+                                    8 Mayıs’ta gerçekleştirdiğimiz Ankara gezimizden birbirinden güzel anılarla döndük. 🇹🇷🖤 Tarihin ve emeğin izlerini birlikte keşfettiğimiz bu özel günde hem öğrendik hem de keyifli anlar biriktirdik.
+                                </p>
+                                
+                                <div id="ankaraDetails" class="hidden mt-3 space-y-2.5 pt-3 border-t border-white/10 text-slate-200">
+                                    <p>
+                                        Anıtkabir’in manevi atmosferini hissetmek, Eski Meclis’in tarihine tanıklık etmek ve İLO ziyaretimizle farklı bakış açıları kazanmak bizler için oldukça değerliydi. ✨
+                                    </p>
+                                    <p class="text-amber-300 font-medium">
+                                        Bu etkinlikte bizlere desteklerini eksik etmeyen Türk Metal Sendikasına çok teşekkür ederiz 🙏🏻
+                                    </p>
+                                </div>
+
+                                <button onclick="toggleEventDetails(this, 'ankaraDetails')" class="event-toggle-btn mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
+                                    <span>Devamını Oku</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="border-t border-white/10 pt-4 flex justify-between items-center">
+                            <span class="text-slate-300 text-sm font-bold"><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Ankara</span>
+                            <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-sky-300 text-sm font-bold transition-colors flex items-center gap-1.5">
+                                <i class="fa-brands fa-instagram text-base"></i> Fotoğrafları Gör
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Etkinlik Kartı 2: AKAD'EMEK Zonguldak -->
+                <div class="liquid-glass-navy text-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-glass-glow hover:-translate-y-2 transition-all duration-300 flex flex-col group border border-white/15">
+                    <div class="relative h-72 sm:h-80 overflow-hidden">
+                        <img src="akademek-zonguldak.jpg" alt="AKAD'EMEK Zonguldak Öğrenci Kurultayı" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#060f24] via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-slate-900/80 text-white px-3.5 py-1 rounded-full text-xs font-bold shadow backdrop-blur-md border border-white/15">
+                            Geçmiş Etkinlik
+                        </div>
+                    </div>
+                    <div class="p-7 sm:p-8 flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs text-blue-400 font-bold mb-2 flex items-center">
+                                <i class="fa-regular fa-calendar mr-2"></i> 23-26 Nisan
+                            </div>
+                            <h3 class="text-2xl font-extrabold text-white mb-3 leading-snug">AKAD'EMEK Zonguldak Öğrenci Kurultayı</h3>
+                            
+                            <div class="text-slate-300 text-sm leading-relaxed mb-4">
+                                <p>
+                                    AKAD’EMEK’te sadece bir etkinliğe değil; dostluğa, emeğe ve unutulmayacak anılara ev sahipliği yaptık. ✨ Birlikte geçirdiğimiz bu süreç, bizim için yalnızca bir organizasyon değil; aynı zamanda güçlü bağlar kurduğumuz çok özel bir yolculuktu.
+                                </p>
+                                
+                                <div id="akademekDetails" class="hidden mt-3 space-y-2.5 pt-3 border-t border-white/10 text-slate-200">
+                                    <p>
+                                        “Söz Çalışma Ekonomisi Öğrencilerinde” diyerek çıktığımız bu yolda dayanışmanın, ekip ruhunun ve birlikte üretmenin ne kadar kıymetli olduğunu bir kez daha gördük.
+                                    </p>
+                                    <p class="text-amber-300 font-medium">
+                                        Bu güzel süreçte emeği geçen, yanımızda olan herkese gönülden teşekkür ederiz. Daha nice güzel organizasyonlarda tekrar bir araya gelmek dileğiyle. 💐
+                                    </p>
+                                </div>
+
+                                <button onclick="toggleEventDetails(this, 'akademekDetails')" class="event-toggle-btn mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
+                                    <span>Devamını Oku</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="border-t border-white/10 pt-4 flex justify-between items-center">
+                            <span class="text-slate-300 text-sm font-bold"><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Zonguldak</span>
+                            <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-sky-300 text-sm font-bold transition-colors flex items-center gap-1.5">
+                                <i class="fa-brands fa-instagram text-base"></i> Fotoğrafları Gör
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- WhatsApp Topluluğu Katılım Bandı -->
+            <div class="bg-gradient-to-br from-emerald-50 to-slate-50 rounded-3xl shadow-xl p-8 md:p-12 border border-emerald-200/80 flex flex-col md:flex-row items-center gap-8 justify-between relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl z-0"></div>
+                
+                <div class="text-left relative z-10 flex-1">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold mb-4 border border-emerald-200">
+                        <i class="fa-brands fa-whatsapp text-sm text-emerald-600"></i> Resmi İletişim Kanalı
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black text-ceko-navy mb-3">WhatsApp Grubumuza Katılın!</h3>
+                    <p class="text-slate-600 text-sm sm:text-base">
+                        Gelecek etkinliklerden, mesleki gezilerden ve staj fırsatlarından ilk siz haberdar olun. ULUÇEEİT ailesine doğrudan katılın.
+                    </p>
+                </div>
+                
+                <div class="relative z-10 flex-shrink-0">
+                    <a href="https://chat.whatsapp.com/" target="_blank" rel="noopener noreferrer" 
+                       class="group inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white px-7 py-3.5 rounded-2xl font-bold text-base transition-all shadow-xl shadow-emerald-600/20 transform hover:-translate-y-0.5">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        <span>Gruba Katıl</span>
+                    </a>
+                    <p class="text-[11px] text-slate-400 mt-2 text-center">Uludağ Üniversitesi öğrencilerine özeldir.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- 📱 MOBİL ALT GEZİNME ÇUBUĞU (APP-STYLE BOTTOM TAB BAR) -->
+    <!-- ========================================================================= -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 py-1.5 flex items-center justify-around">
+        <a href="index.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-blue-600 transition-colors">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px] font-bold mt-0.5">Ana Sayfa</span>
+        </a>
+        <a href="sponsorlar.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-amber-600 transition-colors">
+            <i class="fa-solid fa-tags text-lg"></i>
+            <span class="text-[10px] font-bold mt-0.5">İndirimler</span>
+        </a>
+        <a href="etkinlikler.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-blue-600 bg-blue-50 font-black">
+            <i class="fa-solid fa-calendar-days text-lg text-blue-600"></i>
+            <span class="text-[10px] font-extrabold mt-0.5">Etkinlik</span>
+        </a>
+        <a href="cekilis.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-amber-600 hover:text-amber-700 transition-colors relative">
+            <span class="absolute -top-1 right-2 flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+            </span>
+            <i class="fa-solid fa-gift text-lg"></i>
+            <span class="text-[10px] font-extrabold mt-0.5">Çekiliş</span>
+        </a>
+        <a href="hakkimizda.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-blue-600 transition-colors">
+            <i class="fa-solid fa-users text-lg"></i>
+            <span class="text-[10px] font-bold mt-0.5">Kulüp</span>
+        </a>
+        <button onclick="handleMemberCardClick()" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-amber-600 active:scale-95 transition-transform">
+            <i class="fa-solid fa-id-card text-lg"></i>
+            <span class="text-[10px] font-bold mt-0.5">Kartım</span>
+        </button>
+    </nav>
+
+    <!-- ========================================================================= -->
+    <!-- 🪪 DİJİTAL ÜYE KARTI MODALI -->
+    <!-- ========================================================================= -->
+    <div id="memberCardModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 text-white shadow-2xl overflow-hidden">
+            <button onclick="closeMemberCardModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="memberCardModalContent">
+                <!-- Dinamik JavaScript ile doldurulur -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Aktivasyon Gerekli Modalı -->
+    <div id="activationModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="relative w-full max-w-md bg-slate-900 border border-amber-400/40 rounded-3xl p-6 sm:p-8 text-white shadow-2xl text-center">
+            <button onclick="closeActivationModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto mb-4 border border-amber-400/30">
+                <i class="fa-solid fa-qrcode"></i>
+            </div>
+            <h3 class="text-xl font-black text-white mb-2">Aktivasyon Gerekli!</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-6">
+                Dijital İndirim Kartınızı aktif etmek için üniversite kampüsündeki <strong>ULUÇEEİT Stant Panosundaki QR Kodu</strong> telefonunuzla taratmanız veya kulüp yetkilimizden onay almanız gerekmektedir.
+            </p>
+            <div class="space-y-3">
+                <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" class="block w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black rounded-xl text-xs shadow-lg">
+                    SKS Portalından Üye Ol
+                </a>
+                <button onclick="closeActivationModal()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs">
+                    Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ortak Footer -->
+    <footer class="bg-ceko-dark text-white pt-12 pb-8 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400">
+            <div class="flex items-center justify-center gap-2 mb-3">
+                <img src="logo.png" alt="Logo" class="h-6 w-6 object-contain">
+                <span class="font-bold text-white text-sm">ULUÇEEİT</span>
+            </div>
+            <p>© 2026 ULUÇEEİT - Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT MOTORU -->
+    <script>
+        const STORAGE_KEY = 'ceko_member_card_data_2026';
+
+        // Etkinlik Detay Toggle
+        function toggleEventDetails(btn, targetId) {
+            const detailsDiv = document.getElementById(targetId);
+            const icon = btn.querySelector('i');
+            const textSpan = btn.querySelector('span');
+            
+            if (detailsDiv.classList.contains('hidden')) {
+                detailsDiv.classList.remove('hidden');
+                textSpan.textContent = 'Daha Az Gör';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                detailsDiv.classList.add('hidden');
+                textSpan.textContent = 'Devamını Oku';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Üye Kartı Tıklaması
+        function handleMemberCardClick() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                renderMemberCard(JSON.parse(savedData));
+                document.getElementById('memberCardModal').classList.remove('hidden');
+            } else {
+                document.getElementById('activationModal').classList.remove('hidden');
+            }
+        }
+
+        function closeMemberCardModal() {
+            document.getElementById('memberCardModal').classList.add('hidden');
+        }
+
+        function closeActivationModal() {
+            document.getElementById('activationModal').classList.add('hidden');
+        }
+
+        function renderMemberCard(member) {
+            const cont = document.getElementById('memberCardModalContent');
+            cont.innerHTML = `
+                <div class="text-center mb-6">
+                    <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black uppercase tracking-wider mb-2">
+                        ✓ AKTİF DİJİTAL ÜYE
+                    </span>
+                    <h3 class="text-2xl font-black text-white">${member.fullName}</h3>
+                    <p class="text-xs text-amber-400 font-mono mt-1">${member.studentNo} • ${member.serialNo || 'ULU-2026-VIP'}</p>
+                </div>
+                <div class="p-4 bg-slate-950/80 rounded-2xl border border-slate-800 text-center mb-6">
+                    <p class="text-[11px] text-slate-400 mb-1">Kafede / İşletmede Masada Gösteriniz</p>
+                    <p class="text-lg font-black text-amber-400 font-mono tracking-widest">%30'a Varan İndirim</p>
+                </div>
+                <button onclick="closeMemberCardModal()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs">
+                    Kapat
+                </button>
+            `;
+        }
+
+        function updateNavbarCardState() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            const navBtnText = document.getElementById('navCardBtnText');
+            const mobileBtnText = document.getElementById('mobileNavCardBtnText');
+            if (savedData) {
+                const mem = JSON.parse(savedData);
+                const shortName = (mem.fullName || '').split(' ')[0] || 'Üye';
+                if (navBtnText) navBtnText.textContent = `🪪 ${shortName} (Aktif)`;
+                if (mobileBtnText) mobileBtnText.textContent = shortName;
+            }
+        }
+
+        // Mobil Menü
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const isClosed = mobileMenu.classList.contains('hidden');
+                if (isClosed) {
+                    mobileMenu.classList.remove('hidden');
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-xmark');
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.remove('fa-xmark');
+                    menuIcon.classList.add('fa-bars');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavbarCardState();
+        });
+
+        // PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>

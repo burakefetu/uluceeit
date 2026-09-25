@@ -164,7 +164,7 @@
         }
     </style>
 </head>
-<body class="bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-ceko-navy selection:text-white">
+<body class="bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-ceko-navy selection:text-white pb-20 md:pb-0">
 
     <!-- NAVBAR -->
     <nav class="fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm z-50 transition-all duration-300" id="navbar">
@@ -184,16 +184,16 @@
 
                 <!-- Masaüstü Linkler -->
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="index.html#hakkimizda" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Hakkımızda</a>
-                    <a href="index.html#etkinlikler" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Etkinlikler</a>
-                    <a href="index.html#sponsorlar" class="text-slate-700 hover:text-amber-600 font-semibold text-sm transition-colors flex items-center gap-1.5">
-                        <i class="fa-solid fa-tags text-xs text-amber-500"></i> Sponsorlar
+                    <a href="index.html" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Ana Sayfa</a>
+                    <a href="sponsorlar.html" class="text-slate-700 hover:text-amber-600 font-semibold text-sm transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-tags text-xs text-amber-500"></i> İndirimler
                     </a>
+                    <a href="etkinlikler.html" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Etkinlikler</a>
                     <a href="cekilis.html" class="text-amber-600 font-extrabold text-sm transition-colors flex items-center gap-1.5 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
                         <i class="fa-solid fa-gift text-xs"></i> <span>Çekiliş</span>
                         <span class="bg-amber-500 text-slate-950 text-[10px] px-1.5 py-0.2 rounded-full font-black">Aktif</span>
                     </a>
-                    <a href="index.html#yonetim-kurulu" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Yönetim</a>
+                    <a href="hakkimizda.html" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Hakkımızda</a>
                     
                     <!-- DİJİTAL ÜYE KARTI BUTONU -->
                     <button onclick="handleMemberCardClick()" id="navCardBtn" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all border shadow-sm bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 border-amber-400 hover:shadow-amber-500/30 transform hover:-translate-y-0.5">
@@ -217,21 +217,22 @@
         <!-- MOBİL MENÜ -->
         <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-200 shadow-2xl w-full absolute top-full left-0 z-50">
             <div class="px-5 pt-4 pb-6 space-y-2">
-                <a href="index.html#hakkimizda" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
-                    <i class="fa-solid fa-compass text-blue-600 w-5"></i> Hakkımızda
+                <a href="index.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-house text-blue-600 w-5"></i> Ana Sayfa
                 </a>
-                <a href="index.html#etkinlikler" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
-                    <i class="fa-solid fa-calendar-check text-blue-600 w-5"></i> Etkinlikler
-                </a>
-                <a href="index.html#sponsorlar" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-amber-600 hover:bg-amber-50 transition-colors">
+                <a href="sponsorlar.html" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-amber-600 hover:bg-amber-50 transition-colors">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-tags text-amber-500 w-5"></i> Sponsorlarımız & İndirimler</span>
+                    <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">%30 İndirim</span>
+                </a>
+                <a href="etkinlikler.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-calendar-check text-blue-600 w-5"></i> Etkinlikler & Geziler
                 </a>
                 <a href="cekilis.html" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-amber-700 bg-amber-50 transition-colors">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-gift text-amber-500 w-5"></i> Büyük Çekiliş</span>
                     <span class="bg-amber-500 text-slate-950 text-xs px-2 py-0.5 rounded-full font-black">Aktif</span>
                 </a>
-                <a href="index.html#yonetim-kurulu" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
-                    <i class="fa-solid fa-users text-blue-600 w-5"></i> Yönetim Kurulu
+                <a href="hakkimizda.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fa-solid fa-users text-blue-600 w-5"></i> Hakkımızda & Kulüp
                 </a>
                 <div class="pt-2">
                     <button onclick="handleMemberCardClick()" id="mobileDrawerCardBtn" class="w-full text-center bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 px-4 py-3.5 rounded-xl font-black shadow-md flex items-center justify-center gap-2 transition-all">
@@ -1155,5 +1156,39 @@
             });
         }
     </script>
+
+    <!-- ========================================================================= -->
+    <!-- 📱 MOBİL ALT GEZİNME ÇUBUĞU (APP-STYLE BOTTOM TAB BAR) -->
+    <!-- ========================================================================= -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 py-1.5 flex items-center justify-around">
+        <a href="index.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-blue-600 transition-colors">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px] font-bold mt-0.5">Ana Sayfa</span>
+        </a>
+        <a href="sponsorlar.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-amber-600 transition-colors">
+            <i class="fa-solid fa-tags text-lg"></i>
+            <span class="text-[10px] font-bold mt-0.5">İndirimler</span>
+        </a>
+        <a href="etkinlikler.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-blue-600 transition-colors">
+            <i class="fa-solid fa-calendar-days text-lg"></i>
+            <span class="text-[10px] font-bold mt-0.5">Etkinlik</span>
+        </a>
+        <a href="cekilis.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-amber-600 bg-amber-50 font-black relative">
+            <span class="absolute -top-1 right-2 flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+            </span>
+            <i class="fa-solid fa-gift text-lg text-amber-500"></i>
+            <span class="text-[10px] font-extrabold mt-0.5">Çekiliş</span>
+        </a>
+        <a href="hakkimizda.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-blue-600 transition-colors">
+            <i class="fa-solid fa-users text-lg"></i>
+            <span class="text-[10px] font-bold mt-0.5">Kulüp</span>
+        </a>
+        <button onclick="handleMemberCardClick()" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-amber-600 active:scale-95 transition-transform">
+            <i class="fa-solid fa-id-card text-lg"></i>
+            <span class="text-[10px] font-bold mt-0.5">Kartım</span>
+        </button>
+    </nav>
 </body>
 </html>
