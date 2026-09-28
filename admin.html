@@ -681,8 +681,9 @@
 
             async getMembers() {
                 try {
-                    const res = await fetch(`${this.API_BASE}/members`, {
-                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    const res = await fetch(`${this.API_BASE}/members?_t=${Date.now()}`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY },
+                        cache: 'no-store'
                     });
                     if (res.ok) {
                         const data = await res.json();
@@ -713,8 +714,9 @@
 
             async getGifts() {
                 try {
-                    const res = await fetch(`${this.API_BASE}/gifts`, {
-                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    const res = await fetch(`${this.API_BASE}/gifts?_t=${Date.now()}`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY },
+                        cache: 'no-store'
                     });
                     if (res.ok) {
                         const data = await res.json();
@@ -745,8 +747,9 @@
 
             async getPool() {
                 try {
-                    const res = await fetch(`${this.API_BASE}/pool`, {
-                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    const res = await fetch(`${this.API_BASE}/pool?_t=${Date.now()}`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY },
+                        cache: 'no-store'
                     });
                     if (res.ok) {
                         const data = await res.json();
@@ -777,8 +780,9 @@
 
             async getGiveawayConfig() {
                 try {
-                    const res = await fetch(`${this.API_BASE}/giveaway_config`, {
-                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    const res = await fetch(`${this.API_BASE}/giveaway_config?_t=${Date.now()}`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY },
+                        cache: 'no-store'
                     });
                     if (res.ok) {
                         const data = await res.json();
@@ -809,8 +813,9 @@
 
             async getAnalytics() {
                 try {
-                    const res = await fetch(`${this.API_BASE}/analytics`, {
-                        headers: { 'X-Mantle-Key': this.API_KEY }
+                    const res = await fetch(`${this.API_BASE}/analytics?_t=${Date.now()}`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY },
+                        cache: 'no-store'
                     });
                     if (res.ok) {
                         return await res.json();
@@ -1455,13 +1460,27 @@
             };
 
             if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
+            const normTargetNo = String(targetStudentNo || '').trim().toLowerCase();
             // Önceki varsa sil
-            cachedCloudData.gifts = cachedCloudData.gifts.filter(g => String(g.target || '').trim() !== targetStudentNo);
+            cachedCloudData.gifts = cachedCloudData.gifts.filter(g => String(g.target || '').trim().toLowerCase() !== normTargetNo);
             cachedCloudData.gifts.unshift(newGiftItem);
+
+            // Members koleksiyonundaki üyeyi de bulup wonGift ekle (iOS ve çapraz cihaz senkronizasyonu için)
+            const allMembers = cachedCloudData.members || [];
+            const targetMember = allMembers.find(m => String(m.studentNo || '').trim().toLowerCase() === normTargetNo);
+            if (targetMember) {
+                targetMember.wonGift = {
+                    title: giftTitle,
+                    code: giftCode,
+                    id: newGiftItem.id,
+                    assignedAt: new Date().toISOString()
+                };
+            }
 
             // Buluta ve yerel hafızaya kaydet
             await Promise.all([
                 CloudSync.pushGifts(cachedCloudData.gifts),
+                CloudSync.pushMembers(allMembers),
                 poolItemId ? CloudSync.pushPool(getGiftPool()) : Promise.resolve()
             ]);
 
@@ -1471,7 +1490,7 @@
             const localMemberRaw = localStorage.getItem(STORAGE_KEY);
             if (localMemberRaw) {
                 const localMember = JSON.parse(localMemberRaw);
-                if (String(localMember.studentNo || '').trim() === targetStudentNo) {
+                if (String(localMember.studentNo || '').trim().toLowerCase() === normTargetNo) {
                     localMember.wonGift = { title: giftTitle, code: giftCode, id: newGiftItem.id };
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(localMember));
                 }
@@ -2028,9 +2047,21 @@
                 }
             }
 
+            const targetNo = itemToDelete ? String(itemToDelete.target || '').trim().toLowerCase() : '';
             cachedCloudData.gifts = gifts.filter(item => item.id !== id);
+
+            // Members koleksiyonundan da bu üyenin hediyesini kaldır
+            const allMembers = cachedCloudData.members || [];
+            if (targetNo) {
+                const targetMember = allMembers.find(m => String(m.studentNo || '').trim().toLowerCase() === targetNo);
+                if (targetMember) {
+                    delete targetMember.wonGift;
+                }
+            }
+
             await Promise.all([
                 CloudSync.pushGifts(cachedCloudData.gifts),
+                CloudSync.pushMembers(allMembers),
                 CloudSync.pushPool(getGiftPool())
             ]);
 
@@ -2046,8 +2077,15 @@
             const pool = getGiftPool();
             pool.forEach(p => p.distributed = 0);
 
+            // Tüm üyelerden wonGift temizle
+            const allMembers = cachedCloudData.members || [];
+            allMembers.forEach(m => {
+                delete m.wonGift;
+            });
+
             await Promise.all([
                 CloudSync.pushGifts([]),
+                CloudSync.pushMembers(allMembers),
                 CloudSync.pushPool(pool)
             ]);
             saveGiftPool(pool);

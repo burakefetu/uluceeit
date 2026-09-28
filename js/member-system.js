@@ -112,8 +112,9 @@
 
         async getMembers() {
             try {
-                const res = await fetch(`${this.API_BASE}/members`, {
-                    headers: { 'X-Mantle-Key': this.API_KEY }
+                const res = await fetch(`${this.API_BASE}/members?_t=${Date.now()}`, {
+                    headers: { 'X-Mantle-Key': this.API_KEY },
+                    cache: 'no-store'
                 });
                 if (res.ok) {
                     const data = await res.json();
@@ -144,8 +145,9 @@
 
         async getGifts() {
             try {
-                const res = await fetch(`${this.API_BASE}/gifts`, {
-                    headers: { 'X-Mantle-Key': this.API_KEY }
+                const res = await fetch(`${this.API_BASE}/gifts?_t=${Date.now()}`, {
+                    headers: { 'X-Mantle-Key': this.API_KEY },
+                    cache: 'no-store'
                 });
                 if (res.ok) {
                     const data = await res.json();
@@ -161,12 +163,25 @@
             return cached ? JSON.parse(cached) : [];
         },
 
+        async pushGifts(gifts) {
+            try {
+                localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(gifts));
+                await fetch(`${this.API_BASE}/gifts`, {
+                    method: 'POST',
+                    headers: this.getHeaders(),
+                    body: JSON.stringify(gifts)
+                });
+            } catch (e) {
+                console.warn('MantleDB gifts push error:', e);
+            }
+        },
+
         async registerMember(member) {
             try {
                 if (!member || !member.studentNo) return;
                 const members = await this.getMembers();
-                const sNo = String(member.studentNo).trim();
-                const idx = members.findIndex(m => String(m.studentNo || '').trim() === sNo);
+                const sNo = String(member.studentNo).trim().toLowerCase();
+                const idx = members.findIndex(m => String(m.studentNo || '').trim().toLowerCase() === sNo);
                 if (idx >= 0) {
                     members[idx] = { ...members[idx], ...member };
                 } else {
@@ -181,10 +196,20 @@
         async checkGiftForStudent(studentNo) {
             try {
                 if (!studentNo) return null;
-                const sNo = String(studentNo).trim();
+                const sNo = String(studentNo).trim().toLowerCase();
+                
+                // 1. /gifts tablosunu tara
                 const gifts = await this.getGifts();
-                const gift = gifts.find(g => String(g.target || '').trim() === sNo);
-                return gift || null;
+                const gift = gifts.find(g => String(g.target || '').trim().toLowerCase() === sNo);
+                if (gift) return gift;
+
+                // 2. /members tablosunu tara (üyenin üzerinde wonGift olabilir)
+                const members = await this.getMembers();
+                const member = members.find(m => String(m.studentNo || '').trim().toLowerCase() === sNo);
+                if (member && member.wonGift && (member.wonGift.code || member.wonGift.title)) {
+                    return member.wonGift;
+                }
+                return null;
             } catch (e) {
                 return null;
             }
@@ -192,11 +217,17 @@
 
         async restoreMemberByStudentNo(studentNo) {
             try {
-                const sNo = String(studentNo).trim();
+                const sNo = String(studentNo).trim().toLowerCase();
                 if (!sNo) return null;
                 const members = await this.getMembers();
-                const member = members.find(m => String(m.studentNo || '').trim() === sNo);
+                const member = members.find(m => String(m.studentNo || '').trim().toLowerCase() === sNo);
                 if (member) {
+                    // Buluttaki güncel hediyeyi de kontrol et
+                    const gifts = await this.getGifts();
+                    const gift = gifts.find(g => String(g.target || '').trim().toLowerCase() === sNo);
+                    if (gift) {
+                        member.wonGift = { title: gift.title, code: gift.code, id: gift.id };
+                    }
                     saveStoredMember(member);
                     return member;
                 }
@@ -210,8 +241,9 @@
                 if (sessionStorage.getItem(sessionKey)) return;
                 sessionStorage.setItem(sessionKey, 'true');
 
-                const res = await fetch(`${this.API_BASE}/analytics`, {
-                    headers: { 'X-Mantle-Key': this.API_KEY }
+                const res = await fetch(`${this.API_BASE}/analytics?_t=${Date.now()}`, {
+                    headers: { 'X-Mantle-Key': this.API_KEY },
+                    cache: 'no-store'
                 });
                 let stats = { totalViews: 0, lastVisit: new Date().toISOString() };
                 if (res.ok) {
@@ -300,6 +332,26 @@
     // =========================================================================
     // 🪪 DİJİTAL KART TIKLAMA VE AÇILMA MANTIĞI
     // =========================================================================
+    async function syncAndCheckGiftForMember(member) {
+        if (!member || !member.studentNo) return member;
+        try {
+            const gift = await CloudSync.checkGiftForStudent(member.studentNo);
+            if (gift && (gift.code || gift.title)) {
+                if (!member.wonGift || member.wonGift.code !== gift.code || member.wonGift.title !== gift.title) {
+                    member.wonGift = { title: gift.title, code: gift.code, id: gift.id || ('GIFT-' + Date.now()) };
+                    saveStoredMember(member);
+                    renderMemberCard(member);
+                }
+            } else if (member.wonGift) {
+                // Eğer admin panelinden hediye silindiyse veya sıfırlandıysa karttan da düşür
+                delete member.wonGift;
+                saveStoredMember(member);
+                renderMemberCard(member);
+            }
+        } catch (e) {}
+        return member;
+    }
+
     function handleMemberCardClick() {
         closeMobileMenu();
         const member = getStoredMember();
@@ -308,6 +360,9 @@
             renderMemberCard(member);
             const modal = document.getElementById('memberCardModal');
             if (modal) modal.classList.remove('hidden');
+
+            // ⚡ iOS & Canlı Senkronizasyon: Kart açıldığında anında buluttan hediyeyi kontrol et ve güncelle
+            syncAndCheckGiftForMember(member);
         } else {
             // Henüz kart oluşturulmamışsa bilgilendirme/geri yükleme modalını aç
             const unregistered = document.getElementById('unregisteredModal');
@@ -559,12 +614,29 @@
         if (modal) modal.classList.add('hidden');
     }
 
-    function confirmRedeemGift() {
+    async function confirmRedeemGift() {
         closeRedeemConfirmModal();
         const member = getStoredMember();
         if (member) {
             delete member.wonGift;
             saveStoredMember(member);
+
+            // Buluttan da bu öğrencinin hediyesini kaldır ki tekrar belirmesin
+            if (member.studentNo) {
+                try {
+                    const sNo = String(member.studentNo).trim().toLowerCase();
+                    const gifts = await CloudSync.getGifts();
+                    const filtered = gifts.filter(g => String(g.target || '').trim().toLowerCase() !== sNo);
+                    await CloudSync.pushGifts(filtered);
+
+                    const members = await CloudSync.getMembers();
+                    const m = members.find(x => String(x.studentNo || '').trim().toLowerCase() === sNo);
+                    if (m && m.wonGift) {
+                        delete m.wonGift;
+                        await CloudSync.pushMembers(members);
+                    }
+                } catch (e) {}
+            }
         }
 
         const giftCont = document.getElementById('wonGiftContainer') || document.getElementById('cardWonGiftContainer');
@@ -655,15 +727,10 @@
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
-        // Arka planda aktif üye senkronizasyonu
+        // Arka planda aktif üye ve hediye senkronizasyonu
         const member = getStoredMember();
         if (member && member.studentNo) {
-            CloudSync.checkGiftForStudent(member.studentNo).then(gift => {
-                if (gift && (!member.wonGift || member.wonGift.code !== gift.code)) {
-                    member.wonGift = { title: gift.title, code: gift.code, id: gift.id };
-                    saveStoredMember(member);
-                }
-            }).catch(() => {});
+            syncAndCheckGiftForMember(member);
         }
     }
 
@@ -674,10 +741,23 @@
         initMemberSystem();
     }
 
-    // Tarayıcı geri-ileri butonları ve sekme değişiminde durumu tazele
-    window.addEventListener('pageshow', updateNavbarCardState);
+    // Tarayıcı geri-ileri butonları ve sekme değişiminde durumu tazele (özellikle iOS Safari için)
+    window.addEventListener('pageshow', () => {
+        updateNavbarCardState();
+        const member = getStoredMember();
+        if (member && member.studentNo) {
+            syncAndCheckGiftForMember(member);
+        }
+    });
+
     document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') updateNavbarCardState();
+        if (document.visibilityState === 'visible') {
+            updateNavbarCardState();
+            const member = getStoredMember();
+            if (member && member.studentNo) {
+                syncAndCheckGiftForMember(member);
+            }
+        }
     });
 
     // Global fonksiyonları dışarı aktar

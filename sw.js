@@ -1,4 +1,4 @@
-const CACHE_NAME = 'uluceeit-pwa-v4';
+const CACHE_NAME = 'uluceeit-pwa-v5';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -47,8 +47,12 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // HTML sayfaları ve gezinme istekleri için: Network First, Fallback to Cache
-  if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
+  // HTML sayfaları ve JS kodları için: Network First, Fallback to Cache
+  if (
+    event.request.mode === 'navigate' || 
+    event.request.headers.get('accept')?.includes('text/html') ||
+    url.pathname.endsWith('.js')
+  ) {
     event.respondWith(
       fetch(event.request)
         .then(response => {
