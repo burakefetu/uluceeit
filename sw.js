@@ -1,4 +1,4 @@
-const CACHE_NAME = 'uluceeit-pwa-v3';
+const CACHE_NAME = 'uluceeit-pwa-v4';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -15,15 +15,15 @@ const STATIC_ASSETS = [
 
 // Install: Statik varlıkları önbelleğe al
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(STATIC_ASSETS);
     })
   );
-  self.skipWaiting();
 });
 
-// Activate: Eski önbellekleri temizle
+// Activate: Eski önbellekleri anında temizle ve istemcileri devral
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => {
@@ -34,9 +34,8 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 // Fetch: Ağ öncelikli (Network First) - Çevrimdışıyken önbellekten sun

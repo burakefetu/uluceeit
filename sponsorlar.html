@@ -707,12 +707,25 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             if (window.CloudSync) CloudSync.recordVisit('sponsorlar');
+            
+            // Eski sürüm önbelleklerini temizle
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        if (name !== 'uluceeit-pwa-v4') {
+                            caches.delete(name);
+                        }
+                    });
+                });
+            }
         });
 
-        // PWA Service Worker
+        // PWA Service Worker (Otomatik Güncelleme Destekli)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {});
+                navigator.serviceWorker.register('./sw.js').then(reg => {
+                    reg.update();
+                }).catch(() => {});
             });
         }
     </script>
