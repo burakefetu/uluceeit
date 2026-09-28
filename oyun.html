@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>10 Saniyede Durdur Hediyeni Kazan! - ULUÇEEİT</title>
+  
+  <base href="/">
+  <link rel="icon" type="image/png" href="/logo.png">
+  <meta name="theme-color" content="#020617">
+  
+  <!-- Stand & iPad Kiosk Optimizasyonu -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="10Sn Hediyeni Kazan">
+  <meta name="mobile-web-app-capable" content="yes">
+  
+  <!-- Arama motorları indekslemesin (Gizli stant sayfası) -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Confetti Kütüphanesi -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800;900&family=Inter:wght@400;600;800;900&family=Share+Tech+Mono&display=swap');
+
+    :root {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    body {
+      touch-action: manipulation;
+      overscroll-behavior: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .font-digital {
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .font-heading {
+      font-family: 'Chakra Petch', 'Inter', sans-serif;
+    }
+
+    /* 3D Kırmızı Arcade Buton Stili */
+    .arcade-button-container {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      padding: 18px;
+      background: radial-gradient(circle at 50% 30%, #334155, #0f172a 75%, #020617 100%);
+      box-shadow: 
+        0 20px 45px -10px rgba(0, 0, 0, 0.9),
+        0 0 0 3px rgba(255, 255, 255, 0.1),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.8);
+      transition: all 0.15s ease;
+    }
+
+    .arcade-button {
+      position: relative;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 40% 30%, #ff4b4b 0%, #dc2626 50%, #991b1b 85%, #7f1d1d 100%);
+      box-shadow: 
+        0 14px 0 #7f1d1d,
+        0 18px 25px rgba(0, 0, 0, 0.85),
+        0 0 40px rgba(239, 68, 68, 0.5),
+        inset 0 4px 10px rgba(255, 255, 255, 0.5),
+        inset 0 -6px 12px rgba(0, 0, 0, 0.6);
+      transform: translateY(0);
+      transition: transform 0.06s cubic-bezier(0.2, 0.8, 0.4, 1), box-shadow 0.06s cubic-bezier(0.2, 0.8, 0.4, 1);
+      cursor: pointer;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .arcade-button:active, .arcade-button.pressed {
+      transform: translateY(10px);
+      box-shadow: 
+        0 4px 0 #7f1d1d,
+        0 6px 12px rgba(0, 0, 0, 0.8),
+        0 0 60px rgba(239, 68, 68, 0.8),
+        inset 0 2px 5px rgba(255, 255, 255, 0.3),
+        inset 0 -3px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Çalışırken yanıp sönen neon halka efekti */
+    .running-pulse {
+      animation: pulse-ring 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7), 0 0 50px rgba(239, 68, 68, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 0 16px rgba(239, 68, 68, 0), 0 0 80px rgba(239, 68, 68, 0.9);
+      }
+    }
+
+    /* Zafer kutlaması parlaması */
+    .win-glow {
+      animation: win-pulse 1s infinite alternate;
+    }
+
+    @keyframes win-pulse {
+      from {
+        box-shadow: 0 0 30px rgba(234, 179, 8, 0.5), inset 0 0 20px rgba(234, 179, 8, 0.2);
+        border-color: rgba(250, 204, 21, 0.8);
+      }
+      to {
+        box-shadow: 0 0 60px rgba(234, 179, 8, 0.9), inset 0 0 35px rgba(234, 179, 8, 0.4);
+        border-color: rgba(250, 204, 21, 1);
+      }
+    }
+  </style>
+</head>
+<body class="h-full bg-slate-950 text-white flex flex-col justify-between items-center select-none overflow-hidden relative">
+
+  <!-- Arka Plan Efekti -->
+  <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/30 via-slate-950 to-black z-0"></div>
+  <div class="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] z-0"></div>
+
+  <!-- Üst Köşe Kontrolleri (Stant Görevlileri İçin Gizli/Açık Düğmeler) -->
+  <div class="absolute top-4 left-4 z-50 flex items-center gap-2">
+    <button id="soundToggleBtn" class="w-11 h-11 rounded-full bg-slate-900/70 border border-slate-700/60 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-center backdrop-blur-md transition-all active:scale-90" title="Sesi Aç / Kapat">
+      <i id="soundIcon" class="fas fa-volume-up text-base"></i>
+    </button>
+  </div>
+
+  <div class="absolute top-4 right-4 z-50 flex items-center gap-2">
+    <button id="fullscreenBtn" class="w-11 h-11 rounded-full bg-slate-900/70 border border-slate-700/60 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-center backdrop-blur-md transition-all active:scale-90" title="Tam Ekran">
+      <i class="fas fa-expand text-base"></i>
+    </button>
+    <button id="settingsBtn" class="w-11 h-11 rounded-full bg-slate-900/70 border border-slate-700/60 text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center backdrop-blur-md transition-all active:scale-90" title="Stant Ayarları">
+      <i class="fas fa-cog text-base"></i>
+    </button>
+  </div>
+
+  <!-- ÜST KISIM: Sadece Kulüp Logosu ve Başlık (Kullanıcı İsteği: "üstte yazı fln olmasın sadece logomuz olsun bide 10 saniyede durdur hediyeni kazan yazsın") -->
+  <header class="w-full flex flex-col items-center justify-center pt-8 sm:pt-10 z-10 px-4 text-center">
+    <!-- Kulüp Logosu -->
+    <div class="relative group">
+      <div class="absolute -inset-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition duration-500"></div>
+      <img src="/logo.png" onerror="this.src='/logo.jpg'" alt="Topluluk Logosu" class="relative h-20 sm:h-24 md:h-28 w-auto object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] pointer-events-none">
+    </div>
+
+    <!-- Başlık -->
+    <h1 class="font-heading font-black tracking-wide text-2xl sm:text-3xl md:text-5xl uppercase mt-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-200 to-yellow-400 drop-shadow-[0_3px_15px_rgba(234,179,8,0.4)]">
+      10 SANİYEDE DURDUR HEDİYENİ KAZAN
+    </h1>
+
+    <!-- Küçük Hedef Rozeti -->
+    <div class="inline-flex items-center gap-2 mt-2 px-4 py-1.5 rounded-full bg-slate-900/80 border border-amber-500/30 text-amber-300 text-xs sm:text-sm font-semibold tracking-wider shadow-inner">
+      <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+      <span>HEDEF: TAM 10.00 SANİYE</span>
+    </div>
+  </header>
+
+  <!-- ORTA KISIM: Büyük Dijital Sayaç -->
+  <main class="w-full flex flex-col items-center justify-center my-auto z-10 px-4">
+    
+    <!-- Sayaç Gövdesi -->
+    <div id="displayBoard" class="relative w-full max-w-xl sm:max-w-2xl bg-gradient-to-b from-slate-900 via-slate-950 to-black p-5 sm:p-7 rounded-3xl border-2 border-slate-700/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.1)] transition-all duration-300">
+      
+      <!-- Sayaç Ekranı (İç Kısım) -->
+      <div class="relative bg-slate-950/90 rounded-2xl border border-slate-800/80 p-6 sm:p-9 flex flex-col items-center justify-center overflow-hidden shadow-inner">
+        
+        <!-- Ekran Tarama Çizgileri Efekti -->
+        <div class="absolute inset-0 pointer-events-none opacity-5 bg-[repeating-linear-gradient(0deg,#000,#000_2px,transparent_2px,transparent_4px)]"></div>
+
+        <!-- Sayaç Rakamları -->
+        <div class="relative flex items-baseline justify-center font-digital select-none">
+          <span id="timeSec" class="text-7xl sm:text-8xl md:text-9xl font-black tracking-wider text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.6)]">
+            00
+          </span>
+          <span class="text-7xl sm:text-8xl md:text-9xl font-black text-cyan-300/80 mx-1">:</span>
+          <span id="timeMs" class="text-7xl sm:text-8xl md:text-9xl font-black tracking-wider text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.6)]">
+            00
+          </span>
+        </div>
+
+        <!-- Durum Bildirimi / Sonuç Mesajı -->
+        <div id="statusMessage" class="mt-4 px-5 py-2 rounded-xl text-center font-bold text-sm sm:text-base md:text-lg tracking-wide transition-all duration-300 text-slate-400 bg-slate-900/60 border border-slate-800">
+          BAŞLAMAK İÇİN AŞAĞIDAKİ KIRMIZI BUTONA BAS
+        </div>
+
+      </div>
+
+      <!-- Alt Skor & İstatistik Bilgi Çubuğu (Stant Takibi) -->
+      <div class="flex items-center justify-between text-xs sm:text-sm text-slate-400 mt-4 px-2">
+        <div class="flex items-center gap-1.5">
+          <i class="fas fa-bullseye text-amber-400"></i>
+          <span>En Yakın: <strong id="bestScoreText" class="text-white">--.--</strong></span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i class="fas fa-trophy text-yellow-400"></i>
+          <span>Kazanılan: <strong id="totalWinsText" class="text-white">0</strong></span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i class="fas fa-play text-blue-400"></i>
+          <span>Deneme: <strong id="totalPlaysText" class="text-white">0</strong></span>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ALT KISIM: Kocaman 3D Kırmızı Arcade Butonu (iPad Standı İçin Optimize) -->
+  <footer class="w-full flex flex-col items-center justify-center pb-10 sm:pb-14 z-10 px-4">
+    
+    <div class="arcade-button-container" id="buttonContainer">
+      <button 
+        id="arcadeButton" 
+        class="arcade-button w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 flex flex-col items-center justify-center gap-2"
+        aria-label="Oyunu Başlat veya Durdur">
+        
+        <i id="btnIcon" class="fas fa-play text-4xl sm:text-5xl text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"></i>
+        
+        <span id="btnText" class="font-heading font-black text-2xl sm:text-3xl tracking-widest text-white uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          BAŞLAT
+        </span>
+
+      </button>
+    </div>
+
+    <div class="mt-4 text-xs sm:text-sm font-semibold text-slate-400/80 tracking-wide text-center">
+      <i class="fas fa-hand-pointer mr-1 text-red-400 animate-bounce"></i>
+      Dokunarak başlat, tam 10.00'da dokunarak durdur!
+    </div>
+
+  </footer>
+
+  <!-- AYARLAR & STANT YÖNETİM MODALI (GİZLİ GÖREVLİ MENÜSÜ) -->
+  <div id="settingsModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-md p-6 shadow-2xl relative">
+      <button id="closeSettingsBtn" class="absolute top-5 right-5 text-slate-400 hover:text-white w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+          <i class="fas fa-sliders-h"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-lg text-white">Stant Oyun Ayarları</h3>
+          <p class="text-xs text-slate-400">Hassasiyet ve Sayaç Yönetimi</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Tolerans Seçimi -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Kazanma Toleransı</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button data-tolerance="0.00" class="tol-btn py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-800/80 text-xs font-bold text-slate-200 hover:bg-slate-700 text-center transition">
+              Tam 10.00<br><span class="text-[10px] text-slate-400 font-normal">Zor</span>
+            </button>
+            <button data-tolerance="0.02" class="tol-btn py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-800/80 text-xs font-bold text-slate-200 hover:bg-slate-700 text-center transition">
+              ±0.02 sn<br><span class="text-[10px] text-slate-400 font-normal">9.98 - 10.02</span>
+            </button>
+            <button data-tolerance="0.05" class="tol-btn py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-800/80 text-xs font-bold text-slate-200 hover:bg-slate-700 text-center transition">
+              ±0.05 sn<br><span class="text-[10px] text-slate-400 font-normal">9.95 - 10.05</span>
+            </button>
+          </div>
+          <p id="currentTolDesc" class="text-[11px] text-amber-400/90 mt-1.5 font-medium"></p>
+        </div>
+
+        <!-- Test Butonları -->
+        <div class="pt-2 border-t border-slate-800 flex gap-2">
+          <button id="testWinBtn" class="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 text-xs font-bold hover:bg-emerald-600/50 flex items-center justify-center gap-1.5">
+            <i class="fas fa-trophy"></i> Zafer Efektini Test Et
+          </button>
+          <button id="resetStatsBtn" class="py-2.5 px-3 rounded-xl bg-red-600/20 border border-red-500/30 text-red-300 text-xs font-bold hover:bg-red-600/40 flex items-center justify-center gap-1.5">
+            <i class="fas fa-trash-alt"></i> Skorları Sıfırla
+          </button>
+        </div>
+
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-slate-800 flex justify-end">
+        <button id="saveSettingsBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-600/30 transition">
+          Tamam
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OYUN MOTORU & SES SİSTEMİ -->
+  <script>
+    (function() {
+      // 1. Durum Değişkenleri
+      let state = 'IDLE'; // 'IDLE', 'RUNNING', 'STOPPED'
+      let startTime = 0;
+      let elapsedTime = 0; // saniye cinsinden
+      let animFrameId = null;
+      let soundEnabled = true;
+      let tolerance = 0.00; // Varsayılan: Tam 10.00
+      let stats = {
+        totalPlays: 0,
+        totalWins: 0,
+        bestDiff: null,
+        bestTime: null
+      };
+
+      // 2. DOM Elemanları
+      const timeSec = document.getElementById('timeSec');
+      const timeMs = document.getElementById('timeMs');
+      const statusMessage = document.getElementById('statusMessage');
+      const displayBoard = document.getElementById('displayBoard');
+      const arcadeButton = document.getElementById('arcadeButton');
+      const buttonContainer = document.getElementById('buttonContainer');
+      const btnIcon = document.getElementById('btnIcon');
+      const btnText = document.getElementById('btnText');
+      const soundToggleBtn = document.getElementById('soundToggleBtn');
+      const soundIcon = document.getElementById('soundIcon');
+      const fullscreenBtn = document.getElementById('fullscreenBtn');
+      const settingsBtn = document.getElementById('settingsBtn');
+      const settingsModal = document.getElementById('settingsModal');
+      const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+      const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+      const testWinBtn = document.getElementById('testWinBtn');
+      const resetStatsBtn = document.getElementById('resetStatsBtn');
+      const totalPlaysText = document.getElementById('totalPlaysText');
+      const totalWinsText = document.getElementById('totalWinsText');
+      const bestScoreText = document.getElementById('bestScoreText');
+      const currentTolDesc = document.getElementById('currentTolDesc');
+
+      // 3. Web Audio API (İnternetsiz / Sıfır Gecikmeli Ses Efektleri)
+      let audioCtx = null;
+      function initAudio() {
+        if (!audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            audioCtx = new AudioContext();
+          }
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      }
+
+      function playTone(freq, type, duration, gainVal = 0.3) {
+        if (!soundEnabled || !audioCtx) return;
+        try {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch(e) {}
+      }
+
+      function playStartSound() {
+        if (!soundEnabled) return;
+        initAudio();
+        playTone(523.25, 'triangle', 0.12, 0.4); // C5
+        setTimeout(() => playTone(659.25, 'triangle', 0.25, 0.4), 100); // E5
+      }
+
+      function playStopSound() {
+        if (!soundEnabled) return;
+        initAudio();
+        playTone(320, 'square', 0.1, 0.3);
+      }
+
+      function playWinFanfare() {
+        if (!soundEnabled) return;
+        initAudio();
+        const notes = [
+          { f: 523.25, d: 0.12 }, // C5
+          { f: 659.25, d: 0.12 }, // E5
+          { f: 783.99, d: 0.12 }, // G5
+          { f: 1046.50, d: 0.40 } // C6
+        ];
+        notes.forEach((n, idx) => {
+          setTimeout(() => {
+            playTone(n.f, 'triangle', n.d, 0.5);
+          }, idx * 110);
+        });
+      }
+
+      function playNearMissSound() {
+        if (!soundEnabled) return;
+        initAudio();
+        playTone(440, 'sine', 0.15, 0.25);
+        setTimeout(() => playTone(392, 'sine', 0.3, 0.2), 120);
+      }
+
+      // 4. İstatistikleri ve Ayarları Yükle / Kaydet
+      function loadSettingsAndStats() {
+        try {
+          const savedTol = localStorage.getItem('stand_game_tol');
+          if (savedTol !== null) tolerance = parseFloat(savedTol);
+
+          const savedStats = localStorage.getItem('stand_game_stats');
+          if (savedStats) {
+            stats = Object.assign(stats, JSON.parse(savedStats));
+          }
+        } catch(e) {}
+
+        updateStatsUI();
+        updateTolUI();
+      }
+
+      function saveStats() {
+        try {
+          localStorage.setItem('stand_game_stats', JSON.stringify(stats));
+        } catch(e) {}
+        updateStatsUI();
+      }
+
+      function updateStatsUI() {
+        totalPlaysText.textContent = stats.totalPlays || 0;
+        totalWinsText.textContent = stats.totalWins || 0;
+        if (stats.bestTime !== null) {
+          bestScoreText.textContent = stats.bestTime.toFixed(2) + 's';
+        } else {
+          bestScoreText.textContent = '--.--';
+        }
+      }
+
+      function updateTolUI() {
+        document.querySelectorAll('.tol-btn').forEach(btn => {
+          const val = parseFloat(btn.dataset.tolerance);
+          if (val === tolerance) {
+            btn.classList.add('bg-blue-600', 'border-blue-400', 'text-white');
+            btn.classList.remove('bg-slate-800/80', 'border-slate-700');
+          } else {
+            btn.classList.remove('bg-blue-600', 'border-blue-400', 'text-white');
+            btn.classList.add('bg-slate-800/80', 'border-slate-700');
+          }
+        });
+
+        if (tolerance === 0.00) {
+          currentTolDesc.textContent = 'Hedef: Sadece tam 10.00 saniyede durduran kazanır.';
+        } else {
+          const min = (10 - tolerance).toFixed(2);
+          const max = (10 + tolerance).toFixed(2);
+          currentTolDesc.textContent = 'Hedef: ' + min + ' sn ile ' + max + ' sn arasında durduran kazanır.';
+        }
+      }
+
+      // 5. Sayaç Formatlama & Render
+      function renderTime(seconds) {
+        const sec = Math.floor(seconds);
+        const ms = Math.floor((seconds % 1) * 100);
+        timeSec.textContent = sec.toString().padStart(2, '0');
+        timeMs.textContent = ms.toString().padStart(2, '0');
+      }
+
+      function tick() {
+        if (state !== 'RUNNING') return;
+        const now = performance.now();
+        elapsedTime = (now - startTime) / 1000;
+
+        // 30 saniye sonra otomatik durdurma
+        if (elapsedTime >= 30.00) {
+          stopGame();
+          return;
+        }
+
+        renderTime(elapsedTime);
+        animFrameId = requestAnimationFrame(tick);
+      }
+
+      // 6. Konfeti Patlaması
+      function triggerWinConfetti() {
+        if (typeof confetti === 'function') {
+          const count = 200;
+          const defaults = {
+            origin: { y: 0.65 }
+          };
+
+          function fire(particleRatio, opts) {
+            confetti(Object.assign({}, defaults, opts, {
+              particleCount: Math.floor(count * particleRatio)
+            }));
+          }
+
+          fire(0.25, { spread: 26, startVelocity: 55 });
+          fire(0.2, { spread: 60 });
+          fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+          fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+          fire(0.1, { spread: 120, startVelocity: 45 });
+        }
+      }
+
+      // 7. Oyunu Başlat
+      function startGame() {
+        initAudio();
+        state = 'RUNNING';
+        elapsedTime = 0;
+        renderTime(0);
+
+        // Ekran efektlerini sıfırla
+        displayBoard.classList.remove('win-glow', 'border-yellow-400', 'border-emerald-500', 'border-red-500');
+        displayBoard.classList.add('border-slate-700/80');
+
+        timeSec.className = "text-7xl sm:text-8xl md:text-9xl font-black tracking-wider text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.6)]";
+        timeMs.className = "text-7xl sm:text-8xl md:text-9xl font-black tracking-wider text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.6)]";
+
+        // Buton görünümü: DURDUR!
+        buttonContainer.classList.add('running-pulse');
+        btnIcon.className = "fas fa-hand-paper text-4xl sm:text-5xl text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]";
+        btnText.textContent = "DURDUR!";
+
+        // Durum mesajı
+        statusMessage.className = "mt-4 px-5 py-2 rounded-xl text-center font-bold text-sm sm:text-base md:text-lg tracking-wide transition-all duration-300 text-yellow-300 bg-yellow-950/40 border border-yellow-500/40 animate-pulse";
+        statusMessage.innerHTML = '<i class="fas fa-stopwatch mr-1.5"></i>ODAKLAN VE TAM 10.00\'DA DURDUR!';
+
+        playStartSound();
+
+        // Ekran uykusunu önle (iPad Kiosk için)
+        if ('wakeLock' in navigator) {
+          try { navigator.wakeLock.request('screen'); } catch(e) {}
+        }
+
+        startTime = performance.now();
+        animFrameId = requestAnimationFrame(tick);
+      }
+
+      // 8. Oyunu Durdur
+      function stopGame() {
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        state = 'STOPPED';
+
+        const finalSec = Math.floor(elapsedTime);
+        const finalMs = Math.floor((elapsedTime % 1) * 100);
+        const stoppedTime = parseFloat(finalSec + '.' + finalMs.toString().padStart(2, '0'));
+        renderTime(stoppedTime);
+
+        buttonContainer.classList.remove('running-pulse');
+
+        // İstatistik kaydı
+        stats.totalPlays = (stats.totalPlays || 0) + 1;
+        const diff = Math.abs(stoppedTime - 10.00);
+
+        if (stats.bestDiff === null || diff < stats.bestDiff) {
+          stats.bestDiff = diff;
+          stats.bestTime = stoppedTime;
+        }
+
+        const isWin = (diff <= tolerance);
+
+        if (isWin) {
+          // KAZANDI!
+          stats.totalWins = (stats.totalWins || 0) + 1;
+          playWinFanfare();
+          triggerWinConfetti();
+
+          displayBoard.classList.add('win-glow', 'border-yellow-400');
+          displayBoard.classList.remove('border-slate-700/80');
+
+          timeSec.className = "text-7xl sm:text-8xl md:text-9xl font-black tracking-wider text-yellow-300 drop-shadow-[0_0_35px_rgba(250,204,21,0.9)] animate-bounce";
+          timeMs.className = "text-7xl sm:text-8xl md:text-9xl font-black tracking-wider text-yellow-300 drop-shadow-[0_0_35px_rgba(250,204,21,0.9)] animate-bounce";
+
+          statusMessage.className = "mt-4 px-6 py-2.5 rounded-xl text-center font-black text-base sm:text-lg md:text-xl tracking-wide transition-all duration-300 text-yellow-300 bg-yellow-500/20 border-2 border-yellow-400 shadow-[0_0_25px_rgba(234,179,8,0.5)]";
+          statusMessage.innerHTML = '🎉 TEBRİKLER! TAM 10.00! HEDİYENİ KAZANDIN! 🎁';
+
+          btnIcon.className = "fas fa-redo text-4xl sm:text-5xl text-white";
+          btnText.textContent = "YENİDEN OYNA";
+
+        } else if (diff <= 0.05) {
+          // ÇOK YAKIN!
+          playNearMissSound();
+
+          displayBoard.classList.add('border-amber-500/80');
+          displayBoard.classList.remove('border-slate-700/80');
+
+          const sign = (stoppedTime > 10.00) ? '+' : '-';
+          statusMessage.className = "mt-4 px-5 py-2 rounded-xl text-center font-bold text-sm sm:text-base md:text-lg tracking-wide transition-all duration-300 text-amber-300 bg-amber-950/40 border border-amber-500/40";
+          statusMessage.innerHTML = '⚡ ÇOK YAKIN! Fark: ' + sign + diff.toFixed(2) + ' sn - Tekrar Dene!';
+
+          btnIcon.className = "fas fa-redo text-4xl sm:text-5xl text-white";
+          btnText.textContent = "YENİDEN DENE";
+
+        } else {
+          // KAÇIRDI
+          playStopSound();
+
+          displayBoard.classList.add('border-red-900/60');
+          displayBoard.classList.remove('border-slate-700/80');
+
+          const sign = (stoppedTime > 10.00) ? '+' : '-';
+          statusMessage.className = "mt-4 px-5 py-2 rounded-xl text-center font-bold text-sm sm:text-base md:text-lg tracking-wide transition-all duration-300 text-slate-300 bg-slate-900/80 border border-slate-700";
+          statusMessage.innerHTML = 'Fark: ' + sign + diff.toFixed(2) + ' sn • Tekrar dene!';
+
+          btnIcon.className = "fas fa-redo text-4xl sm:text-5xl text-white";
+          btnText.textContent = "YENİDEN DENE";
+        }
+
+        saveStats();
+      }
+
+      // 9. Buton Tıklama / Dokunma İşleyicisi (Sıfır Gecikme: pointerdown)
+      function handleArcadeAction(e) {
+        if (e) {
+          e.preventDefault();
+        }
+
+        arcadeButton.classList.add('pressed');
+        setTimeout(() => arcadeButton.classList.remove('pressed'), 120);
+
+        if (state === 'IDLE' || state === 'STOPPED') {
+          startGame();
+        } else if (state === 'RUNNING') {
+          stopGame();
+        }
+      }
+
+      // iPad'de anında tepki vermesi için pointerdown ve click
+      let lastTrigger = 0;
+      arcadeButton.addEventListener('pointerdown', (e) => {
+        const now = Date.now();
+        if (now - lastTrigger < 200) return; // Debounce
+        lastTrigger = now;
+        handleArcadeAction(e);
+      });
+
+      // Klavye Boşluk (Space) tuşu ile de oynanabilsin (test kolaylığı)
+      window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && settingsModal.classList.contains('hidden')) {
+          e.preventDefault();
+          handleArcadeAction();
+        }
+      });
+
+      // 10. Ses Aç/Kapat
+      soundToggleBtn.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        if (soundEnabled) {
+          soundIcon.className = "fas fa-volume-up text-base";
+          soundToggleBtn.classList.remove('text-red-400');
+          soundToggleBtn.classList.add('text-slate-300');
+          initAudio();
+          playTone(600, 'sine', 0.1, 0.2);
+        } else {
+          soundIcon.className = "fas fa-volume-mute text-base";
+          soundToggleBtn.classList.remove('text-slate-300');
+          soundToggleBtn.classList.add('text-red-400');
+        }
+      });
+
+      // 11. Tam Ekran Modu (iPad / Kiosk)
+      fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen?.().catch(() => {});
+        } else {
+          document.exitFullscreen?.().catch(() => {});
+        }
+      });
+
+      // 12. Ayarlar Modalı İşlemleri
+      settingsBtn.addEventListener('click', () => {
+        updateTolUI();
+        settingsModal.classList.remove('hidden');
+        settingsModal.classList.add('flex');
+      });
+
+      closeSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('hidden');
+        settingsModal.classList.remove('flex');
+      });
+
+      saveSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('hidden');
+        settingsModal.classList.remove('flex');
+      });
+
+      document.querySelectorAll('.tol-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          tolerance = parseFloat(btn.dataset.tolerance);
+          try { localStorage.setItem('stand_game_tol', tolerance); } catch(e) {}
+          updateTolUI();
+        });
+      });
+
+      testWinBtn.addEventListener('click', () => {
+        initAudio();
+        playWinFanfare();
+        triggerWinConfetti();
+      });
+
+      resetStatsBtn.addEventListener('click', () => {
+        if (confirm('Tüm stant istatistiklerini sıfırlamak istiyor musunuz?')) {
+          stats = { totalPlays: 0, totalWins: 0, bestDiff: null, bestTime: null };
+          saveStats();
+        }
+      });
+
+      // Başlangıç Yüklemesi
+      loadSettingsAndStats();
+
+    })();
+  </script>
+</body>
+</html>
