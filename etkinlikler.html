@@ -528,6 +528,9 @@
     <!-- ========================================================================= -->
     <div id="redeemConfirmModal" class="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[1001] hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target === this) closeRedeemConfirmModal()">
         <div class="relative w-full max-w-sm bg-slate-900 border-2 border-amber-500 rounded-3xl p-5 sm:p-6 text-white text-center shadow-2xl my-auto max-h-[92dvh] overflow-y-auto modal-scrollable overscroll-contain">
+            <button onclick="closeRedeemConfirmModal()" class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center transition-colors z-30" aria-label="Kapat">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
             <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto mb-4 border border-amber-400/40">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
@@ -559,6 +562,9 @@
     <!-- ========================================================================= -->
     <div id="redeemSuccessModal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[1002] hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target === this) closeRedeemSuccessModal()">
         <div class="relative w-full max-w-sm bg-gradient-to-b from-emerald-950 to-slate-900 border-2 border-emerald-400 rounded-3xl p-6 sm:p-7 text-white text-center shadow-2xl my-auto max-h-[92dvh] overflow-y-auto modal-scrollable overscroll-contain">
+            <button onclick="closeRedeemSuccessModal()" class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center transition-colors z-30" aria-label="Kapat">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
             <div class="w-20 h-20 rounded-3xl bg-emerald-500 text-slate-950 flex items-center justify-center text-4xl mx-auto mb-4 shadow-xl shadow-emerald-500/40 animate-bounce">
                 <i class="fa-solid fa-check"></i>
             </div>
@@ -581,7 +587,7 @@
                 </div>
             </div>
 
-            <button onclick="closeRedeemSuccessModal()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded-xl text-sm transition-all shadow-lg min-h-[44px]">
+            <button onclick="closeRedeemSuccessModal()" class="w-full py-3.5 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-slate-950 font-black rounded-xl text-sm transition-all shadow-lg min-h-[44px]">
                 Tamamla & Kapat
             </button>
         </div>

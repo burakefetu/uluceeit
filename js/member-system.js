@@ -359,7 +359,10 @@
         if (member && member.fullName) {
             renderMemberCard(member);
             const modal = document.getElementById('memberCardModal');
-            if (modal) modal.classList.remove('hidden');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
 
             // ⚡ iOS & Canlı Senkronizasyon: Kart açıldığında anında buluttan hediyeyi kontrol et ve güncelle
             syncAndCheckGiftForMember(member);
@@ -368,6 +371,7 @@
             const unregistered = document.getElementById('unregisteredModal');
             if (unregistered) {
                 unregistered.classList.remove('hidden');
+                unregistered.style.display = 'flex';
             } else {
                 openActivationModal();
             }
@@ -376,12 +380,22 @@
 
     function closeMemberCardModal() {
         const modal = document.getElementById('memberCardModal');
-        if (modal) modal.classList.add('hidden');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+        }
+        if (cardClockInterval) {
+            clearInterval(cardClockInterval);
+            cardClockInterval = null;
+        }
     }
 
     function closeUnregisteredModal() {
         const modal = document.getElementById('unregisteredModal');
-        if (modal) modal.classList.add('hidden');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+        }
     }
 
     function openActivationModal() {
@@ -395,6 +409,7 @@
         const modal = document.getElementById('activationModal');
         if (modal) {
             modal.classList.remove('hidden');
+            modal.style.display = 'flex';
             const input = document.getElementById('inputFullName');
             if (input) setTimeout(() => input.focus(), 200);
         }
@@ -402,7 +417,10 @@
 
     function closeActivationModal() {
         const modal = document.getElementById('activationModal');
-        if (modal) modal.classList.add('hidden');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+        }
     }
 
     // =========================================================================
@@ -606,41 +624,52 @@
         currentRedeemingCode = giftCode;
 
         const modal = document.getElementById('redeemConfirmModal');
-        if (modal) modal.classList.remove('hidden');
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+        }
     }
 
     function closeRedeemConfirmModal() {
         const modal = document.getElementById('redeemConfirmModal');
-        if (modal) modal.classList.add('hidden');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+        }
     }
 
-    async function confirmRedeemGift() {
+    function confirmRedeemGift() {
         closeRedeemConfirmModal();
         const member = getStoredMember();
         if (member) {
             delete member.wonGift;
             saveStoredMember(member);
 
-            // Buluttan da bu öğrencinin hediyesini kaldır ki tekrar belirmesin
+            // Arka planda buluttan da bu öğrencinin hediyesini kaldır (kullanıcı UI'ı bloke olmasın)
             if (member.studentNo) {
-                try {
-                    const sNo = String(member.studentNo).trim().toLowerCase();
-                    const gifts = await CloudSync.getGifts();
-                    const filtered = gifts.filter(g => String(g.target || '').trim().toLowerCase() !== sNo);
-                    await CloudSync.pushGifts(filtered);
+                (async () => {
+                    try {
+                        const sNo = String(member.studentNo).trim().toLowerCase();
+                        const gifts = await CloudSync.getGifts();
+                        const filtered = gifts.filter(g => String(g.target || '').trim().toLowerCase() !== sNo);
+                        await CloudSync.pushGifts(filtered);
 
-                    const members = await CloudSync.getMembers();
-                    const m = members.find(x => String(x.studentNo || '').trim().toLowerCase() === sNo);
-                    if (m && m.wonGift) {
-                        delete m.wonGift;
-                        await CloudSync.pushMembers(members);
-                    }
-                } catch (e) {}
+                        const members = await CloudSync.getMembers();
+                        const m = members.find(x => String(x.studentNo || '').trim().toLowerCase() === sNo);
+                        if (m && m.wonGift) {
+                            delete m.wonGift;
+                            await CloudSync.pushMembers(members);
+                        }
+                    } catch (e) {}
+                })();
             }
         }
 
         const giftCont = document.getElementById('wonGiftContainer') || document.getElementById('cardWonGiftContainer');
-        if (giftCont) giftCont.classList.add('hidden');
+        if (giftCont) {
+            giftCont.classList.add('hidden');
+            giftCont.style.display = 'none';
+        }
 
         const successTitle = document.getElementById('successModalGiftTitle');
         if (successTitle) successTitle.textContent = currentRedeemingGift || 'Hediye';
@@ -656,12 +685,29 @@
         }
 
         const successModal = document.getElementById('redeemSuccessModal');
-        if (successModal) successModal.classList.remove('hidden');
+        if (successModal) {
+            successModal.classList.remove('hidden');
+            successModal.style.display = 'flex';
+        }
     }
 
     function closeRedeemSuccessModal() {
-        const modal = document.getElementById('redeemSuccessModal');
-        if (modal) modal.classList.add('hidden');
+        // 1. Başarılı kullanım modalını kapat
+        const successModal = document.getElementById('redeemSuccessModal');
+        if (successModal) {
+            successModal.classList.add('hidden');
+            successModal.style.display = 'none';
+        }
+        
+        // 2. Onay modalını da kapat
+        const confirmModal = document.getElementById('redeemConfirmModal');
+        if (confirmModal) {
+            confirmModal.classList.add('hidden');
+            confirmModal.style.display = 'none';
+        }
+
+        // 3. Hediyeyi kullandıktan sonra ana kart popup'ını da tamamen kapat!
+        closeMemberCardModal();
     }
 
     // =========================================================================
@@ -757,6 +803,17 @@
             if (member && member.studentNo) {
                 syncAndCheckGiftForMember(member);
             }
+        }
+    });
+
+    // ESC tuşuna basıldığında tüm açık modalları kapat
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+            closeRedeemSuccessModal();
+            closeRedeemConfirmModal();
+            closeMemberCardModal();
+            closeActivationModal();
+            closeUnregisteredModal();
         }
     });
 
