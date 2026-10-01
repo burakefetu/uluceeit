@@ -235,6 +235,13 @@
         .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     </style>
+
+    <!-- Guard: Remove any cached lottery elements -->
+    <script id="cekilis_cleanup_guard">
+      document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll("a[href*='cekilis']").forEach(function(el) { el.remove(); });
+      });
+    </script>
 </head>
 <body class="bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-ceko-navy selection:text-white pb-20 md:pb-0">
 
@@ -1365,8 +1372,9 @@
         // 🚀 PWA SERVICE WORKER & AKILLI KURULUM MOTORU
         // =========================================================================
         if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.action === 'RELOAD_PAGE') window.location.reload(); });
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then(reg => {
+                navigator.serviceWorker.register('./sw.js?v=9').then(reg => {
                     reg.update();
                 }).catch(err => {
                     console.warn('PWA SW kaydı hatası:', err);

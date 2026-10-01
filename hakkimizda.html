@@ -126,6 +126,13 @@
         .modal-scrollable::-webkit-scrollbar-track { background: transparent; }
         .modal-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 9999px; }
     </style>
+
+    <!-- Guard: Remove any cached lottery elements -->
+    <script id="cekilis_cleanup_guard">
+      document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll("a[href*='cekilis']").forEach(function(el) { el.remove(); });
+      });
+    </script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-blue-600 selection:text-white pb-20 md:pb-0">
 
@@ -1090,8 +1097,9 @@
 
         // PWA Service Worker
         if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.action === 'RELOAD_PAGE') window.location.reload(); });
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {});
+                navigator.serviceWorker.register('./sw.js?v=9').catch(() => {});
             });
         }
     </script>
