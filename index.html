@@ -213,7 +213,7 @@
 
         #chatbot-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; }
         @media (max-width: 768px) {
-            #chatbot-container { bottom: 74px; right: 14px; }
+            #chatbot-container { bottom: calc(85px + env(safe-area-inset-bottom, 0px)); right: 14px; }
         }
         #chatbot-button { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #0b1d4a, #2563eb); color: white; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 30px rgba(11, 29, 74, 0.35); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid white; }
         #chatbot-button:hover { transform: scale(1.08); box-shadow: 0 15px 35px rgba(37, 99, 235, 0.5); }
@@ -1374,7 +1374,7 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.action === 'RELOAD_PAGE') window.location.reload(); });
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=9').then(reg => {
+                navigator.serviceWorker.register('./sw.js?v=10').then(reg => {
                     reg.update();
                 }).catch(err => {
                     console.warn('PWA SW kaydı hatası:', err);
@@ -1444,7 +1444,7 @@
     </script>
 
     <!-- 📱 PWA Mobil Uygulama Yükleme Bildirimi -->
-    <div id="pwaInstallBanner" class="fixed bottom-5 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 bg-slate-900/95 backdrop-blur-xl border border-amber-400/40 rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-3 transform translate-y-32 opacity-0 transition-all duration-500 ease-out hidden">
+    <div id="pwaInstallBanner" style="bottom: max(5rem, calc(4.75rem + env(safe-area-inset-bottom, 0px)));" class="fixed left-3 right-3 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-md z-50 bg-slate-900/95 backdrop-blur-xl border border-amber-400/40 rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-3 transform translate-y-32 opacity-0 transition-all duration-500 ease-out hidden">
         <div class="flex items-center gap-3">
             <img src="icon-192.png" alt="App Icon" class="w-12 h-12 rounded-xl shadow-md border border-white/10 object-contain bg-slate-950 p-1 flex-shrink-0">
             <div>
@@ -1495,26 +1495,26 @@
     <!-- ========================================================================= -->
     <!-- 📱 MOBİL ALT GEZİNME ÇUBUĞU (APP-STYLE BOTTOM TAB BAR) -->
     <!-- ========================================================================= -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 py-1.5 flex items-center justify-around">
-        <a href="index.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-blue-600 bg-blue-50 font-black">
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] px-1 pt-1.5 flex items-center justify-between" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0.5rem));">
+        <a href="index.html" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-blue-600 bg-blue-50/80 rounded-xl transition-colors">
             <i class="fa-solid fa-house text-lg text-blue-600"></i>
-            <span class="text-[10px] font-extrabold mt-0.5">Ana Sayfa</span>
+            <span class="text-[10px] font-black mt-0.5 truncate w-full px-0.5">Ana Sayfa</span>
         </a>
-        <a href="sponsorlar.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-amber-600 transition-colors">
+        <a href="sponsorlar.html" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-slate-500 hover:text-amber-600 transition-colors">
             <i class="fa-solid fa-tags text-lg"></i>
-            <span class="text-[10px] font-bold mt-0.5">İndirimler</span>
+            <span class="text-[10px] font-bold mt-0.5 truncate w-full px-0.5">İndirimler</span>
         </a>
-        <a href="etkinlikler.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-blue-600 transition-colors">
+        <a href="etkinlikler.html" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-slate-500 hover:text-blue-600 transition-colors">
             <i class="fa-solid fa-calendar-days text-lg"></i>
-            <span class="text-[10px] font-bold mt-0.5">Etkinlik</span>
+            <span class="text-[10px] font-bold mt-0.5 truncate w-full px-0.5">Etkinlik</span>
         </a>
-        <a href="hakkimizda.html" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-blue-600 transition-colors">
+        <a href="hakkimizda.html" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-slate-500 hover:text-blue-600 transition-colors">
             <i class="fa-solid fa-users text-lg"></i>
-            <span class="text-[10px] font-bold mt-0.5">Kulüp</span>
+            <span class="text-[10px] font-bold mt-0.5 truncate w-full px-0.5">Kulüp</span>
         </a>
-        <button onclick="handleMemberCardClick()" class="flex flex-col items-center justify-center flex-1 py-1 text-amber-600 hover:text-amber-700 active:scale-95 transition-transform" aria-label="Dijital Kartım">
-            <i class="fa-solid fa-id-card text-lg"></i>
-            <span id="bottomNavCardLabel" class="text-[10px] font-black mt-0.5">Kartım</span>
+        <button onclick="handleMemberCardClick()" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-amber-600 hover:text-amber-700 active:scale-95 transition-transform" aria-label="Dijital Kartım">
+            <i class="fa-solid fa-id-card text-lg text-amber-500"></i>
+            <span id="bottomNavCardLabel" class="text-[10px] font-black mt-0.5 truncate w-full px-0.5">Kartım</span>
         </button>
     </nav>
 </body>

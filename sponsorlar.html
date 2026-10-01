@@ -346,28 +346,28 @@
     </main>
 
     <!-- ========================================================================= -->
-    <!-- 📱 MOBİL UYGULAMA TİPİ SABİT ALT GEZİNME ÇUBUĞU (BOTTOM NAVIGATION BAR) -->
+    <!-- 📱 MOBİL ALT GEZİNME ÇUBUĞU (APP-STYLE BOTTOM TAB BAR) -->
     <!-- ========================================================================= -->
-    <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] z-50 flex items-center justify-around py-2 px-1">
-        <a href="index.html" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-500 hover:text-blue-600 transition-colors">
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] px-1 pt-1.5 flex items-center justify-between" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0.5rem));">
+        <a href="index.html" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-slate-500 hover:text-blue-600 transition-colors">
             <i class="fa-solid fa-house text-lg"></i>
-            <span class="text-[10px] font-bold mt-0.5">Ana Sayfa</span>
+            <span class="text-[10px] font-bold mt-0.5 truncate w-full px-0.5">Ana Sayfa</span>
         </a>
-        <a href="sponsorlar.html" class="flex flex-col items-center justify-center flex-1 py-1 text-amber-600 font-black">
+        <a href="sponsorlar.html" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-amber-600 bg-amber-50/80 rounded-xl transition-colors">
             <i class="fa-solid fa-tags text-lg text-amber-500"></i>
-            <span class="text-[10px] font-extrabold mt-0.5">İndirimler</span>
+            <span class="text-[10px] font-black mt-0.5 truncate w-full px-0.5">İndirimler</span>
         </a>
-        <a href="etkinlikler.html" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-500 hover:text-blue-600 transition-colors">
+        <a href="etkinlikler.html" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-slate-500 hover:text-blue-600 transition-colors">
             <i class="fa-solid fa-calendar-days text-lg"></i>
-            <span class="text-[10px] font-bold mt-0.5">Etkinlik</span>
+            <span class="text-[10px] font-bold mt-0.5 truncate w-full px-0.5">Etkinlik</span>
         </a>
-        <a href="hakkimizda.html" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-500 hover:text-blue-600 transition-colors">
+        <a href="hakkimizda.html" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-slate-500 hover:text-blue-600 transition-colors">
             <i class="fa-solid fa-users text-lg"></i>
-            <span class="text-[10px] font-bold mt-0.5">Kulüp</span>
+            <span class="text-[10px] font-bold mt-0.5 truncate w-full px-0.5">Kulüp</span>
         </a>
-        <button onclick="handleMemberCardClick()" class="flex flex-col items-center justify-center flex-1 py-1 text-amber-600 hover:text-amber-700 active:scale-95 transition-transform" aria-label="Dijital Kartım">
-            <i class="fa-solid fa-id-card text-lg"></i>
-            <span id="bottomNavCardLabel" class="text-[10px] font-black mt-0.5">Kartım</span>
+        <button onclick="handleMemberCardClick()" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-amber-600 hover:text-amber-700 active:scale-95 transition-transform" aria-label="Dijital Kartım">
+            <i class="fa-solid fa-id-card text-lg text-amber-500"></i>
+            <span id="bottomNavCardLabel" class="text-[10px] font-black mt-0.5 truncate w-full px-0.5">Kartım</span>
         </button>
     </nav>
 
@@ -722,7 +722,7 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.action === 'RELOAD_PAGE') window.location.reload(); });
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=9').then(reg => {
+                navigator.serviceWorker.register('./sw.js?v=10').then(reg => {
                     reg.update();
                 }).catch(() => {});
             });
