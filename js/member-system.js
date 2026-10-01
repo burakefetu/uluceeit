@@ -554,13 +554,8 @@
             avatarEl.textContent = initials;
         }
 
-        // Çekiliş Biletini Göster (Varsa)
-        if (member.giveawayTicket) {
-            if (ticketCont) ticketCont.classList.remove('hidden');
-            if (ticketNum) ticketNum.textContent = member.giveawayTicket;
-        } else {
-            if (ticketCont) ticketCont.classList.add('hidden');
-        }
+        // Çekiliş Biletini Göster (Şuanlık Gizli)
+        if (ticketCont) ticketCont.classList.add('hidden');
 
         // Canlı QR Kod Üretimi (Varsa container)
         if (qrContainer) {

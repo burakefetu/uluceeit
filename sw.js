@@ -1,11 +1,10 @@
-const CACHE_NAME = 'uluceeit-pwa-v7';
+const CACHE_NAME = 'uluceeit-pwa-v8';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './sponsorlar.html',
   './etkinlikler.html',
   './hakkimizda.html',
-  './cekilis.html',
   './oyun.html',
   './js/member-system.js',
   './logo.png',
