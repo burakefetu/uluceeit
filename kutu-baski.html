@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kutu Reklamı QR Tasarım & Baskı Stüdyosu - ULUÇEEİT</title>
+  
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-heading {
+      font-family: 'Chakra Petch', sans-serif;
+    }
+    
+    @media screen {
+      .print-page-preview {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .print-page {
+        page-break-after: always;
+        break-after: page;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 1.5cm !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+      }
+      @page {
+        size: A3 portrait;
+        margin: 0;
+      }
+    }
+
+    .qr-badge-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 22%;
+      height: 22%;
+      background: white;
+      border-radius: 9999px;
+      padding: 6px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+
+  <!-- 🎛️ EKRAN KONTROL VE AYAR ÇUBUĞU (YAZDIRILMAZ) -->
+  <header class="no-print bg-slate-900/95 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-xl px-4 py-3 sm:px-6">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+      
+      <!-- Sol: Başlık ve Logo -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2.5 group">
+          <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain drop-shadow">
+          <div>
+            <h1 class="text-sm font-black text-white group-hover:text-amber-400 transition-colors leading-tight">
+              📦 "KUTU ADAM" BASKI & QR STÜDYOSU
+            </h1>
+            <p class="text-[11px] text-slate-400 font-medium">Bursa Uludağ Üniversitesi • ULUÇEEİT Guerrilla Marketing</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Orta: Yüz Seçimi -->
+      <div class="flex items-center bg-slate-950 p-1 rounded-2xl border border-slate-800 text-xs font-bold">
+        <button onclick="setViewFace('all')" id="tab-all" class="tab-btn px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 transition-all">
+          <i class="fas fa-layer-group mr-1"></i> Tüm 4 Yüz
+        </button>
+        <button onclick="setViewFace('on')" id="tab-on" class="tab-btn px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all">
+          Ön Yüz
+        </button>
+        <button onclick="setViewFace('arka')" id="tab-arka" class="tab-btn px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all">
+          Arka Yüz
+        </button>
+        <button onclick="setViewFace('sag')" id="tab-sag" class="tab-btn px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all">
+          Sağ Yan
+        </button>
+        <button onclick="setViewFace('sol')" id="tab-sol" class="tab-btn px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all">
+          Sol Yan
+        </button>
+      </div>
+
+      <!-- Sağ: Aksiyon Butonları -->
+      <div class="flex items-center gap-2">
+        <button onclick="openGuideModal()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition flex items-center gap-1.5">
+          <i class="fas fa-book-open text-amber-400"></i>
+          <span>Kutu Rehberi</span>
+        </button>
+        
+        <a href="kutu-qr-kod.png" download="uluceeit-kutu-qr-2000px.png" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition flex items-center gap-1.5" title="2000x2000px HD PNG QR Kodu İndir">
+          <i class="fas fa-file-image text-blue-400"></i>
+          <span>QR PNG</span>
+        </a>
+
+        <a href="kutu-qr-kod.svg" download="uluceeit-kutu-qr-vector.svg" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition flex items-center gap-1.5" title="Vektörel SVG QR Kodu İndir (Baskı/Folyo için)">
+          <i class="fas fa-vector-square text-emerald-400"></i>
+          <span>QR Vektör (SVG)</span>
+        </a>
+
+        <button onclick="window.print()" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs rounded-xl shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 transform active:scale-95">
+          <i class="fas fa-print text-sm"></i>
+          <span>Yazdır (A3 / A4)</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- 📢 BİLGİLENDİRME & ÖNERİLEN BOYUT BANNERI (YAZDIRILMAZ) -->
+  <aside class="no-print bg-gradient-to-r from-blue-900/40 via-slate-900 to-amber-950/40 border-b border-slate-800/80 px-4 py-3 text-center text-xs">
+    <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-slate-300">
+      <span class="inline-flex items-center gap-1.5 text-amber-400 font-bold">
+        <i class="fas fa-lightbulb"></i> Tavsiye Edilen Kutu:
+      </span>
+      <span><strong>Koli Ebatı:</strong> 50x50x50 cm veya 50x50x60 cm</span>
+      <span><strong>Baskı Formatı:</strong> A3 (29.7 x 42 cm) Renkli Kuşe / Çıkartma</span>
+      <span><strong>Kırtasiye İpucu:</strong> Ctrl + P ile A3 kağıt seçip direkt yazdırabilirsiniz.</span>
+    </div>
+  </aside>
+
+  <!-- 📄 YAZDIRILABİLİR 4 YÜZ TASARIMLARI -->
+  <main class="print-container flex-grow max-w-4xl mx-auto w-full p-4 sm:p-8 space-y-12">
+
+    <!-- ========================================== -->
+    <!-- 1. YÜZ: ÖN YÜZ (FRONT) -->
+    <!-- ========================================== -->
+    <section id="face-on" class="print-page print-page-preview bg-white text-slate-900 rounded-3xl p-8 sm:p-12 border-4 border-[#0b1d4a] flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300">
+      
+      <div class="absolute top-3 left-3 text-[10px] font-mono text-slate-400 uppercase tracking-widest no-print">
+        📍 YÜZ 1: ÖN TARAF (A3 / 50x50 KUTU İÇİN)
+      </div>
+
+      <!-- 1. ÜST: Kulüp Başlığı & Logo -->
+      <header class="w-full flex items-center justify-between border-b-2 border-slate-200 pb-4 mb-3">
+        <div class="flex items-center gap-3 text-left">
+          <img src="logo.png" alt="Logo" class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow">
+          <div>
+            <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-500 block">BURSA ULUDAĞ ÜNİVERSİTESİ</span>
+            <span class="text-2xl sm:text-4xl font-heading font-black tracking-tight text-[#0b1d4a] block leading-none">ULUÇEEİT</span>
+            <span class="text-[11px] font-bold text-amber-600 uppercase tracking-wide">RESMİ ÖĞRENCİ TOPLULUĞU</span>
+          </div>
+        </div>
+
+        <div class="hidden sm:flex flex-col items-end">
+          <span class="px-3 py-1 rounded-full bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-sm">
+            ⭐ GÖRÜKLE AVANTAJLARI
+          </span>
+          <span class="text-[11px] font-mono text-slate-400 mt-1 font-bold">www.uluceeit.com.tr</span>
+        </div>
+      </header>
+
+      <!-- 2. MERKEZ: VURUCU MERAK UYANDIRICI SLOGAN -->
+      <div class="my-3 w-full">
+        <div class="inline-block bg-[#0b1d4a] text-white px-6 py-2.5 rounded-2xl font-heading font-black text-2xl sm:text-4xl uppercase tracking-wide shadow-lg mb-2 transform -rotate-1">
+          BU KUTUYU NEDEN GİYDİM? 👀
+        </div>
+        <p class="text-lg sm:text-2xl font-black text-amber-600 uppercase tracking-tight">
+          ÖĞRENMEK İÇİN KAMERANI AÇ VE KODU TARA! 📲
+        </p>
+      </div>
+
+      <!-- 3. ORTA: DEV KARE QR KOD -->
+      <div class="my-3 relative flex flex-col items-center">
+        <div class="flex items-center gap-2 mb-2 text-sm sm:text-base font-black text-[#0b1d4a] uppercase tracking-wider">
+          <i class="fas fa-chevron-down text-amber-500 animate-bounce"></i>
+          <span>KAMERANI BURAYA DOĞRULT</span>
+          <i class="fas fa-chevron-down text-amber-500 animate-bounce"></i>
+        </div>
+
+        <div class="relative p-4 sm:p-5 bg-white border-4 border-[#0b1d4a] rounded-3xl shadow-2xl flex items-center justify-center">
+          <div id="qrcode-on" class="w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center"></div>
+          <div class="qr-badge-logo flex items-center justify-center">
+            <img src="logo.png" alt="Logo" class="w-full h-full object-contain">
+          </div>
+        </div>
+
+        <div class="mt-2 text-xs sm:text-sm font-bold text-slate-600 font-mono">
+          🔗 https://uluceeit.com.tr
+        </div>
+      </div>
+
+      <!-- 4. ALT: 3 BÜYÜK AVANTAJ KUTUSU -->
+      <div class="w-full grid grid-cols-3 gap-3 my-3">
+        <div class="p-3 bg-amber-50 border-2 border-amber-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">☕</span>
+          <strong class="text-xs sm:text-sm font-black text-amber-900 block leading-tight">%30 İNDİRİM</strong>
+          <span class="text-[10px] text-amber-800">Görükle Kafelerinde</span>
+        </div>
+
+        <div class="p-3 bg-blue-50 border-2 border-blue-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">🪪</span>
+          <strong class="text-xs sm:text-sm font-black text-blue-900 block leading-tight">DİJİTAL KART</strong>
+          <span class="text-[10px] text-blue-800">Ücretsiz Kulüp Kartı</span>
+        </div>
+
+        <div class="p-3 bg-emerald-50 border-2 border-emerald-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">✈️</span>
+          <strong class="text-xs sm:text-sm font-black text-emerald-900 block leading-tight">TEKNİK GEZİ</strong>
+          <span class="text-[10px] text-emerald-800">Ankara TBMM & Zirveler</span>
+        </div>
+      </div>
+
+      <!-- 5. EN ALT: BİLGİLENDİRME & KARE KOD NOTU -->
+      <footer class="w-full pt-3 border-t border-slate-200 flex justify-between items-center text-xs font-semibold text-slate-500">
+        <span>📸 Kamerayla 10 metreden dahi taranabilir.</span>
+        <span>Instagram: <strong>@uludagceeit</strong></span>
+      </footer>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 2. YÜZ: ARKA YÜZ (BACK) -->
+    <!-- ========================================== -->
+    <section id="face-arka" class="print-page print-page-preview bg-white text-slate-900 rounded-3xl p-8 sm:p-12 border-4 border-[#0b1d4a] flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300">
+      
+      <div class="absolute top-3 left-3 text-[10px] font-mono text-slate-400 uppercase tracking-widest no-print">
+        📍 YÜZ 2: ARKA TARAF (A3 / 50x50 KUTU İÇİN)
+      </div>
+
+      <header class="w-full flex items-center justify-between border-b-2 border-slate-200 pb-4 mb-3">
+        <div class="flex items-center gap-3 text-left">
+          <img src="logo.png" alt="Logo" class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow">
+          <div>
+            <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-500 block">BURSA ULUDAĞ ÜNİVERSİTESİ</span>
+            <span class="text-2xl sm:text-4xl font-heading font-black tracking-tight text-[#0b1d4a] block leading-none">ULUÇEEİT</span>
+            <span class="text-[11px] font-bold text-amber-600 uppercase tracking-wide">ÖĞRENCİ TOPLULUĞU</span>
+          </div>
+        </div>
+
+        <div class="hidden sm:flex flex-col items-end">
+          <span class="px-3 py-1 rounded-full bg-blue-600 text-white font-black text-xs uppercase tracking-wider shadow-sm">
+            🎁 FIRSATLARI YAKALA
+          </span>
+          <span class="text-[11px] font-mono text-slate-400 mt-1 font-bold">www.uluceeit.com.tr</span>
+        </div>
+      </header>
+
+      <div class="my-3 w-full">
+        <div class="inline-block bg-amber-500 text-slate-950 px-6 py-2.5 rounded-2xl font-heading font-black text-2xl sm:text-4xl uppercase tracking-wide shadow-lg mb-2 transform rotate-1">
+          ARKAMDAN BAKMA, KODU TARA! 😎
+        </div>
+        <p class="text-lg sm:text-2xl font-black text-[#0b1d4a] uppercase tracking-tight">
+          GÖRÜKLE'NİN EN İYİ İNDİRİMLERİ KAÇIYOR! 🏃‍♂️💨
+        </p>
+      </div>
+
+      <div class="my-3 relative flex flex-col items-center">
+        <div class="flex items-center gap-2 mb-2 text-sm sm:text-base font-black text-amber-600 uppercase tracking-wider">
+          <i class="fas fa-qrcode text-lg"></i>
+          <span>KAMERANI AÇ VE HEMEN OKUT</span>
+          <i class="fas fa-qrcode text-lg"></i>
+        </div>
+
+        <div class="relative p-4 sm:p-5 bg-white border-4 border-amber-500 rounded-3xl shadow-2xl flex items-center justify-center">
+          <div id="qrcode-arka" class="w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center"></div>
+          <div class="qr-badge-logo flex items-center justify-center">
+            <img src="logo.png" alt="Logo" class="w-full h-full object-contain">
+          </div>
+        </div>
+
+        <div class="mt-2 text-xs sm:text-sm font-bold text-slate-600 font-mono">
+          🔗 https://uluceeit.com.tr
+        </div>
+      </div>
+
+      <div class="w-full grid grid-cols-3 gap-3 my-3">
+        <div class="p-3 bg-slate-50 border-2 border-slate-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">🎁</span>
+          <strong class="text-xs sm:text-sm font-black text-slate-900 block leading-tight">HEDİYELER</strong>
+          <span class="text-[10px] text-slate-600">Sürpriz Kampanya</span>
+        </div>
+
+        <div class="p-3 bg-amber-50 border-2 border-amber-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">🍕</span>
+          <strong class="text-xs sm:text-sm font-black text-amber-900 block leading-tight">YEMEK & KAFE</strong>
+          <span class="text-[10px] text-amber-800">Öğrenci Menüleri</span>
+        </div>
+
+        <div class="p-3 bg-blue-50 border-2 border-blue-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">🤝</span>
+          <strong class="text-xs sm:text-sm font-black text-blue-900 block leading-tight">NETWORKING</strong>
+          <span class="text-[10px] text-blue-800">500+ Üniversiteli</span>
+        </div>
+      </div>
+
+      <footer class="w-full pt-3 border-t border-slate-200 flex justify-between items-center text-xs font-semibold text-slate-500">
+        <span>🌐 SKS Onaylı Resmi Topluluk Sistemi</span>
+        <span>Instagram: <strong>@uludagceeit</strong></span>
+      </footer>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 3. YÜZ: SAĞ YAN (RIGHT FACE) -->
+    <!-- ========================================== -->
+    <section id="face-sag" class="print-page print-page-preview bg-white text-slate-900 rounded-3xl p-8 sm:p-12 border-4 border-[#0b1d4a] flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300">
+      
+      <div class="absolute top-3 left-3 text-[10px] font-mono text-slate-400 uppercase tracking-widest no-print">
+        📍 YÜZ 3: SAĞ YAN (A3 / 50x50 KUTU İÇİN)
+      </div>
+
+      <header class="w-full flex items-center justify-between border-b-2 border-slate-200 pb-4 mb-3">
+        <div class="flex items-center gap-3 text-left">
+          <img src="logo.png" alt="Logo" class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow">
+          <div>
+            <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-500 block">BURSA ULUDAĞ ÜNİVERSİTESİ</span>
+            <span class="text-2xl sm:text-4xl font-heading font-black tracking-tight text-[#0b1d4a] block leading-none">ULUÇEEİT</span>
+          </div>
+        </div>
+
+        <span class="px-3 py-1 rounded-full bg-emerald-500 text-white font-black text-xs uppercase tracking-wider shadow-sm">
+          💳 ANINDA İNDİRİM
+        </span>
+      </header>
+
+      <div class="my-3 w-full">
+        <div class="inline-block bg-emerald-600 text-white px-6 py-2.5 rounded-2xl font-heading font-black text-2xl sm:text-4xl uppercase tracking-wide shadow-lg mb-2">
+          GÖRÜKLE'DE %30 İNDİRİMİ KAP! ☕🍕
+        </div>
+        <p class="text-lg sm:text-2xl font-black text-slate-700 uppercase tracking-tight">
+          ANLAŞMALI KAFELERDE GEÇERLİ KART CEBİNDE!
+        </p>
+      </div>
+
+      <div class="my-3 relative flex flex-col items-center">
+        <div class="flex items-center gap-2 mb-2 text-sm sm:text-base font-black text-emerald-700 uppercase tracking-wider">
+          <i class="fas fa-hand-pointer text-emerald-500"></i>
+          <span>KAMERANLA TARA 👉 ANINDA KAZAN</span>
+        </div>
+
+        <div class="relative p-4 sm:p-5 bg-white border-4 border-emerald-600 rounded-3xl shadow-2xl flex items-center justify-center">
+          <div id="qrcode-sag" class="w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center"></div>
+          <div class="qr-badge-logo flex items-center justify-center">
+            <img src="logo.png" alt="Logo" class="w-full h-full object-contain">
+          </div>
+        </div>
+
+        <div class="mt-2 text-xs sm:text-sm font-bold text-slate-600 font-mono">
+          🔗 https://uluceeit.com.tr
+        </div>
+      </div>
+
+      <div class="w-full grid grid-cols-3 gap-3 my-3">
+        <div class="p-3 bg-emerald-50 border-2 border-emerald-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">🏷️</span>
+          <strong class="text-xs sm:text-sm font-black text-emerald-900 block leading-tight">KAFELERDE</strong>
+          <span class="text-[10px] text-emerald-800">Espresso & Tatlılar</span>
+        </div>
+
+        <div class="p-3 bg-amber-50 border-2 border-amber-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">🏋️</span>
+          <strong class="text-xs sm:text-sm font-black text-amber-900 block leading-tight">SPOR SALONU</strong>
+          <span class="text-[10px] text-amber-800">Özel Öğrenci Üyeliği</span>
+        </div>
+
+        <div class="p-3 bg-blue-50 border-2 border-blue-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">📚</span>
+          <strong class="text-xs sm:text-sm font-black text-blue-900 block leading-tight">EĞİTİM & KİTAP</strong>
+          <span class="text-[10px] text-blue-800">Özel İndirim Kuponu</span>
+        </div>
+      </div>
+
+      <footer class="w-full pt-3 border-t border-slate-200 flex justify-between items-center text-xs font-semibold text-slate-500">
+        <span>🌐 Hemen Kaydol, Kartını Görsel Olarak Göster</span>
+        <span>Instagram: <strong>@uludagceeit</strong></span>
+      </footer>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 4. YÜZ: SOL YAN (LEFT FACE) -->
+    <!-- ========================================== -->
+    <section id="face-sol" class="print-page print-page-preview bg-white text-slate-900 rounded-3xl p-8 sm:p-12 border-4 border-[#0b1d4a] flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300">
+      
+      <div class="absolute top-3 left-3 text-[10px] font-mono text-slate-400 uppercase tracking-widest no-print">
+        📍 YÜZ 4: SOL YAN (A3 / 50x50 KUTU İÇİN)
+      </div>
+
+      <header class="w-full flex items-center justify-between border-b-2 border-slate-200 pb-4 mb-3">
+        <div class="flex items-center gap-3 text-left">
+          <img src="logo.png" alt="Logo" class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow">
+          <div>
+            <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-500 block">BURSA ULUDAĞ ÜNİVERSİTESİ</span>
+            <span class="text-2xl sm:text-4xl font-heading font-black tracking-tight text-[#0b1d4a] block leading-none">ULUÇEEİT</span>
+          </div>
+        </div>
+
+        <span class="px-3 py-1 rounded-full bg-blue-600 text-white font-black text-xs uppercase tracking-wider shadow-sm">
+          🔥 KAMPÜSÜN EN AKTİFİ
+        </span>
+      </header>
+
+      <div class="my-3 w-full">
+        <div class="inline-block bg-[#0b1d4a] text-white px-6 py-2.5 rounded-2xl font-heading font-black text-2xl sm:text-4xl uppercase tracking-wide shadow-lg mb-2">
+          BURSA ULUDAĞ'IN EN AKTİF KULÜBÜ! 🔥
+        </div>
+        <p class="text-lg sm:text-2xl font-black text-blue-600 uppercase tracking-tight">
+          GELECEĞE YÖN VERMEK İÇİN AİLEMİZE KATIL! 🚀
+        </p>
+      </div>
+
+      <div class="my-3 relative flex flex-col items-center">
+        <div class="flex items-center gap-2 mb-2 text-sm sm:text-base font-black text-[#0b1d4a] uppercase tracking-wider">
+          <i class="fas fa-qrcode text-lg"></i>
+          <span>KAMERANLA TARA 👉 HEMEN ÜYE OL</span>
+          <i class="fas fa-qrcode text-lg"></i>
+        </div>
+
+        <div class="relative p-4 sm:p-5 bg-white border-4 border-[#0b1d4a] rounded-3xl shadow-2xl flex items-center justify-center">
+          <div id="qrcode-sol" class="w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center"></div>
+          <div class="qr-badge-logo flex items-center justify-center">
+            <img src="logo.png" alt="Logo" class="w-full h-full object-contain">
+          </div>
+        </div>
+
+        <div class="mt-2 text-xs sm:text-sm font-bold text-slate-600 font-mono">
+          🔗 https://uluceeit.com.tr
+        </div>
+      </div>
+
+      <div class="w-full grid grid-cols-3 gap-3 my-3">
+        <div class="p-3 bg-blue-50 border-2 border-blue-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">🏛️</span>
+          <strong class="text-xs sm:text-sm font-black text-blue-900 block leading-tight">ANKARA GEZİSİ</strong>
+          <span class="text-[10px] text-blue-800">TBMM & Bakanlık</span>
+        </div>
+
+        <div class="p-3 bg-purple-50 border-2 border-purple-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">📜</span>
+          <strong class="text-xs sm:text-sm font-black text-purple-900 block leading-tight">SERTİFİKALAR</strong>
+          <span class="text-[10px] text-purple-800">CV Katkılı Eğitimler</span>
+        </div>
+
+        <div class="p-3 bg-amber-50 border-2 border-amber-300 rounded-2xl text-center">
+          <span class="text-xl sm:text-2xl block mb-1">🎓</span>
+          <strong class="text-xs sm:text-sm font-black text-amber-900 block leading-tight">KARİYER ZİRVESİ</strong>
+          <span class="text-[10px] text-amber-800">Lider İK Yöneticileri</span>
+        </div>
+      </div>
+
+      <footer class="w-full pt-3 border-t border-slate-200 flex justify-between items-center text-xs font-semibold text-slate-500">
+        <span>🌐 SKS Resmi Başvuru: <strong>uluceeit.com.tr</strong></span>
+        <span>Instagram: <strong>@uludagceeit</strong></span>
+      </footer>
+
+    </section>
+
+  </main>
+
+  <!-- 📋 KUTU ADAMI HAZIRLAMA KILAVUZU MODALI (YAZDIRILMAZ) -->
+  <div id="guideModal" class="no-print fixed inset-0 bg-black/85 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-2xl p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      
+      <button onclick="closeGuideModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center transition">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl border border-amber-400/30">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <div>
+          <h3 class="font-heading font-black text-xl text-white">"Kutu Adam" Gerilla Kampanyası Nasıl Yapılır?</h3>
+          <p class="text-xs text-slate-400">Üniversitede Viral Olma & Hazırlık Rehberi</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 text-xs sm:text-sm text-slate-300">
+        
+        <div class="p-4 bg-slate-800/80 rounded-2xl border border-slate-700">
+          <h4 class="font-black text-amber-400 mb-1 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-xs font-black">1</span>
+            İdeal Koli Seçimi
+          </h4>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            Taşıma/nakliyat kolisi satan yerlerden veya nalburlardan <strong>50 x 50 x 50 cm</strong> veya <strong>50 x 50 x 60 cm</strong> (çift oluklu, sağlam) bir koli edinin. Çift oluklu koli ezilmez ve dik durur.
+          </p>
+        </div>
+
+        <div class="p-4 bg-slate-800/80 rounded-2xl border border-slate-700">
+          <h4 class="font-black text-amber-400 mb-1 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-xs font-black">2</span>
+            Kafa ve Kol Deliklerinin Açılması
+          </h4>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            - <strong>Baş Deliği:</strong> Kolinin üst kapağının tam ortasına maket bıçağıyla yaklaşık <strong>22-24 cm çapında</strong> yuvarlak bir delik açın.<br>
+            - <strong>Kol Delikleri:</strong> Kolinin sağ ve sol yan üst kısımlarına kolların rahat çıkması için <strong>14 x 18 cm oval</strong> iki delik açın.
+          </p>
+        </div>
+
+        <div class="p-4 bg-slate-800/80 rounded-2xl border border-slate-700">
+          <h4 class="font-black text-amber-400 mb-1 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-xs font-black">3</span>
+            Omuz Askı Desteği (Konfor Tüyosu)
+          </h4>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            Kutunun sert kartonunun giyen kişinin omzunu acıtmaması için, kutunun iç tavanına iki adet sünger veya yumuşak kumaş şerit yapıştırın. Böylece giyen arkadaş 2-3 saat boyunca rahatça dolaşabilir!
+          </p>
+        </div>
+
+        <div class="p-4 bg-slate-800/80 rounded-2xl border border-slate-700">
+          <h4 class="font-black text-amber-400 mb-1 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-xs font-black">4</span>
+            Baskı ve Yapıştırma
+          </h4>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            Bu sayfadaki 4 tasarımı herhangi bir kırtasiyeden <strong>A3 boyutunda (veya yapışkanlı çıkartma folyoya)</strong> renkli bastırın. Kolinin 4 yanına sprey yapıştırıcı veya arkadan çift taraflı bantla gergin şekilde yapıştırın.
+          </p>
+        </div>
+
+        <div class="p-4 bg-slate-800/80 rounded-2xl border border-slate-700">
+          <h4 class="font-black text-amber-400 mb-1 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-xs font-black">5</span>
+            Viral Olma Taktikleri (Kampüs Rotası)
+          </h4>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            - <strong>Yemekhane Önü (12:00 - 13:30):</strong> En kalabalık saatlerde arkadaşınız kutuyu giyip yemekhane ve Mediko önünde turlasın.<br>
+            - <strong>Gizemli Davranış:</strong> Kutu adam konuşmasın, sadece el sallasın veya kafasını yana eğsin. Merak eden herkes kamerayı açıp QR kodu taratacaktır!<br>
+            - <strong>Stant Ekibi:</strong> Yanında 1-2 kulüp üyesi telefonla video çekip Instagram Reels / TikTok paylaşımı yapsın, üniversite sayfalarına göndersin.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-slate-800 flex justify-end">
+        <button onclick="closeGuideModal()" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-600/30 transition">
+          Harika, Anladım!
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const QR_URL = "https://uluceeit.com.tr";
+
+    function generateQRCodes() {
+      const faces = ["on", "arka", "sag", "sol"];
+      
+      faces.forEach(face => {
+        const container = document.getElementById("qrcode-" + face);
+        if (!container) return;
+        container.innerHTML = "";
+
+        new QRCode(container, {
+          text: QR_URL,
+          width: 320,
+          height: 320,
+          colorDark: "#0b1d4a",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      });
+    }
+
+    function setViewFace(face) {
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.remove("bg-amber-500", "text-slate-950");
+        btn.classList.add("text-slate-400");
+      });
+      const activeBtn = document.getElementById("tab-" + face);
+      if (activeBtn) {
+        activeBtn.classList.add("bg-amber-500", "text-slate-950");
+        activeBtn.classList.remove("text-slate-400");
+      }
+
+      const allSections = ["face-on", "face-arka", "face-sag", "face-sol"];
+      if (face === "all") {
+        allSections.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove("hidden");
+        });
+      } else {
+        allSections.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            if (id === "face-" + face) {
+              el.classList.remove("hidden");
+            } else {
+              el.classList.add("hidden");
+            }
+          }
+        });
+      }
+    }
+
+    function openGuideModal() {
+      const modal = document.getElementById("guideModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeGuideModal() {
+      const modal = document.getElementById("guideModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      generateQRCodes();
+    });
+  </script>
+</body>
+</html>

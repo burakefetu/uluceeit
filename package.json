@@ -9,5 +9,8 @@
     "push": "git push origin main"
   },
   "author": "Burak Efe Türk",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  }
 }
