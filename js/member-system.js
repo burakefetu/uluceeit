@@ -782,12 +782,17 @@
             hash.includes('stant');
 
         if (hasActivationFlag) {
-            setTimeout(() => {
-                openActivationModal(true);
-                if (typeof confetti === 'function') {
-                    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            const tryOpen = () => {
+                const modal = document.getElementById('activationModal');
+                if (modal && modal.classList.contains('hidden')) {
+                    openActivationModal(true);
+                    if (typeof confetti === 'function') {
+                        try { confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } }); } catch(e){}
+                    }
                 }
-            }, 300);
+            };
+            setTimeout(tryOpen, 150);
+            setTimeout(tryOpen, 600);
         }
 
         // Arka planda aktif üye ve hediye senkronizasyonu
