@@ -414,6 +414,7 @@
     }
 
     function closeActivationModal() {
+        try { sessionStorage.removeItem('uluceeit_pending_activation'); } catch(e){}
         const modal = document.getElementById('activationModal');
         if (modal) {
             modal.classList.add('hidden');
@@ -758,10 +759,8 @@
         const isStandQrScanned = (token.toUpperCase() === SECRET_AUTH_TOKEN);
 
         if (isStandQrScanned) {
-            // URL parametresini hemen temizle ki sayfada gezinirken veya yenilendiğinde tekrar açılmasın
-            try {
-                window.history.replaceState({}, document.title, window.location.pathname);
-            } catch(e) {}
+            try { sessionStorage.setItem('uluceeit_pending_activation', 'true'); } catch(e){}
+            try { window.history.replaceState({}, document.title, window.location.pathname); } catch(e) {}
 
             setTimeout(() => {
                 openActivationModal();
@@ -769,6 +768,15 @@
                     try { confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } }); } catch(e){}
                 }
             }, 250);
+        } else if (sessionStorage.getItem('uluceeit_pending_activation') === 'true') {
+            const member = getStoredMember();
+            if (!member || !member.fullName) {
+                setTimeout(() => {
+                    openActivationModal();
+                }, 250);
+            } else {
+                try { sessionStorage.removeItem('uluceeit_pending_activation'); } catch(e){}
+            }
         }
 
         // Arka planda aktif üye ve hediye senkronizasyonu

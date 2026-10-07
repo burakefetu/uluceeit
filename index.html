@@ -1379,11 +1379,8 @@
         // 🚀 PWA SERVICE WORKER & AKILLI KURULUM MOTORU
         // =========================================================================
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.action === 'RELOAD_PAGE') window.location.reload(); });
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=10').then(reg => {
-                    reg.update();
-                }).catch(err => {
+                navigator.serviceWorker.register('./sw.js').catch(err => {
                     console.warn('PWA SW kaydı hatası:', err);
                 });
             });

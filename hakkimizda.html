@@ -1097,9 +1097,8 @@
 
         // PWA Service Worker
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.action === 'RELOAD_PAGE') window.location.reload(); });
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=10').catch(() => {});
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
             });
         }
     </script>

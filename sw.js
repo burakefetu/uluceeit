@@ -1,4 +1,4 @@
-const CACHE_NAME = 'uluceeit-pwa-v14';
+const CACHE_NAME = 'uluceeit-pwa-v15';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -35,11 +35,7 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    }).then(() => self.clients.claim()).then(() => {
-      return self.clients.matchAll({ type: 'window' }).then(clients => {
-        clients.forEach(client => client.postMessage({ action: 'RELOAD_PAGE' }));
-      });
-    })
+    }).then(() => self.clients.claim())
   );
 });
 

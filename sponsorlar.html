@@ -718,13 +718,10 @@
             }
         });
 
-        // PWA Service Worker (Otomatik Güncelleme Destekli)
+        // PWA Service Worker
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.action === 'RELOAD_PAGE') window.location.reload(); });
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=10').then(reg => {
-                    reg.update();
-                }).catch(() => {});
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
             });
         }
     </script>
