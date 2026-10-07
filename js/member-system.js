@@ -367,13 +367,11 @@
             // ⚡ iOS & Canlı Senkronizasyon: Kart açıldığında anında buluttan hediyeyi kontrol et ve güncelle
             syncAndCheckGiftForMember(member);
         } else {
-            // Henüz kart oluşturulmamışsa bilgilendirme/geri yükleme modalını aç
+            // Henüz kart oluşturulmamışsa kilitli bilgilendirme modalını aç (ASLA aktivasyon açma!)
             const unregistered = document.getElementById('unregisteredModal');
             if (unregistered) {
                 unregistered.classList.remove('hidden');
                 unregistered.style.display = 'flex';
-            } else {
-                openActivationModal();
             }
         }
     }
@@ -398,15 +396,13 @@
         }
     }
 
-    function openActivationModal(force = false) {
+    function openActivationModal() {
         closeMobileMenu();
         closeUnregisteredModal();
-        if (!force) {
-            const member = getStoredMember();
-            if (member && member.fullName) {
-                handleMemberCardClick();
-                return;
-            }
+        const member = getStoredMember();
+        if (member && member.fullName) {
+            handleMemberCardClick();
+            return;
         }
         const modal = document.getElementById('activationModal');
         if (modal) {
@@ -755,44 +751,24 @@
             menuBtn._hasMemberListener = true;
         }
 
-        // URL Parametreleri (Örn: ?aktivasyon=CEEIT-2026-ONAY, ?kayit=1, ?uye=1, ?stand=1 vb.)
+        // URL Parametresi: YALNIZCA VE YALNIZCA Fiziksel Stant QR Kodu Okutulduğunda Açılır!
         const params = new URLSearchParams(window.location.search);
         const token = (params.get('aktivasyon') || params.get('activate') || '').trim();
-        const hash = (window.location.hash || '').toLowerCase();
 
-        const isTokenMatch = token && (
-            token.toUpperCase() === SECRET_AUTH_TOKEN || 
-            token.toUpperCase() === 'ONAY' ||
-            token.toUpperCase() === 'CEEIT'
-        );
+        const isStandQrScanned = (token.toUpperCase() === SECRET_AUTH_TOKEN);
 
-        const hasActivationFlag = 
-            isTokenMatch ||
-            params.has('aktivasyon') ||
-            params.has('activate') ||
-            params.has('kayit') ||
-            params.has('register') ||
-            params.has('uye') ||
-            params.has('stand') ||
-            params.has('stant') ||
-            hash.includes('kayit') ||
-            hash.includes('uye') ||
-            hash.includes('aktivasyon') ||
-            hash.includes('stand') ||
-            hash.includes('stant');
+        if (isStandQrScanned) {
+            // URL parametresini hemen temizle ki sayfada gezinirken veya yenilendiğinde tekrar açılmasın
+            try {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } catch(e) {}
 
-        if (hasActivationFlag) {
-            const tryOpen = () => {
-                const modal = document.getElementById('activationModal');
-                if (modal && modal.classList.contains('hidden')) {
-                    openActivationModal(true);
-                    if (typeof confetti === 'function') {
-                        try { confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } }); } catch(e){}
-                    }
+            setTimeout(() => {
+                openActivationModal();
+                if (typeof confetti === 'function') {
+                    try { confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } }); } catch(e){}
                 }
-            };
-            setTimeout(tryOpen, 150);
-            setTimeout(tryOpen, 600);
+            }, 250);
         }
 
         // Arka planda aktif üye ve hediye senkronizasyonu
