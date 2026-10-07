@@ -398,13 +398,15 @@
         }
     }
 
-    function openActivationModal() {
+    function openActivationModal(force = false) {
         closeMobileMenu();
         closeUnregisteredModal();
-        const member = getStoredMember();
-        if (member && member.fullName) {
-            handleMemberCardClick();
-            return;
+        if (!force) {
+            const member = getStoredMember();
+            if (member && member.fullName) {
+                handleMemberCardClick();
+                return;
+            }
         }
         const modal = document.getElementById('activationModal');
         if (modal) {
@@ -753,19 +755,39 @@
             menuBtn._hasMemberListener = true;
         }
 
-        // URL Parametreleri (Örn: ?aktivasyon=... veya ?kayit=1)
+        // URL Parametreleri (Örn: ?aktivasyon=CEEIT-2026-ONAY, ?kayit=1, ?uye=1, ?stand=1 vb.)
         const params = new URLSearchParams(window.location.search);
-        const token = params.get('aktivasyon') || params.get('activate');
-        const isRegisterReq = params.get('kayit') === '1' || params.get('register') === '1';
+        const token = (params.get('aktivasyon') || params.get('activate') || '').trim();
+        const hash = (window.location.hash || '').toLowerCase();
 
-        if (token === SECRET_AUTH_TOKEN || isRegisterReq) {
+        const isTokenMatch = token && (
+            token.toUpperCase() === SECRET_AUTH_TOKEN || 
+            token.toUpperCase() === 'ONAY' ||
+            token.toUpperCase() === 'CEEIT'
+        );
+
+        const hasActivationFlag = 
+            isTokenMatch ||
+            params.has('aktivasyon') ||
+            params.has('activate') ||
+            params.has('kayit') ||
+            params.has('register') ||
+            params.has('uye') ||
+            params.has('stand') ||
+            params.has('stant') ||
+            hash.includes('kayit') ||
+            hash.includes('uye') ||
+            hash.includes('aktivasyon') ||
+            hash.includes('stand') ||
+            hash.includes('stant');
+
+        if (hasActivationFlag) {
             setTimeout(() => {
-                openActivationModal();
-                if (typeof confetti === 'function' && token === SECRET_AUTH_TOKEN) {
-                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                openActivationModal(true);
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
                 }
             }, 300);
-            window.history.replaceState({}, document.title, window.location.pathname);
         }
 
         // Arka planda aktif üye ve hediye senkronizasyonu
