@@ -306,6 +306,35 @@
                 </div>
             </div>
 
+            <!-- 📍 TANIŞMA ETKİNLİĞİ ÖZEL SALON ÇEKİLİŞİ KARTI -->
+            <div id="eventCheckinCard" class="max-w-xl mx-auto mb-10 p-6 rounded-3xl bg-gradient-to-r from-emerald-950/80 via-slate-900/90 to-emerald-950/80 border-2 border-emerald-400/60 shadow-2xl relative overflow-hidden backdrop-blur-xl text-left">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs uppercase tracking-wider border border-emerald-500/40">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        📍 TANIŞMA ETKİNLİĞİ SALON ÇEKİLİŞİ
+                    </span>
+                    <span id="eventCheckinStatusBadge" class="text-xs font-mono text-slate-300 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700 w-fit">
+                        Yoklama: Kontrol Ediliyor...
+                    </span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black text-white">
+                    Etkinlik Salonunda mısınız? 🎟️
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-300 mt-1.5 mb-5 leading-relaxed">
+                    Bu çekiliş <strong>yalnızca salonda fiziksel olarak bulunan üyelerimiz</strong> arasında çekilecektir! Salondaki QR kodu okutarak veya aşağıdaki butona basarak salon biletinizi anında alabilirsiniz.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center gap-3">
+                    <button type="button" onclick="handleEventCheckinClick()" id="btnEventCheckin" class="w-full sm:w-auto flex-1 py-3.5 px-6 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-500 text-slate-950 font-black text-sm rounded-xl shadow-lg shadow-emerald-500/30 transition-all flex items-center justify-center gap-2 active:scale-95">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span id="btnEventCheckinText">Salondayım, Çekilişe Katıl!</span>
+                    </button>
+                    <div id="eventCheckinTicketDisplay" class="hidden w-full sm:w-auto px-4 py-2 bg-slate-950 border border-emerald-400/50 rounded-xl text-center">
+                        <span class="text-[9px] text-slate-400 block uppercase font-bold">Salon Biletiniz</span>
+                        <span id="eventCheckinTicketNo" class="text-sm font-mono font-black text-emerald-300">SALON-101</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- TEK TIKLA BİLET ALMA / KATILIM BUTONU -->
             <div class="max-w-md mx-auto">
                 <button onclick="handleJoinGiveaway()" id="joinGiveawayBtn" class="w-full py-4 px-8 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black text-lg rounded-2xl shadow-xl shadow-amber-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
@@ -966,6 +995,77 @@
             }
         }
 
+        // =========================================================================
+        // 📍 TANIŞMA ETKİNLİĞİ SALON YOKLAMA & BİLET ALMA
+        // =========================================================================
+        async function handleEventCheckinClick() {
+            const member = typeof getStoredMember === 'function' ? getStoredMember() : null;
+            if (!member) {
+                alert("📍 Tanışma Etkinliği çekilişine katılabilmek için lütfen önce dijital üye kartınızı oluşturun.");
+                if (typeof openActivationModal === 'function') {
+                    openActivationModal();
+                } else if (typeof openUnregisteredModal === 'function') {
+                    openUnregisteredModal();
+                }
+                return;
+            }
+
+            if (member.eventTicket) {
+                openMemberCardModal();
+                return;
+            }
+
+            const btnText = document.getElementById('btnEventCheckinText');
+            if (btnText) btnText.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Yoklama Yapılıyor...';
+
+            if (!window.CloudSync || typeof CloudSync.checkInToEvent !== 'function') {
+                alert("Bağlantı hatası: Lütfen sayfayı yenileyiniz.");
+                if (btnText) btnText.textContent = "Salondayım, Çekilişe Katıl!";
+                return;
+            }
+
+            const res = await CloudSync.checkInToEvent(member);
+            if (res.status === 'checkin_closed') {
+                alert("⚠️ Tanışma Etkinliği salon yoklaması şu anda kapalıdır.\n\nYönetim kurulu salon yoklamasını başlattığında bu butona tekrar basarak biletinizi alabilirsiniz.");
+                if (btnText) btnText.textContent = "Salondayım, Çekilişe Katıl!";
+                return;
+            }
+
+            if (res.status === 'success' || res.status === 'already_checked_in') {
+                const ticket = res.ticket || member.eventTicket;
+                member.eventTicket = ticket;
+                updateEventCheckinUI(member);
+
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 180, spread: 90, origin: { y: 0.5 } });
+                }
+
+                alert(`🎉 TEBRİKLER!\n\nTanışma Etkinliği salon çekilişine başarıyla kaydoldunuz!\n\n📍 SALON BİLETİNİZ: ${ticket}\n\nNumaranız dijital üye kartınıza işlendi. Kura ekrana yansıtıldığında bu numarayla takip edebilirsiniz!`);
+                openMemberCardModal();
+            } else {
+                alert("Yoklama kaydı tamamlanamadı. Lütfen tekrar deneyin.");
+                if (btnText) btnText.textContent = "Salondayım, Çekilişe Katıl!";
+            }
+        }
+
+        function updateEventCheckinUI(member) {
+            if (!member) member = typeof getStoredMember === 'function' ? getStoredMember() : null;
+            const btnText = document.getElementById('btnEventCheckinText');
+            const ticketDisplay = document.getElementById('eventCheckinTicketDisplay');
+            const ticketNoEl = document.getElementById('eventCheckinTicketNo');
+            const statusBadge = document.getElementById('eventCheckinStatusBadge');
+
+            if (member && member.eventTicket) {
+                if (btnText) btnText.innerHTML = `✅ Biletiniz Alındı (${member.eventTicket}) - Kartı Gör`;
+                if (ticketDisplay) ticketDisplay.classList.remove('hidden');
+                if (ticketNoEl) ticketNoEl.textContent = member.eventTicket;
+                if (statusBadge) {
+                    statusBadge.className = "text-xs font-mono text-emerald-300 bg-emerald-500/20 px-2.5 py-1 rounded-lg border border-emerald-500/40 font-bold w-fit";
+                    statusBadge.textContent = "Salondasınız (Kayıtlı)";
+                }
+            }
+        }
+
         // 👑 YÖNETİM HEDİYE ATAMA PANELİ
         function openAdminGiveawayModal() {
             const pin = prompt("🔒 Yönetim Kurulu PIN Kodunu Giriniz:");
@@ -1019,27 +1119,60 @@
             if (member) {
                 delete member.wonGift;
                 delete member.giveawayTicket;
+                delete member.eventTicket;
+                delete member.eventAttended;
                 if (typeof saveStoredMember === 'function') {
                     saveStoredMember(member);
                 }
                 alert("Çekiliş ve hediye verileri sıfırlandı.");
                 closeAdminGiveawayModal();
                 updateGiveawayBtnState();
+                updateEventCheckinUI(member);
             }
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
+            const member = typeof getStoredMember === 'function' ? getStoredMember() : null;
             updateGiveawayBtnState();
+            updateEventCheckinUI(member);
             startCountdown();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const isEventScan = urlParams.has('etkinlik') || urlParams.has('salon') || urlParams.has('giris');
 
             if (window.CloudSync) {
                 CloudSync.recordVisit('cekilis');
                 try {
                     const config = await CloudSync.getGiveawayConfig();
-                    if (config && config.targetTime) {
-                        updateCountdown();
+                    if (config) {
+                        if (config.targetTime) updateCountdown();
+                        const statusBadge = document.getElementById('eventCheckinStatusBadge');
+                        if (statusBadge && (!member || !member.eventTicket)) {
+                            if (config.eventCheckinOpen) {
+                                statusBadge.className = "text-xs font-mono text-emerald-300 bg-emerald-500/20 px-2.5 py-1 rounded-lg border border-emerald-500/40 font-bold w-fit";
+                                statusBadge.textContent = "🟢 Yoklama Açık";
+                            } else {
+                                statusBadge.className = "text-xs font-mono text-rose-300 bg-rose-500/20 px-2.5 py-1 rounded-lg border border-rose-500/40 font-bold w-fit";
+                                statusBadge.textContent = "🔴 Yoklama Kapalı";
+                            }
+                        }
                     }
                 } catch (e) {}
+            }
+
+            // Eğer QR kod okutularak gelinmişse otomatik yoklama yap!
+            if (isEventScan) {
+                setTimeout(async () => {
+                    const currentM = typeof getStoredMember === 'function' ? getStoredMember() : null;
+                    if (!currentM) {
+                        alert("📍 Tanışma Etkinliği salonuna hoş geldiniz!\n\nÇekilişe dahil olabilmek için lütfen önce dijital üye kartınızı oluşturun.");
+                        if (typeof openActivationModal === 'function') openActivationModal();
+                    } else if (!currentM.eventTicket) {
+                        await handleEventCheckinClick();
+                    } else {
+                        openMemberCardModal();
+                    }
+                }, 400);
             }
         });
 

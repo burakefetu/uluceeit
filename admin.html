@@ -10,6 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 
@@ -91,6 +92,9 @@
             </div>
 
             <div class="flex items-center gap-3">
+                <button onclick="openStageProjectorModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 text-xs font-black transition-all flex items-center gap-1.5 shadow-lg shadow-amber-500/20 active:scale-95 animate-pulse">
+                    <i class="fa-solid fa-film text-sm"></i> <span>🎬 Sahne Çekiliş Modu</span>
+                </button>
                 <a href="stand-qr.html" target="_blank" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors flex items-center gap-1.5 border border-slate-700">
                     <i class="fa-solid fa-qrcode text-amber-400"></i> <span class="hidden sm:inline">Stant QR Panosu</span>
                 </a>
@@ -107,54 +111,67 @@
         <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-8">
             
             <!-- Üst İstatistik Kartları -->
-            <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
-                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase">Toplam Hediye Stoğu</p>
-                        <h3 id="statTotalStock" class="text-2xl font-black text-amber-400 font-mono mt-1">0</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Toplam Hediye</p>
+                        <h3 id="statTotalStock" class="text-xl font-black text-amber-400 font-mono mt-1">0</h3>
                     </div>
-                    <div class="w-11 h-11 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-base">
                         <i class="fa-solid fa-boxes-stacked"></i>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase">Dağıtılan Hediyeler</p>
-                        <h3 id="statTotalDistributed" class="text-2xl font-black text-emerald-400 font-mono mt-1">0</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Dağıtılan Hediye</p>
+                        <h3 id="statTotalDistributed" class="text-xl font-black text-emerald-400 font-mono mt-1">0</h3>
                     </div>
-                    <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base">
                         <i class="fa-solid fa-gift"></i>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase">Kalan Toplam Hediye</p>
-                        <h3 id="statTotalRemaining" class="text-2xl font-black text-sky-400 font-mono mt-1">0</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Kalan Hediye</p>
+                        <h3 id="statTotalRemaining" class="text-xl font-black text-sky-400 font-mono mt-1">0</h3>
                     </div>
-                    <div class="w-11 h-11 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg">
+                    <div class="w-9 h-9 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-base">
                         <i class="fa-solid fa-ticket"></i>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase">Çekiliş Katılımcısı</p>
-                        <h3 id="statGiveawayParticipants" class="text-2xl font-black text-yellow-400 font-mono mt-1">0</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Kayıtlı Üye</p>
+                        <h3 id="statLocalUser" class="text-xl font-black text-white font-mono mt-1 truncate">0</h3>
                     </div>
-                    <div class="w-11 h-11 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center text-lg">
+                    <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-base">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Genel Biletliler</p>
+                        <h3 id="statGiveawayParticipants" class="text-xl font-black text-yellow-400 font-mono mt-1">0</h3>
+                    </div>
+                    <div class="w-9 h-9 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center text-base">
                         <i class="fa-solid fa-ticket-simple"></i>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between col-span-2 sm:col-span-1">
+                <!-- 📍 TANIŞMA ETKİNLİĞİ SALONDAKİLER -->
+                <div class="bg-gradient-to-br from-slate-900 to-emerald-950/40 border border-emerald-500/40 p-4 rounded-2xl flex items-center justify-between shadow-lg">
                     <div>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase">Kayıtlı Canlı Üye</p>
-                        <h3 id="statLocalUser" class="text-base font-black text-white mt-1 truncate">0 Üye</h3>
+                        <p class="text-[10px] text-emerald-400 font-bold uppercase flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Salondakiler
+                        </p>
+                        <h3 id="statEventAttendees" class="text-xl font-black text-emerald-300 font-mono mt-1">0 Kişi</h3>
                     </div>
-                    <div class="w-11 h-11 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-id-card"></i>
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-base border border-emerald-500/30">
+                        <i class="fa-solid fa-users-viewfinder"></i>
                     </div>
                 </div>
             </div>
@@ -388,6 +405,95 @@
 
                 </div>
 
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- 📍 TANIŞMA ETKİNLİĞİ ÇEKİLİŞİ & SALONDA BULUNANLAR (CANLI YOKLAMA) -->
+            <!-- ========================================================================= -->
+            <div id="tanismaEtkinligiSection" class="bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-16 -top-16 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-5">
+                    <div>
+                        <div class="flex items-center gap-2.5 mb-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span class="text-[11px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">Canlı Etkinlik Modülü</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white flex items-center gap-2">
+                            <span>📍 Tanışma Etkinliği Çekilişi (Salondakiler)</span>
+                            <span id="eventAttendeesCountBadge" class="text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 px-3 py-0.5 rounded-full border border-emerald-500/30">0 Katılımcı</span>
+                        </h3>
+                        <p class="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                            Kura yalnızca etkinlik salonunda fiziksel olarak bulunup QR okutmuş üyeler arasında çekilir. Stanttaki diğer kayıtlı üyeler bu kuraya dahil edilmez.
+                        </p>
+                    </div>
+
+                    <!-- Hızlı Eylem Butonları -->
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <!-- Yoklama Durumu Butonu -->
+                        <button type="button" id="btnToggleEventCheckin" onclick="toggleEventCheckinStatus()" class="px-3.5 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 shadow-md border active:scale-95 bg-rose-500/20 text-rose-300 border-rose-500/40 hover:bg-rose-500/30">
+                            <i class="fa-solid fa-lock" id="iconEventCheckin"></i>
+                            <span id="textEventCheckin">🔴 Yoklama Kapalı (Açmak için tıkla)</span>
+                        </button>
+
+                        <!-- Katılım QR Kodunu Yansıt / Göster -->
+                        <button type="button" onclick="openEventQrModal()" class="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-black transition-all flex items-center gap-2 border border-amber-500/40 shadow-sm active:scale-95">
+                            <i class="fa-solid fa-qrcode text-amber-400 text-sm"></i>
+                            <span>📱 Katılım QR Kodunu Yansıt</span>
+                        </button>
+
+                        <!-- Sahne Projeksiyon Ekranını Aç -->
+                        <button type="button" onclick="openStageProjectorModal()" class="px-4 py-2.5 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black rounded-xl text-xs shadow-xl shadow-amber-500/30 transition-all flex items-center gap-2 active:scale-95">
+                            <i class="fa-solid fa-film text-sm"></i>
+                            <span>🎬 Sahne Çekiliş Ekranı</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kontrol & Arama Çubuğu -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-slate-400">Salonda Bulunanlar:</span>
+                        <span id="eventAttendeesTabCount" class="text-xs font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">0 Kişi</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <div class="relative">
+                            <input type="text" id="eventAttendeeSearchInput" oninput="renderEventAttendees()" placeholder="🔍 Salondakilerde ara..." class="py-2 pl-3 pr-8 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-emerald-400 w-full sm:w-56">
+                            <button type="button" onclick="document.getElementById('eventAttendeeSearchInput').value=''; renderEventAttendees();" class="absolute right-2.5 top-2 text-slate-500 hover:text-white text-xs" title="Temizle">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+
+                        <!-- Manuel Üye Ekle Butonu -->
+                        <button type="button" onclick="openManualAddAttendeeModal()" class="px-3 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-bold rounded-xl text-xs border border-emerald-500/30 transition-all flex items-center gap-1.5 shrink-0" title="Telefonu olmayan veya şarjı biten üyeyi salona dahil et">
+                            <i class="fa-solid fa-user-plus"></i> <span>Salona Manuel Ekle</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Salondakiler Tablosu -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="text-slate-400 border-b border-slate-800 uppercase text-[10px] tracking-wider">
+                                <th class="py-3 px-3">Salon Bilet No</th>
+                                <th class="py-3 px-3">Katılımcı Üye</th>
+                                <th class="py-3 px-3">Öğrenci No</th>
+                                <th class="py-3 px-3">Katılım Zamanı</th>
+                                <th class="py-3 px-3">Kura Durumu</th>
+                                <th class="py-3 px-3 text-right">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eventAttendeesTableBody" class="divide-y divide-slate-800 text-slate-300">
+                            <!-- Dinamik Salondakiler Listesi -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="noEventAttendeesPlaceholder" class="py-8 text-center text-slate-500 text-xs">
+                    Henüz salondaki QR kodu okutmuş bir üye bulunmuyor. Yukarıdan yoklamayı açıp QR kodu ekrana yansıtabilirsiniz.
+                </div>
             </div>
 
             <!-- ========================================================================= -->
@@ -647,6 +753,246 @@
                         </div>
                     </form>
                 </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- 📱 TANIŞMA ETKİNLİĞİ DEV PROJEKSİYON QR KOD MODALI -->
+            <!-- ========================================================================= -->
+            <div id="eventQrModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl">
+                <div class="w-full max-w-xl bg-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl relative text-center">
+                    <button onclick="closeEventQrModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+
+                    <!-- Başlık -->
+                    <div class="flex items-center justify-center gap-3 mb-2">
+                        <img src="logo.png" alt="Logo" class="w-12 h-12 object-contain" onerror="this.src='logo.jpg'">
+                        <div class="text-left">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-emerald-400">BURSA ULUDAĞ ÜNİVERSİTESİ • ULUÇEEİT</p>
+                            <h3 class="text-xl sm:text-2xl font-black text-white">Tanışma Etkinliği Çekilişi</h3>
+                        </div>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 mb-6 max-w-md mx-auto">
+                        Telefonunuzun kamerasını açarak QR kodu okutun ve salon biletinizi anında alın!
+                    </p>
+
+                    <!-- QR Kod Kutusu (Beyaz Arka Plan & Keskin Kontrast) -->
+                    <div class="bg-white p-6 rounded-3xl inline-block shadow-2xl border-4 border-emerald-400 mb-5 relative group">
+                        <div id="eventQrCodeContainer" class="flex items-center justify-center min-w-[220px] min-h-[220px]">
+                            <!-- Dinamik QR Kod -->
+                        </div>
+                    </div>
+
+                    <!-- Canlı Yoklama Sayacı & Durum -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-xs mb-6">
+                        <div class="flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-4 py-2 rounded-xl font-bold border border-emerald-500/30">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span>Salonda Katılanlar: <b id="eventQrAttendeeCount" class="font-mono text-sm text-white">0</b> Kişi</span>
+                        </div>
+                        <div id="eventQrStatusBadge" class="bg-slate-800 text-slate-300 px-3 py-2 rounded-xl font-mono">
+                            Yoklama: Canlı
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-3">
+                        <button type="button" onclick="closeEventQrModal()" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs transition-all">
+                            Kapat
+                        </button>
+                        <button type="button" onclick="openStageProjectorModal(); closeEventQrModal();" class="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-600 hover:to-yellow-500 text-slate-950 font-black rounded-xl text-xs shadow-lg transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-film"></i> <span>Sahne Çekilişine Geç</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- ➕ SALONA MANUEL ÜYE EKLEME MODALI -->
+            <!-- ========================================================================= -->
+            <div id="manualAddAttendeeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+                <div class="w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl relative text-left">
+                    <button onclick="closeManualAddAttendeeModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg border border-emerald-400/30">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-black text-white">Salona Manuel Katılımcı Ekle</h3>
+                            <p class="text-xs text-slate-400">Telefonu şarjı biten veya interneti olmayan üyeyi ekleyin.</p>
+                        </div>
+                    </div>
+
+                    <form onsubmit="handleManualAddAttendeeSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase">Kayıtlı Üyelerden Seçin:</label>
+                            <select id="manualAttendeeSelect" required class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-emerald-400">
+                                <option value="">Üye Seçiniz...</option>
+                            </select>
+                        </div>
+
+                        <div class="flex justify-end gap-2 pt-2">
+                            <button type="button" onclick="closeManualAddAttendeeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs hover:bg-slate-700">İptal</button>
+                            <button type="submit" class="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition-all shadow-md">Salona Dahil Et</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- 🎬 SAHNE PROJEKSİYON CANLI ÇEKİLİŞ EKRANI (TAM EKRAN SİNEMATİK MOD) -->
+            <!-- ========================================================================= -->
+            <div id="stageProjectorModal" class="hidden fixed inset-0 z-[9999] bg-[#060f24] overflow-y-auto flex flex-col text-white select-none">
+                <!-- Sinematik Işık Efektleri -->
+                <div class="fixed -top-40 -left-40 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="fixed -bottom-40 -right-40 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+                <!-- Üst Bar -->
+                <header class="px-6 sm:px-10 py-5 border-b border-white/10 flex items-center justify-between relative z-10 bg-slate-950/60 backdrop-blur-md">
+                    <div class="flex items-center gap-4">
+                        <img src="logo.png" alt="Logo" class="w-12 h-12 object-contain drop-shadow" onerror="this.src='logo.jpg'">
+                        <div>
+                            <p class="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">BURSA ULUDAĞ ÜNİVERSİTESİ • ULUÇEEİT</p>
+                            <h1 class="text-lg sm:text-2xl font-black tracking-tight text-white">2026 Tanışma Etkinliği Büyük Çekilişi</h1>
+                        </div>
+                    </div>
+
+                    <!-- Sağ Kontrol Butonları -->
+                    <div class="flex items-center gap-3">
+                        <!-- Canlı Sayaç Rozeti -->
+                        <div class="flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-4 py-2 rounded-2xl font-black text-xs sm:text-sm border border-emerald-500/30 shadow-lg">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span>Salonda: <b id="stageAttendeeCount" class="font-mono text-white text-base">0</b> Katılımcı</span>
+                        </div>
+
+                        <!-- QR Butonu -->
+                        <button type="button" onclick="openEventQrModal()" class="px-3.5 py-2 bg-slate-800/80 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-bold transition-all border border-amber-500/30 flex items-center gap-1.5 shadow-sm" title="Salondaki QR Kodu Göster">
+                            <i class="fa-solid fa-qrcode text-amber-400"></i> <span class="hidden md:inline">Katılım QR</span>
+                        </button>
+
+                        <!-- Tam Ekran -->
+                        <button type="button" onclick="toggleStageFullscreen()" class="px-3.5 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition-all border border-slate-700 flex items-center gap-1.5" title="Tam Ekran Modu (F11)">
+                            <i class="fa-solid fa-expand text-sky-400"></i> <span class="hidden md:inline">Tam Ekran</span>
+                        </button>
+
+                        <!-- Kapat -->
+                        <button type="button" onclick="closeStageProjectorModal()" class="px-3.5 py-2 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded-xl text-xs font-black transition-all border border-rose-500/30 flex items-center gap-1.5" title="Panele Dön">
+                            <i class="fa-solid fa-xmark text-sm"></i> <span class="hidden md:inline">Panele Dön</span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Ana Sahne Alanı -->
+                <main class="flex-grow flex flex-col items-center justify-center p-4 sm:p-8 max-w-5xl mx-auto w-full relative z-10 text-center">
+
+                    <!-- Hediye Seçim Şeridi -->
+                    <div class="mb-6 flex flex-col sm:flex-row items-center gap-3 bg-slate-900/80 border border-amber-500/30 px-6 py-3.5 rounded-2xl shadow-xl max-w-xl w-full">
+                        <span class="text-xs font-black uppercase text-amber-400 flex items-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-gift text-sm"></i> Çekilecek Hediye:
+                        </span>
+                        <select id="stagePrizeSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-white font-bold text-xs sm:text-sm focus:outline-none focus:border-amber-400">
+                            <!-- Dinamik Hediye Havuzundan Doldurulur -->
+                        </select>
+                    </div>
+
+                    <!-- 🎰 KURA VİTRİNİ & SLOT KUTUSU -->
+                    <div id="stageShowcaseBox" class="w-full bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-slate-900/90 border-2 border-amber-400/50 rounded-3xl p-8 sm:p-14 shadow-2xl relative overflow-hidden mb-8 min-h-[360px] flex flex-col items-center justify-center">
+                        <!-- Şık Altın Işık Çerçevesi -->
+                        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+                        <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+
+                        <!-- BEKLEME DURUMU -->
+                        <div id="stageStateIdle" class="flex flex-col items-center justify-center space-y-4">
+                            <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 flex items-center justify-center text-5xl shadow-2xl shadow-amber-500/30 animate-bounce">
+                                <i class="fa-solid fa-gift"></i>
+                            </div>
+                            <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                                Tanışma Etkinliği Büyük Kurası
+                            </h2>
+                            <p class="text-sm sm:text-base text-slate-300 max-w-lg leading-relaxed">
+                                Kura yalnızca salonda bulunup QR okutmuş üyeler arasında çekilir. Hazır olduğunuzda aşağıdaki butona basarak kurayı başlatın!
+                            </p>
+                        </div>
+
+                        <!-- DÖNME / ÇEKİLİŞ DURUMU (HIZLA AKAN İSİMLER) -->
+                        <div id="stageStateSpinning" class="hidden flex flex-col items-center justify-center space-y-4 w-full">
+                            <span class="text-xs sm:text-sm font-black uppercase tracking-widest text-amber-400 animate-pulse flex items-center gap-2">
+                                <i class="fa-solid fa-dice text-base animate-spin"></i> KURA ÇEKİLİYOR...
+                            </span>
+                            <div class="w-full max-w-2xl py-6 px-4 bg-black/60 rounded-3xl border-2 border-amber-400/80 shadow-2xl">
+                                <h2 id="stageRollingName" class="text-3xl sm:text-5xl font-black text-amber-300 tracking-tight truncate font-sans">
+                                    Katılımcı İsimleri...
+                                </h2>
+                                <p id="stageRollingTicket" class="text-sm sm:text-lg font-mono font-black text-sky-400 mt-2">
+                                    SALON-000
+                                </p>
+                            </div>
+                            <p class="text-xs text-slate-400">Salondaki tüm adaylar taranıyor...</p>
+                        </div>
+
+                        <!-- KAZANAN TALİHLİ EKRANI -->
+                        <div id="stageStateWinner" class="hidden flex flex-col items-center justify-center space-y-4 w-full animate-fade">
+                            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 px-5 py-1.5 rounded-full font-black text-xs sm:text-sm uppercase tracking-wider shadow-xl">
+                                <i class="fa-solid fa-crown text-base"></i> TEBRİKLER! KAZANAN TALİHLİ
+                            </div>
+                            <div class="w-full max-w-2xl py-6 px-6 bg-gradient-to-b from-amber-500/15 via-slate-950/80 to-amber-500/10 rounded-3xl border-2 border-amber-400 shadow-2xl">
+                                <h2 id="stageWinnerName" class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+                                    Ahmet Yılmaz
+                                </h2>
+                                <div class="flex flex-wrap items-center justify-center gap-3 mt-3 text-xs sm:text-sm">
+                                    <span class="bg-amber-500 text-slate-950 px-3 py-1 rounded-xl font-mono font-black shadow-sm" id="stageWinnerTicket">
+                                        SALON-104
+                                    </span>
+                                    <span class="bg-slate-800 text-slate-300 px-3 py-1 rounded-xl font-mono font-bold border border-slate-700" id="stageWinnerStudentNo">
+                                        No: 022201045
+                                    </span>
+                                </div>
+                                <div class="mt-4 pt-3 border-t border-white/10">
+                                    <p class="text-xs uppercase font-bold text-slate-400">Kazanılan Hediye:</p>
+                                    <h4 id="stageWinnerPrizeTitle" class="text-base sm:text-xl font-black text-amber-300 mt-0.5">
+                                        EspressoLab Kahve Paketi
+                                    </h4>
+                                </div>
+                            </div>
+
+                            <!-- Salonda mı? Kontrolü (Roll Call Butonları) -->
+                            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md pt-2">
+                                <button type="button" onclick="confirmStageWinnerPresent()" class="w-full sm:w-auto flex-1 py-3.5 px-6 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-black rounded-2xl text-xs sm:text-sm shadow-xl shadow-emerald-500/30 transition-all flex items-center justify-center gap-2 active:scale-95">
+                                    <i class="fa-solid fa-check text-base"></i>
+                                    <span>✅ Salonda! Hediyeyi Tanımla</span>
+                                </button>
+                                <button type="button" onclick="rejectStageWinnerAbsent()" class="w-full sm:w-auto flex-1 py-3.5 px-6 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-black rounded-2xl text-xs sm:text-sm border border-rose-500/40 transition-all flex items-center justify-center gap-2 active:scale-95" title="Salonda yoksa bu kişiyi ele ve yeniden çek">
+                                    <i class="fa-solid fa-xmark text-base"></i>
+                                    <span>❌ Yok! Yedek Çek</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- BÜYÜK KURAYI ÇEK BUTONU (DURUMA GÖRE GÖRÜNÜR) -->
+                    <div id="stageDrawBtnContainer" class="flex justify-center">
+                        <button type="button" id="btnStartStageLottery" onclick="startStageLotteryDraw()" class="py-5 px-10 sm:px-14 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black rounded-3xl text-base sm:text-xl shadow-2xl shadow-amber-500/40 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-3">
+                            <i class="fa-solid fa-dice text-2xl"></i>
+                            <span>🎲 BÜYÜK KURAYI BAŞLAT</span>
+                        </button>
+                    </div>
+
+                </main>
+
+                <!-- Alt Kayan Şerit: Salondaki Katılımcılar (Live Ticker) -->
+                <footer class="py-3 px-6 bg-slate-950/80 border-t border-white/10 relative z-10 text-xs overflow-hidden">
+                    <div class="flex items-center gap-4">
+                        <span class="font-black text-amber-400 uppercase text-[10px] tracking-wider shrink-0 flex items-center gap-1.5">
+                            <i class="fa-solid fa-users"></i> Salondakiler:
+                        </span>
+                        <div class="overflow-x-auto whitespace-nowrap scrollbar-none flex items-center gap-2" id="stageAttendeesTicker">
+                            <!-- Dinamik Rozetler -->
+                            <span class="text-slate-500 text-xs italic">Henüz salonda kayıtlı üye bulunmuyor.</span>
+                        </div>
+                    </div>
+                </footer>
             </div>
 
         </main>
@@ -939,6 +1285,7 @@
 
                 if (membersChanged || giftsChanged || showFeedback) {
                     renderCloudMembers();
+                    renderEventAttendees();
                     renderGiveawayParticipants();
                     renderGiftsList();
                     updateStats();
@@ -950,11 +1297,12 @@
                     }
                 }
 
-                // Çekiliş bitiş tarihini arka planda kontrol et
+                // Çekiliş bitiş tarihini ve etkinlik yoklama durumunu arka planda kontrol et
                 try {
                     const config = await CloudSync.getGiveawayConfig();
-                    if (config && config.targetTime) {
-                        updateAdminGiveawayBadge(config.targetTime);
+                    if (config) {
+                        if (config.targetTime) updateAdminGiveawayBadge(config.targetTime);
+                        updateEventCheckinUI(config);
                     }
                 } catch (e) {}
 
@@ -1014,11 +1362,21 @@
                 // Bu üyeye tanımlı aktif hediye var mı? (Tam Eşleşme)
                 const assignedGift = (cachedCloudData.gifts || []).find(g => String(g.target || '').trim() === sNo);
                 
+                const isEventAttendee = !!(m.eventTicket || m.eventAttended);
+                const quickEventBtn = !isEventAttendee ? `
+                    <button type="button" onclick="quickAddMemberToEvent('${sNo}')" class="px-2 py-1 bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-300 font-bold rounded-lg text-[10px] border border-emerald-500/30 transition-all flex items-center gap-1" title="Bu Üyeyi Salona Dahil Et">
+                        <i class="fa-solid fa-location-dot"></i> <span>Salona Al</span>
+                    </button>
+                ` : '';
+
                 let giftBadge = `<span class="text-slate-500 text-[10px] font-medium italic">Hediye Yok</span>`;
                 let actionButtons = `
-                    <button type="button" onclick="openAssignGiftModal('${sNo}', '${safeName}')" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-xl text-xs shadow-md shadow-amber-500/20 transition-all flex items-center gap-1.5 ml-auto active:scale-95">
-                        <i class="fa-solid fa-gift"></i> <span>Hediye Ver</span>
-                    </button>
+                    <div class="flex items-center justify-end gap-1.5">
+                        ${quickEventBtn}
+                        <button type="button" onclick="openAssignGiftModal('${sNo}', '${safeName}')" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-xl text-xs shadow-md shadow-amber-500/20 transition-all flex items-center gap-1.5 active:scale-95">
+                            <i class="fa-solid fa-gift"></i> <span>Hediye Ver</span>
+                        </button>
+                    </div>
                 `;
 
                 if (assignedGift) {
@@ -1030,6 +1388,7 @@
                     `;
                     actionButtons = `
                         <div class="flex items-center justify-end gap-1.5">
+                            ${quickEventBtn}
                             <button type="button" onclick="openAssignGiftModal('${sNo}', '${safeName}')" class="px-2.5 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 font-bold rounded-lg text-[11px] border border-blue-400/30 transition-all flex items-center gap-1" title="Tanımlı Hediyeyi Değiştir">
                                 <i class="fa-solid fa-pen-to-square"></i> <span>Değiştir</span>
                             </button>
@@ -1051,6 +1410,7 @@
                             <div>
                                 <div class="flex items-center gap-1.5 flex-wrap">
                                     <span class="text-xs">${m.fullName || 'İsimsiz Üye'}</span>
+                                    ${m.eventTicket ? `<span class="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-1.5 py-0.5 rounded font-mono font-bold" title="Tanışma Etkinliği Salon Biletli"><i class="fa-solid fa-location-dot text-[8px] mr-0.5"></i>${m.eventTicket}</span>` : ''}
                                     ${m.giveawayTicket ? `<span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-400/30 px-1.5 py-0.5 rounded font-mono font-bold"><i class="fa-solid fa-ticket text-[8px] mr-0.5"></i>${m.giveawayTicket}</span>` : ''}
                                 </div>
                                 ${isSelected ? '<span class="text-[9px] bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded font-black tracking-wider">SEÇİLDİ</span>' : ''}
@@ -1796,18 +2156,21 @@
             const totalDistributed = gifts.length;
             const totalRemaining = Math.max(0, totalStock - totalDistributed);
             const giveawayCount = members.filter(m => !!m.giveawayTicket).length;
+            const attendeesCount = members.filter(m => !!(m.eventAttended || m.eventTicket)).length;
 
             const elTotalStock = document.getElementById('statTotalStock');
             const elTotalDistributed = document.getElementById('statTotalDistributed');
             const elTotalRemaining = document.getElementById('statTotalRemaining');
             const elGiveaway = document.getElementById('statGiveawayParticipants');
             const elLocal = document.getElementById('statLocalUser');
+            const elAttendees = document.getElementById('statEventAttendees');
 
             if (elTotalStock) elTotalStock.textContent = totalStock;
             if (elTotalDistributed) elTotalDistributed.textContent = totalDistributed;
             if (elTotalRemaining) elTotalRemaining.textContent = totalRemaining;
             if (elGiveaway) elGiveaway.textContent = giveawayCount;
             if (elLocal) elLocal.textContent = `${members.length} Üye`;
+            if (elAttendees) elAttendees.textContent = `${attendeesCount} Kişi`;
 
             // 🌐 Canlı Web Trafik İstatistiklerini Güncelle
             CloudSync.getAnalytics().then(analytics => {
@@ -2152,6 +2515,590 @@
             renderGiftsList();
             updateStats();
             alert("Tüm hediye ve dağıtım kayıtları sıfırlandı.");
+        }
+
+        // =========================================================================
+        // 🎵 SES EFEKTLERİ SENTEZLEYİCİSİ (WEB AUDIO API - DIŞ DOSYA GEREKTİRMEZ)
+        // =========================================================================
+        const SoundFX = {
+            ctx: null,
+            init() {
+                try {
+                    if (!this.ctx) {
+                        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                        if (AudioCtx) this.ctx = new AudioCtx();
+                    }
+                    if (this.ctx && this.ctx.state === 'suspended') {
+                        this.ctx.resume();
+                    }
+                } catch (e) {}
+            },
+            tick(freq = 600, duration = 0.04) {
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch (e) {}
+            },
+            winFanfare() {
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                    notes.forEach((freq, i) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, this.ctx.currentTime + (i * 0.12));
+                        gain.gain.setValueAtTime(0.2, this.ctx.currentTime + (i * 0.12));
+                        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + (i * 0.12) + 0.6);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(this.ctx.currentTime + (i * 0.12));
+                        osc.stop(this.ctx.currentTime + (i * 0.12) + 0.65);
+                    });
+                } catch (e) {}
+            }
+        };
+
+        // =========================================================================
+        // 📍 TANIŞMA ETKİNLİĞİ & SALON YOKLAMA MOTORU
+        // =========================================================================
+        let isEventCheckinActive = false;
+        let eventQrInstance = null;
+        let currentStageCandidate = null;
+        let currentStagePrize = null;
+        let stageExcludedStudentNos = new Set();
+
+        function getEventAttendees() {
+            const allMembers = cachedCloudData.members || [];
+            return allMembers.filter(m => !!(m.eventAttended || m.eventTicket));
+        }
+
+        function updateEventCheckinUI(config) {
+            if (!config) return;
+            isEventCheckinActive = !!config.eventCheckinOpen;
+            const btn = document.getElementById('btnToggleEventCheckin');
+            const icon = document.getElementById('iconEventCheckin');
+            const text = document.getElementById('textEventCheckin');
+            const qrStatus = document.getElementById('eventQrStatusBadge');
+
+            if (isEventCheckinActive) {
+                if (btn) {
+                    btn.className = "px-3.5 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 shadow-md border active:scale-95 bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/30";
+                }
+                if (icon) icon.className = "fa-solid fa-unlock";
+                if (text) text.textContent = "🟢 Yoklama Açık (Durdurmak için tıkla)";
+                if (qrStatus) {
+                    qrStatus.className = "bg-emerald-500/20 text-emerald-300 px-3 py-2 rounded-xl font-mono font-bold border border-emerald-500/40";
+                    qrStatus.textContent = "Yoklama: Canlı (Girişler Açık)";
+                }
+            } else {
+                if (btn) {
+                    btn.className = "px-3.5 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 shadow-md border active:scale-95 bg-rose-500/20 text-rose-300 border-rose-500/40 hover:bg-rose-500/30";
+                }
+                if (icon) icon.className = "fa-solid fa-lock";
+                if (text) text.textContent = "🔴 Yoklama Kapalı (Açmak için tıkla)";
+                if (qrStatus) {
+                    qrStatus.className = "bg-rose-500/20 text-rose-300 px-3 py-2 rounded-xl font-mono font-bold border border-rose-500/40";
+                    qrStatus.textContent = "Yoklama: Kapalı (Yeni Giriş Yok)";
+                }
+            }
+        }
+
+        async function toggleEventCheckinStatus() {
+            try {
+                const config = await CloudSync.getGiveawayConfig() || {};
+                config.eventCheckinOpen = !config.eventCheckinOpen;
+                await CloudSync.pushGiveawayConfig(config);
+                updateEventCheckinUI(config);
+                const statusMsg = config.eventCheckinOpen 
+                    ? "✅ Salonda QR Yoklama Açıldı! Katılımcılar QR okutarak biletlerini alabilir."
+                    : "🔒 Salonda QR Yoklama Kapatıldı! Yeni katılımcı girişi durduruldu.";
+                alert(statusMsg);
+            } catch (e) {
+                console.error("Yoklama durumu güncellenemedi:", e);
+                alert("Yoklama durumu güncellenirken hata oluştu.");
+            }
+        }
+
+        function renderEventAttendees() {
+            const tbody = document.getElementById('eventAttendeesTableBody');
+            const placeholder = document.getElementById('noEventAttendeesPlaceholder');
+            const countBadge = document.getElementById('eventAttendeesCountBadge');
+            const tabCount = document.getElementById('eventAttendeesTabCount');
+            const qrCount = document.getElementById('eventQrAttendeeCount');
+            const stageCount = document.getElementById('stageAttendeeCount');
+            const statAttendees = document.getElementById('statEventAttendees');
+
+            let attendees = getEventAttendees();
+            const totalCount = attendees.length;
+
+            if (countBadge) countBadge.textContent = `${totalCount} Katılımcı`;
+            if (tabCount) tabCount.textContent = `${totalCount} Kişi`;
+            if (qrCount) qrCount.textContent = totalCount;
+            if (stageCount) stageCount.textContent = totalCount;
+            if (statAttendees) statAttendees.textContent = `${totalCount} Kişi`;
+
+            updateStageAttendeesTicker(attendees);
+
+            const searchInput = document.getElementById('eventAttendeeSearchInput');
+            const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+            if (query) {
+                attendees = attendees.filter(m => 
+                    (m.fullName || '').toLowerCase().includes(query) || 
+                    String(m.studentNo || '').toLowerCase().includes(query) ||
+                    String(m.eventTicket || '').toLowerCase().includes(query)
+                );
+            }
+
+            if (!tbody) return;
+
+            if (attendees.length === 0) {
+                tbody.innerHTML = '';
+                if (placeholder) {
+                    placeholder.classList.remove('hidden');
+                    placeholder.textContent = query ? 'Aranan kritere uygun katılımcı bulunamadı.' : 'Henüz salondaki QR kodu okutmuş bir üye bulunmuyor. Yukarıdan yoklamayı açıp QR kodu ekrana yansıtabilirsiniz.';
+                }
+                return;
+            }
+
+            if (placeholder) placeholder.classList.add('hidden');
+
+            tbody.innerHTML = attendees.map(m => {
+                const sNo = String(m.studentNo || '').trim();
+                const safeName = (m.fullName || 'Üye').replace(/'/g, "\\'");
+                const ticket = m.eventTicket || 'SALON-???';
+                const joinedDate = m.eventJoinedAt ? new Date(m.eventJoinedAt).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : 'Bugün';
+
+                let statusBadge = `<span class="inline-flex items-center gap-1 bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-lg font-bold text-[11px] border border-amber-500/30">⏳ Kuraya Hazır</span>`;
+                if (m.wonGift) {
+                    statusBadge = `
+                        <span class="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-lg font-black text-[11px] border border-emerald-500/30">
+                            <span>🎁 ${m.wonGift.title || 'Hediye Kazandı'}</span>
+                        </span>
+                    `;
+                }
+
+                return `
+                    <tr class="hover:bg-slate-800/40 transition-colors">
+                        <td class="py-3 px-3 font-mono font-black text-emerald-400">
+                            <span class="bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">${ticket}</span>
+                        </td>
+                        <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 font-black flex items-center justify-center text-xs border border-emerald-400/30 shadow-sm">${(m.fullName || 'Ö').charAt(0).toUpperCase()}</span>
+                            <span>${m.fullName || 'İsimsiz Üye'}</span>
+                        </td>
+                        <td class="py-3 px-3 font-mono font-bold text-slate-300">${sNo}</td>
+                        <td class="py-3 px-3 text-slate-400 text-[11px]">${joinedDate}</td>
+                        <td class="py-3 px-3">${statusBadge}</td>
+                        <td class="py-3 px-3 text-right">
+                            <div class="flex items-center justify-end gap-1.5">
+                                <button type="button" onclick="openAssignGiftModal('${sNo}', '${safeName}')" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold rounded-lg text-[11px] border border-amber-400/30 transition-all" title="Doğrudan Hediye Ata">
+                                    <i class="fa-solid fa-gift"></i> <span>Hediye</span>
+                                </button>
+                                <button type="button" onclick="removeAttendeeFromEvent('${sNo}', '${safeName}')" class="px-2 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-bold rounded-lg text-[11px] border border-rose-400/30 transition-all" title="Salondan Çıkar">
+                                    <i class="fa-solid fa-user-xmark"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openEventQrModal() {
+            const modal = document.getElementById('eventQrModal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+
+            const qrContainer = document.getElementById('eventQrCodeContainer');
+            if (qrContainer && typeof QRCode !== 'undefined') {
+                qrContainer.innerHTML = '';
+                const targetUrl = `${window.location.origin}/cekilis.html?etkinlik=tanisma2026`;
+                eventQrInstance = new QRCode(qrContainer, {
+                    text: targetUrl,
+                    width: 220,
+                    height: 220,
+                    colorDark: "#020617",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+
+            const attendees = getEventAttendees();
+            const countEl = document.getElementById('eventQrAttendeeCount');
+            if (countEl) countEl.textContent = attendees.length;
+        }
+
+        function closeEventQrModal() {
+            const modal = document.getElementById('eventQrModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function openManualAddAttendeeModal() {
+            const modal = document.getElementById('manualAddAttendeeModal');
+            const select = document.getElementById('manualAttendeeSelect');
+            if (!modal || !select) return;
+
+            const allMembers = cachedCloudData.members || [];
+            const attendees = getEventAttendees();
+            const attendeeNos = new Set(attendees.map(a => String(a.studentNo || '').trim().toLowerCase()));
+
+            const candidates = allMembers.filter(m => !attendeeNos.has(String(m.studentNo || '').trim().toLowerCase()));
+
+            if (candidates.length === 0) {
+                select.innerHTML = `<option value="">Tüm üyeler zaten salonda kayıtlı!</option>`;
+            } else {
+                select.innerHTML = `<option value="">-- Salona Eklenecek Üyeyi Seçin (${candidates.length} Aday) --</option>` +
+                    candidates.map(m => {
+                        const sNo = String(m.studentNo || '').trim();
+                        return `<option value="${sNo}">${m.fullName || 'İsimsiz'} (No: ${sNo})</option>`;
+                    }).join('');
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeManualAddAttendeeModal() {
+            const modal = document.getElementById('manualAddAttendeeModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        async function handleManualAddAttendeeSubmit(e) {
+            e.preventDefault();
+            const select = document.getElementById('manualAttendeeSelect');
+            const studentNo = select ? select.value.trim() : '';
+            if (!studentNo) {
+                alert("Lütfen salona eklenecek bir üye seçin.");
+                return;
+            }
+            await quickAddMemberToEvent(studentNo);
+            closeManualAddAttendeeModal();
+        }
+
+        async function quickAddMemberToEvent(studentNo) {
+            const sNo = String(studentNo || '').trim().toLowerCase();
+            const sNoDigits = sNo.replace(/^0+/, '');
+            const members = cachedCloudData.members || [];
+            const member = members.find(m => {
+                const target = String(m.studentNo || '').trim().toLowerCase();
+                return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+            });
+
+            if (!member) {
+                alert("Üye bulunamadı.");
+                return;
+            }
+
+            if (member.eventTicket) {
+                alert(`Bu üye zaten salonda kayıtlı! Bilet No: ${member.eventTicket}`);
+                return;
+            }
+
+            const attendees = getEventAttendees();
+            const ticketNo = 'SALON-' + (101 + attendees.length);
+            member.eventTicket = ticketNo;
+            member.eventAttended = true;
+            member.eventJoinedAt = new Date().toISOString();
+
+            await CloudSync.pushMembers(members);
+            renderCloudMembers();
+            renderEventAttendees();
+            updateStats();
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 60, origin: { y: 0.5 } });
+            }
+            alert(`✅ ${member.fullName} (${member.studentNo}) salona dahil edildi!\nBilet No: ${ticketNo}`);
+        }
+
+        async function removeAttendeeFromEvent(studentNo, fullName) {
+            if (!confirm(`${fullName} (${studentNo}) adlı üyeyi salondan çıkarmak istediğinize emin misiniz?`)) return;
+
+            const sNo = String(studentNo || '').trim().toLowerCase();
+            const sNoDigits = sNo.replace(/^0+/, '');
+            const members = cachedCloudData.members || [];
+            const member = members.find(m => {
+                const target = String(m.studentNo || '').trim().toLowerCase();
+                return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+            });
+
+            if (member) {
+                delete member.eventTicket;
+                delete member.eventAttended;
+                delete member.eventJoinedAt;
+                await CloudSync.pushMembers(members);
+                renderCloudMembers();
+                renderEventAttendees();
+                updateStats();
+                alert(`${fullName} salondan çıkarıldı.`);
+            }
+        }
+
+        // =========================================================================
+        // 🎬 SAHNE PROJEKSİYON CANLI ÇEKİLİŞ MODU
+        // =========================================================================
+        function populateStagePrizeSelect() {
+            const select = document.getElementById('stagePrizeSelect');
+            if (!select) return;
+            const pool = getGiftPool();
+            const available = pool.filter(p => (p.stock || 0) - (p.distributed || 0) > 0);
+
+            if (available.length === 0) {
+                select.innerHTML = `<option value="">⚠️ Hediye Havuzunda Stok Kalmadı (Önce Stok Ekleyin)</option>`;
+                return;
+            }
+
+            select.innerHTML = available.map(p => {
+                const remaining = (p.stock || 0) - (p.distributed || 0);
+                return `<option value="${p.id}|${p.title}|${p.prefix || 'ULU-SALON'}">🎁 ${p.title} (Kalan: ${remaining} Adet)</option>`;
+            }).join('');
+        }
+
+        function updateStageAttendeesTicker(attendees) {
+            const ticker = document.getElementById('stageAttendeesTicker');
+            if (!ticker) return;
+
+            if (!attendees || attendees.length === 0) {
+                ticker.innerHTML = `<span class="text-slate-500 text-xs italic">Henüz salonda kayıtlı üye bulunmuyor.</span>`;
+                return;
+            }
+
+            ticker.innerHTML = attendees.map(m => {
+                const ticket = m.eventTicket || 'SALON-???';
+                const name = m.fullName || 'Katılımcı';
+                const hasWon = !!m.wonGift;
+                const bg = hasWon ? 'bg-amber-500/20 text-amber-300 border-amber-400/30' : 'bg-slate-800 text-slate-300 border-slate-700';
+                return `
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl font-mono text-[11px] border ${bg}">
+                        <b class="text-emerald-400">${ticket}</b>
+                        <span class="font-sans font-medium text-white">${name}</span>
+                        ${hasWon ? '<span>🎁</span>' : ''}
+                    </span>
+                `;
+            }).join('');
+        }
+
+        function openStageProjectorModal() {
+            const modal = document.getElementById('stageProjectorModal');
+            if (!modal) return;
+
+            populateStagePrizeSelect();
+            const attendees = getEventAttendees();
+            const countEl = document.getElementById('stageAttendeeCount');
+            if (countEl) countEl.textContent = attendees.length;
+            updateStageAttendeesTicker(attendees);
+
+            // Sahneyi başlangıç (idle) durumuna getir
+            stageExcludedStudentNos.clear();
+            currentStageCandidate = null;
+            currentStagePrize = null;
+            document.getElementById('stageStateIdle').classList.remove('hidden');
+            document.getElementById('stageStateSpinning').classList.add('hidden');
+            document.getElementById('stageStateWinner').classList.add('hidden');
+            document.getElementById('stageDrawBtnContainer').classList.remove('hidden');
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeStageProjectorModal() {
+            const modal = document.getElementById('stageProjectorModal');
+            if (modal) modal.classList.add('hidden');
+            if (document.fullscreenElement && document.exitFullscreen) {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
+
+        function toggleStageFullscreen() {
+            const elem = document.getElementById('stageProjectorModal');
+            if (!elem) return;
+
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(err => console.log(err));
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(err => console.log(err));
+                }
+            }
+        }
+
+        function startStageLotteryDraw() {
+            SoundFX.init();
+            const attendees = getEventAttendees();
+            const prizeSelect = document.getElementById('stagePrizeSelect');
+            const prizeVal = prizeSelect ? prizeSelect.value : '';
+
+            if (!prizeVal || prizeVal.startsWith('⚠️')) {
+                alert("⚠️ Lütfen çekilecek bir hediye seçin! Havuzda stok yoksa hediye ekleyin.");
+                return;
+            }
+
+            const [poolItemId, prizeTitle, prizePrefix] = prizeVal.split('|');
+
+            // Salonda henüz hediye kazanmamış ve bu turda elenmemiş adaylar
+            const candidates = attendees.filter(m => {
+                const sNo = String(m.studentNo || '').trim().toLowerCase();
+                return !m.wonGift && !stageExcludedStudentNos.has(sNo);
+            });
+
+            if (candidates.length === 0) {
+                alert("⚠️ Salonda henüz hediye kazanmamış veya kuraya dahil edilecek katılımcı kalmadı!\nTüm salondakiler hediye kazanmış olabilir veya yoklamadan katılımcı eklemeniz gerekebilir.");
+                return;
+            }
+
+            // Durumu Değiştir: Dönme Animasyonu
+            document.getElementById('stageStateIdle').classList.add('hidden');
+            document.getElementById('stageStateWinner').classList.add('hidden');
+            document.getElementById('stageStateSpinning').classList.remove('hidden');
+            document.getElementById('stageDrawBtnContainer').classList.add('hidden');
+
+            let counter = 0;
+            const totalSpins = 45 + Math.floor(Math.random() * 20); // ~55 spins
+            let currentDelay = 40;
+
+            function spinStep() {
+                counter++;
+                const randomIdx = Math.floor(Math.random() * candidates.length);
+                const candidate = candidates[randomIdx];
+
+                const rollName = document.getElementById('stageRollingName');
+                const rollTicket = document.getElementById('stageRollingTicket');
+                if (rollName) rollName.textContent = candidate.fullName || 'İsimsiz Katılımcı';
+                if (rollTicket) rollTicket.textContent = candidate.eventTicket || 'SALON-???';
+
+                SoundFX.tick(600 + Math.min(600, counter * 15));
+
+                if (counter < totalSpins) {
+                    if (counter > totalSpins - 15) {
+                        currentDelay += 25; // Yavaşlama efekti
+                    }
+                    setTimeout(spinStep, currentDelay);
+                } else {
+                    finishStageSpin(candidate, { poolItemId, prizeTitle, prizePrefix });
+                }
+            }
+            spinStep();
+        }
+
+        function finishStageSpin(winner, prize) {
+            currentStageCandidate = winner;
+            currentStagePrize = prize;
+
+            document.getElementById('stageStateSpinning').classList.add('hidden');
+            document.getElementById('stageStateWinner').classList.remove('hidden');
+
+            document.getElementById('stageWinnerName').textContent = winner.fullName || 'İsimsiz Katılımcı';
+            document.getElementById('stageWinnerTicket').textContent = winner.eventTicket || 'SALON-???';
+            document.getElementById('stageWinnerStudentNo').textContent = 'No: ' + (winner.studentNo || '---');
+            document.getElementById('stageWinnerPrizeTitle').textContent = prize.prizeTitle || 'Özel Hediye';
+
+            SoundFX.winFanfare();
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 220, spread: 110, origin: { y: 0.5 } });
+                setTimeout(() => {
+                    confetti({ particleCount: 160, angle: 60, spread: 80, origin: { x: 0 } });
+                    confetti({ particleCount: 160, angle: 120, spread: 80, origin: { x: 1 } });
+                }, 350);
+            }
+        }
+
+        async function confirmStageWinnerPresent() {
+            if (!currentStageCandidate || !currentStagePrize) {
+                alert("Talihli seçimi bulunamadı.");
+                return;
+            }
+
+            const pool = getGiftPool();
+            const poolItem = pool.find(p => p.id === currentStagePrize.poolItemId);
+            if (poolItem) {
+                poolItem.distributed = (poolItem.distributed || 0) + 1;
+                saveGiftPool(pool);
+            }
+
+            const prefix = currentStagePrize.prizePrefix || 'ULU-SALON';
+            const code = prefix + '-' + Math.floor(1000 + Math.random() * 9000);
+            const targetNo = String(currentStageCandidate.studentNo || '').trim();
+
+            const newGiftItem = {
+                id: 'GIFT-' + Date.now(),
+                poolItemId: currentStagePrize.poolItemId,
+                target: targetNo,
+                title: currentStagePrize.prizeTitle,
+                code: code,
+                date: new Date().toLocaleDateString('tr-TR')
+            };
+
+            if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
+            cachedCloudData.gifts.unshift(newGiftItem);
+
+            const allMembers = cachedCloudData.members || [];
+            const sNoDigits = targetNo.toLowerCase().replace(/^0+/, '');
+            const targetMember = allMembers.find(m => {
+                const mt = String(m.studentNo || '').trim().toLowerCase();
+                return mt === targetNo.toLowerCase() || (sNoDigits && mt.replace(/^0+/, '') === sNoDigits);
+            });
+            if (targetMember) {
+                targetMember.wonGift = {
+                    title: currentStagePrize.prizeTitle,
+                    code: code,
+                    id: newGiftItem.id,
+                    assignedAt: new Date().toISOString()
+                };
+            }
+
+            await Promise.all([
+                CloudSync.pushGifts(cachedCloudData.gifts),
+                CloudSync.pushMembers(allMembers),
+                CloudSync.pushPool(pool)
+            ]);
+
+            renderCloudMembers();
+            renderEventAttendees();
+            renderGiftsList();
+            updateStats();
+            populateStagePrizeSelect();
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 250, spread: 120, origin: { y: 0.4 } });
+            }
+
+            alert(`🎉 TEBRİKLER!\n\n${currentStageCandidate.fullName} (${currentStageCandidate.eventTicket})\nKazanılan: ${currentStagePrize.prizeTitle}\nTeslim Kodu: ${code}\n\nHediye öğrencinin telefonundaki dijital üye kartına bulut üzerinden anında işlendi!`);
+
+            // Sahneyi bir sonraki çekilişe hazırla
+            stageExcludedStudentNos.clear();
+            currentStageCandidate = null;
+            currentStagePrize = null;
+            document.getElementById('stageStateWinner').classList.add('hidden');
+            document.getElementById('stageStateIdle').classList.remove('hidden');
+            document.getElementById('stageDrawBtnContainer').classList.remove('hidden');
+        }
+
+        function rejectStageWinnerAbsent() {
+            if (!currentStageCandidate) return;
+            const absentName = currentStageCandidate.fullName || 'Katılımcı';
+            if (!confirm(`❌ "${absentName}" salonda yok mu?\n\nBu kişi bu turdan elenecek ve hemen yedek bir talihli için kura yeniden başlatılacaktır. Devam edilsin mi?`)) {
+                return;
+            }
+
+            const sNo = String(currentStageCandidate.studentNo || '').trim().toLowerCase();
+            stageExcludedStudentNos.add(sNo);
+
+            // Hemen yeniden kura çek!
+            startStageLotteryDraw();
         }
     </script>
 </body>

@@ -290,6 +290,74 @@
             return null;
         },
 
+        async getGiveawayConfig() {
+            try {
+                const res = await fetch(`${this.API_BASE}/giveaway_config?_t=${Date.now()}`, {
+                    headers: { 'X-Mantle-Key': this.API_KEY },
+                    cache: 'no-store'
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && typeof data === 'object') {
+                        localStorage.setItem('uluceeit_giveaway_config', JSON.stringify(data));
+                        return data;
+                    }
+                }
+            } catch (e) {
+                console.warn('MantleDB giveaway config fetch error:', e);
+            }
+            const cached = localStorage.getItem('uluceeit_giveaway_config');
+            return cached ? JSON.parse(cached) : { targetTime: '2026-10-15T20:00:00+03:00', eventCheckinOpen: false };
+        },
+
+        async pushGiveawayConfig(config) {
+            try {
+                localStorage.setItem('uluceeit_giveaway_config', JSON.stringify(config));
+                await fetch(`${this.API_BASE}/giveaway_config`, {
+                    method: 'POST',
+                    headers: this.getHeaders(),
+                    body: JSON.stringify(config)
+                });
+            } catch (e) {
+                console.warn('MantleDB giveaway config push error:', e);
+            }
+        },
+
+        async checkInToEvent(member) {
+            if (!member || !member.studentNo) return { status: 'no_member' };
+            const config = await this.getGiveawayConfig();
+            if (!config || !config.eventCheckinOpen) {
+                return { status: 'checkin_closed' };
+            }
+            if (member.eventTicket) {
+                return { status: 'already_checked_in', ticket: member.eventTicket };
+            }
+
+            const members = await this.getMembers();
+            const attendees = members.filter(m => m.eventAttended || m.eventTicket);
+            const ticketNo = 'SALON-' + (101 + attendees.length);
+
+            member.eventTicket = ticketNo;
+            member.eventAttended = true;
+            member.eventJoinedAt = new Date().toISOString();
+
+            const sNo = String(member.studentNo).trim().toLowerCase();
+            const sNoDigits = sNo.replace(/^0+/, '');
+            const idx = members.findIndex(m => {
+                const target = String(m.studentNo || '').trim().toLowerCase();
+                return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+            });
+            if (idx >= 0) {
+                members[idx] = { ...members[idx], ...member };
+            } else {
+                members.push(member);
+            }
+
+            await this.pushMembers(members);
+            saveStoredMemberLocally(member);
+            return { status: 'success', ticket: ticketNo };
+        },
+
         async recordVisit(pageName) {
             try {
                 const sessionKey = `visited_session_${pageName}`;
@@ -525,6 +593,16 @@
         saveStoredMember(newMember);
         closeActivationModal();
 
+        // Eğer etkinlik QR kodundan gelinmişse otomatik salon yoklamasını yap
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('etkinlik') || urlParams.has('salon') || urlParams.has('giris')) {
+                await CloudSync.checkInToEvent(newMember);
+            }
+        } catch (err) {
+            console.warn('Auto event check-in error:', err);
+        }
+
         if (typeof confetti === 'function') {
             confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
         }
@@ -631,12 +709,23 @@
         }
 
         // Çekiliş Biletini Göster (Varsa rozeti ve numarayı bas)
-        if (member.giveawayTicket) {
+        const hasTicket = member.eventTicket || member.giveawayTicket;
+        if (hasTicket) {
             if (ticketCont) {
                 ticketCont.classList.remove('hidden');
                 ticketCont.style.display = 'flex';
             }
-            if (ticketNum) ticketNum.textContent = member.giveawayTicket;
+            if (ticketNum) {
+                if (member.eventTicket) {
+                    ticketNum.textContent = member.eventTicket;
+                    const ticketLabel = ticketCont.querySelector('p');
+                    if (ticketLabel) ticketLabel.textContent = '📍 TANIŞMA ETKİNLİĞİ SALON BİLETİNİZ';
+                } else {
+                    ticketNum.textContent = member.giveawayTicket;
+                    const ticketLabel = ticketCont.querySelector('p');
+                    if (ticketLabel) ticketLabel.textContent = 'BÜYÜK ÇEKİLİŞ BİLETİNİZ';
+                }
+            }
         } else {
             if (ticketCont) {
                 ticketCont.classList.add('hidden');
