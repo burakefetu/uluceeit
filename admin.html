@@ -1214,11 +1214,18 @@
         // Biletli Üyeler Arasından Canlı Kura Çekimi
         async function handleGiveawayLotteryDraw() {
             const allMembers = cachedCloudData.members || [];
+            if (allMembers.length === 0) {
+                alert("⚠️ Sistemde kayıtlı üye bulunmuyor!");
+                return;
+            }
+
             const ticketHolders = allMembers.filter(m => !!m.giveawayTicket);
+            let poolMembers = ticketHolders;
 
             if (ticketHolders.length === 0) {
-                alert("⚠️ Henüz çekiliş bileti almış bir üye bulunmuyor!\nÖnce öğrencilerin çekiliş sayfasından (cekilis.html) bilet almaları gerekmektedir.");
-                return;
+                const drawAll = confirm(`⚠️ Çekiliş sayfası (cekilis.html) üzerinden özel bilet almış üye henüz bulunmuyor.\n\nStanttan kayıt olan tüm aktif kulüp üyeleri (${allMembers.length} kişi) arasından kura çekmek ister misiniz?`);
+                if (!drawAll) return;
+                poolMembers = allMembers;
             }
 
             const pool = getGiftPool();
@@ -1228,12 +1235,15 @@
                 return;
             }
 
-            let candidates = ticketHolders.filter(m => !m.wonGift);
+            let candidates = poolMembers.filter(m => !m.wonGift);
             if (candidates.length === 0) {
-                candidates = ticketHolders;
+                candidates = poolMembers;
             }
 
             const winner = candidates[Math.floor(Math.random() * candidates.length)];
+            if (!winner.giveawayTicket) {
+                winner.giveawayTicket = 'BİLET-' + Math.floor(1000 + Math.random() * 9000);
+            }
             const randomGift = availablePool[Math.floor(Math.random() * availablePool.length)];
             const code = (randomGift.prefix || 'ULU-CEK') + '-' + Math.floor(1000 + Math.random() * 9000);
 
@@ -1467,7 +1477,11 @@
 
             // Members koleksiyonundaki üyeyi de bulup wonGift ekle (iOS ve çapraz cihaz senkronizasyonu için)
             const allMembers = cachedCloudData.members || [];
-            const targetMember = allMembers.find(m => String(m.studentNo || '').trim().toLowerCase() === normTargetNo);
+            const normTargetDigits = normTargetNo.replace(/^0+/, '');
+            const targetMember = allMembers.find(m => {
+                const mt = String(m.studentNo || '').trim().toLowerCase();
+                return mt === normTargetNo || (normTargetDigits && mt.replace(/^0+/, '') === normTargetDigits);
+            });
             if (targetMember) {
                 targetMember.wonGift = {
                     title: giftTitle,
@@ -1910,12 +1924,33 @@
 
             // 🌐 CANLI BULUT VERİTABANINA YAZ
             if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
+            const normTargetNo = String(targetIdentifier || '').trim().toLowerCase();
+            const normTargetDigits = normTargetNo.replace(/^0+/, '');
             // Önceki varsa sil
-            cachedCloudData.gifts = cachedCloudData.gifts.filter(g => String(g.target || '').trim() !== String(targetIdentifier || '').trim());
+            cachedCloudData.gifts = cachedCloudData.gifts.filter(g => {
+                const gt = String(g.target || '').trim().toLowerCase();
+                return gt !== normTargetNo && (!normTargetDigits || gt.replace(/^0+/, '') !== normTargetDigits);
+            });
             cachedCloudData.gifts.unshift(newGiftItem);
+
+            // Members koleksiyonundaki üyeyi de bulup wonGift ekle
+            const allMembers = cachedCloudData.members || [];
+            const targetMember = allMembers.find(m => {
+                const mt = String(m.studentNo || '').trim().toLowerCase();
+                return mt === normTargetNo || (normTargetDigits && mt.replace(/^0+/, '') === normTargetDigits);
+            });
+            if (targetMember) {
+                targetMember.wonGift = {
+                    title: giftTitle,
+                    code: giftCode,
+                    id: newGiftItem.id,
+                    assignedAt: new Date().toISOString()
+                };
+            }
             
             await Promise.all([
                 CloudSync.pushGifts(cachedCloudData.gifts),
+                CloudSync.pushMembers(allMembers),
                 poolItemId ? CloudSync.pushPool(getGiftPool()) : Promise.resolve()
             ]);
 
@@ -1960,10 +1995,11 @@
 
             const members = cachedCloudData.members || [];
             let targetIdentifier = 'Mevcut Cihaz';
+            let winnerMember = null;
 
             if (members.length > 0) {
-                const randomMember = members[Math.floor(Math.random() * members.length)];
-                targetIdentifier = String(randomMember.studentNo || '').trim();
+                winnerMember = members[Math.floor(Math.random() * members.length)];
+                targetIdentifier = String(winnerMember.studentNo || '').trim();
             }
 
             const randomGift = availablePool[Math.floor(Math.random() * availablePool.length)];
@@ -1984,9 +2020,19 @@
 
             if (!cachedCloudData.gifts) cachedCloudData.gifts = [];
             cachedCloudData.gifts.unshift(newGiftItem);
+
+            if (winnerMember) {
+                winnerMember.wonGift = {
+                    title: randomGift.title,
+                    code: code,
+                    id: newGiftItem.id,
+                    assignedAt: new Date().toISOString()
+                };
+            }
             
             await Promise.all([
                 CloudSync.pushGifts(cachedCloudData.gifts),
+                winnerMember ? CloudSync.pushMembers(members) : Promise.resolve(),
                 CloudSync.pushPool(pool)
             ]);
 
@@ -1994,7 +2040,8 @@
                 confetti({ particleCount: 180, spread: 80, origin: { y: 0.5 } });
             }
 
-            alert(`🎉 KURA ÇEKİLDİ!\nKazanan Öğrenci: ${targetIdentifier}\nHediye: ${randomGift.title}\nTeslim Kodu: ${code}\nÖğrencinin telefonundaki karta bulut üzerinden işlendi.`);
+            const winnerText = winnerMember ? `${winnerMember.fullName} (${targetIdentifier})` : targetIdentifier;
+            alert(`🎉 KURA ÇEKİLDİ!\nKazanan Öğrenci: ${winnerText}\nHediye: ${randomGift.title}\nTeslim Kodu: ${code}\nÖğrencinin telefonundaki karta bulut üzerinden işlendi.`);
             
             renderCloudMembers();
             renderGiftsList();
@@ -2053,7 +2100,11 @@
             // Members koleksiyonundan da bu üyenin hediyesini kaldır
             const allMembers = cachedCloudData.members || [];
             if (targetNo) {
-                const targetMember = allMembers.find(m => String(m.studentNo || '').trim().toLowerCase() === targetNo);
+                const targetDigits = targetNo.replace(/^0+/, '');
+                const targetMember = allMembers.find(m => {
+                    const mt = String(m.studentNo || '').trim().toLowerCase();
+                    return mt === targetNo || (targetDigits && mt.replace(/^0+/, '') === targetDigits);
+                });
                 if (targetMember) {
                     delete targetMember.wonGift;
                 }

@@ -28,6 +28,7 @@
 
     function getMemberCookie() {
         try {
+            if (!document || typeof document.cookie !== 'string') return null;
             const nameEQ = COOKIE_NAME + '=';
             const ca = document.cookie.split(';');
             for (let i = 0; i < ca.length; i++) {
@@ -78,13 +79,18 @@
         return null;
     }
 
-    function saveStoredMember(member) {
+    function saveStoredMemberLocally(member) {
         if (!member) return;
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
         } catch (e) {}
         setMemberCookie(member);
         updateNavbarCardState();
+    }
+
+    function saveStoredMember(member) {
+        if (!member) return;
+        saveStoredMemberLocally(member);
         CloudSync.registerMember(member).catch(() => {});
     }
 
@@ -118,7 +124,7 @@
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    if (Array.isArray(data)) {
+                    if (Array.isArray(data) && data.length > 0) {
                         localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(data));
                         return data;
                     }
@@ -132,6 +138,10 @@
 
         async pushMembers(members) {
             try {
+                if (!Array.isArray(members) || members.length === 0) {
+                    console.warn('Refusing to push empty members array to MantleDB');
+                    return;
+                }
                 localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(members));
                 await fetch(`${this.API_BASE}/members`, {
                     method: 'POST',
@@ -180,8 +190,13 @@
             try {
                 if (!member || !member.studentNo) return;
                 const members = await this.getMembers();
+                if (!Array.isArray(members) || members.length === 0) return;
                 const sNo = String(member.studentNo).trim().toLowerCase();
-                const idx = members.findIndex(m => String(m.studentNo || '').trim().toLowerCase() === sNo);
+                const sNoDigits = sNo.replace(/^0+/, '');
+                const idx = members.findIndex(m => {
+                    const target = String(m.studentNo || '').trim().toLowerCase();
+                    return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+                });
                 if (idx >= 0) {
                     members[idx] = { ...members[idx], ...member };
                 } else {
@@ -194,41 +209,81 @@
         },
 
         async checkGiftForStudent(studentNo) {
-            try {
-                if (!studentNo) return null;
-                const sNo = String(studentNo).trim().toLowerCase();
-                
-                // 1. /gifts tablosunu tara
-                const gifts = await this.getGifts();
-                const gift = gifts.find(g => String(g.target || '').trim().toLowerCase() === sNo);
-                if (gift) return gift;
+            if (!studentNo) return { status: 'no_student', gift: null };
+            const sNo = String(studentNo).trim().toLowerCase();
+            const sNoDigits = sNo.replace(/^0+/, '');
+            let networkSuccess = false;
 
-                // 2. /members tablosunu tara (üyenin üzerinde wonGift olabilir)
-                const members = await this.getMembers();
-                const member = members.find(m => String(m.studentNo || '').trim().toLowerCase() === sNo);
-                if (member && member.wonGift && (member.wonGift.code || member.wonGift.title)) {
-                    return member.wonGift;
+            // 1. /gifts tablosunu tara
+            try {
+                const res = await fetch(`${this.API_BASE}/gifts?_t=${Date.now()}`, {
+                    headers: { 'X-Mantle-Key': this.API_KEY },
+                    cache: 'no-store'
+                });
+                if (res.ok) {
+                    const gifts = await res.json();
+                    if (Array.isArray(gifts)) {
+                        networkSuccess = true;
+                        localStorage.setItem(GIFTS_REGISTRY_KEY, JSON.stringify(gifts));
+                        const gift = gifts.find(g => {
+                            const target = String(g.target || '').trim().toLowerCase();
+                            return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+                        });
+                        if (gift) return { status: 'found', gift: gift };
+                    }
                 }
-                return null;
             } catch (e) {
-                return null;
+                console.warn('Gifts network check warning:', e);
             }
+
+            // 2. /members tablosunu tara (üyenin üzerinde wonGift olabilir)
+            try {
+                const res = await fetch(`${this.API_BASE}/members?_t=${Date.now()}`, {
+                    headers: { 'X-Mantle-Key': this.API_KEY },
+                    cache: 'no-store'
+                });
+                if (res.ok) {
+                    const members = await res.json();
+                    if (Array.isArray(members)) {
+                        networkSuccess = true;
+                        localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(members));
+                        const member = members.find(m => {
+                            const target = String(m.studentNo || '').trim().toLowerCase();
+                            return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+                        });
+                        if (member && member.wonGift && (member.wonGift.code || member.wonGift.title)) {
+                            return { status: 'found', gift: member.wonGift };
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn('Members network check warning:', e);
+            }
+
+            if (!networkSuccess) {
+                return { status: 'network_error', gift: null };
+            }
+
+            return { status: 'not_found', gift: null };
         },
 
         async restoreMemberByStudentNo(studentNo) {
             try {
                 const sNo = String(studentNo).trim().toLowerCase();
+                const sNoDigits = sNo.replace(/^0+/, '');
                 if (!sNo) return null;
                 const members = await this.getMembers();
-                const member = members.find(m => String(m.studentNo || '').trim().toLowerCase() === sNo);
+                const member = members.find(m => {
+                    const target = String(m.studentNo || '').trim().toLowerCase();
+                    return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+                });
                 if (member) {
                     // Buluttaki güncel hediyeyi de kontrol et
-                    const gifts = await this.getGifts();
-                    const gift = gifts.find(g => String(g.target || '').trim().toLowerCase() === sNo);
-                    if (gift) {
-                        member.wonGift = { title: gift.title, code: gift.code, id: gift.id };
+                    const check = await this.checkGiftForStudent(studentNo);
+                    if (check.status === 'found' && check.gift) {
+                        member.wonGift = { title: check.gift.title, code: check.gift.code, id: check.gift.id };
                     }
-                    saveStoredMember(member);
+                    saveStoredMemberLocally(member);
                     return member;
                 }
             } catch (e) {}
@@ -329,25 +384,33 @@
         }
     }
 
-    // =========================================================================
-    // 🪪 DİJİTAL KART TIKLAMA VE AÇILMA MANTIĞI
-    // =========================================================================
+    let cardGiftPollInterval = null;
+
     async function syncAndCheckGiftForMember(member) {
         if (!member || !member.studentNo) return member;
         try {
-            const gift = await CloudSync.checkGiftForStudent(member.studentNo);
-            if (gift && (gift.code || gift.title)) {
-                if (!member.wonGift || member.wonGift.code !== gift.code || member.wonGift.title !== gift.title) {
-                    member.wonGift = { title: gift.title, code: gift.code, id: gift.id || ('GIFT-' + Date.now()) };
-                    saveStoredMember(member);
+            const check = await CloudSync.checkGiftForStudent(member.studentNo);
+            if (check.status === 'found' && check.gift) {
+                const gift = check.gift;
+                const giftTitle = gift.title || 'Kazanılan Hediye';
+                const giftCode = gift.code || 'ULU-KUPON-2026';
+                const giftId = gift.id || ('GIFT-' + Date.now());
+
+                if (!member.wonGift || member.wonGift.code !== giftCode || member.wonGift.title !== giftTitle) {
+                    member.wonGift = { title: giftTitle, code: giftCode, id: giftId };
+                    saveStoredMemberLocally(member);
                     renderMemberCard(member);
+                    if (typeof confetti === 'function') {
+                        try { confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 } }); } catch(e){}
+                    }
                 }
-            } else if (member.wonGift) {
-                // Eğer admin panelinden hediye silindiyse veya sıfırlandıysa karttan da düşür
+            } else if (check.status === 'not_found' && member.wonGift) {
+                // SADECE VE SADECE sunucuya başarıyla ulaşıldı ve sunucuda hediye yoksa sil!
                 delete member.wonGift;
-                saveStoredMember(member);
+                saveStoredMemberLocally(member);
                 renderMemberCard(member);
             }
+            // check.status === 'network_error' durumunda MEVCUT HEDİYEYE ASLA DOKUNULMAZ!
         } catch (e) {}
         return member;
     }
@@ -366,6 +429,16 @@
 
             // ⚡ iOS & Canlı Senkronizasyon: Kart açıldığında anında buluttan hediyeyi kontrol et ve güncelle
             syncAndCheckGiftForMember(member);
+
+            // Canlı Çekiliş Takibi: Kart açıkken her 6 saniyede bir yeni hediye var mı tara (Canlı kura takibi için)
+            if (!cardGiftPollInterval) {
+                cardGiftPollInterval = setInterval(() => {
+                    const currentM = getStoredMember();
+                    if (currentM && currentM.studentNo) {
+                        syncAndCheckGiftForMember(currentM);
+                    }
+                }, 6000);
+            }
         } else {
             // Henüz kart oluşturulmamışsa kilitli bilgilendirme modalını aç (ASLA aktivasyon açma!)
             const unregistered = document.getElementById('unregisteredModal');
@@ -385,6 +458,10 @@
         if (cardClockInterval) {
             clearInterval(cardClockInterval);
             cardClockInterval = null;
+        }
+        if (cardGiftPollInterval) {
+            clearInterval(cardGiftPollInterval);
+            cardGiftPollInterval = null;
         }
     }
 
@@ -553,8 +630,19 @@
             avatarEl.textContent = initials;
         }
 
-        // Çekiliş Biletini Göster (Şuanlık Gizli)
-        if (ticketCont) ticketCont.classList.add('hidden');
+        // Çekiliş Biletini Göster (Varsa rozeti ve numarayı bas)
+        if (member.giveawayTicket) {
+            if (ticketCont) {
+                ticketCont.classList.remove('hidden');
+                ticketCont.style.display = 'flex';
+            }
+            if (ticketNum) ticketNum.textContent = member.giveawayTicket;
+        } else {
+            if (ticketCont) {
+                ticketCont.classList.add('hidden');
+                ticketCont.style.display = 'none';
+            }
+        }
 
         // Canlı QR Kod Üretimi (Varsa container)
         if (qrContainer) {
@@ -578,16 +666,22 @@
         if (cardClockInterval) clearInterval(cardClockInterval);
         cardClockInterval = setInterval(updateCardClock, 1000);
 
-        // Hediyeyi Kontrol Et
+        // Hediyeyi Kontrol Et ve Göster
         const giftCont = document.getElementById('wonGiftContainer') || document.getElementById('cardWonGiftContainer');
         const giftTitle = document.getElementById('wonGiftTitle') || document.getElementById('cardWonGiftTitle');
         const giftCode = document.getElementById('wonGiftCode') || document.getElementById('cardWonGiftCode');
-        if (member.wonGift && member.wonGift.code) {
-            if (giftCont) giftCont.classList.remove('hidden');
+        if (member.wonGift && (member.wonGift.code || member.wonGift.title)) {
+            if (giftCont) {
+                giftCont.classList.remove('hidden');
+                giftCont.style.display = 'block';
+            }
             if (giftTitle) giftTitle.textContent = member.wonGift.title || 'Kazanılan Hediye';
-            if (giftCode) giftCode.textContent = member.wonGift.code || '';
+            if (giftCode) giftCode.textContent = member.wonGift.code || 'ULU-KUPON-2026';
         } else {
-            if (giftCont) giftCont.classList.add('hidden');
+            if (giftCont) {
+                giftCont.classList.add('hidden');
+                giftCont.style.display = 'none';
+            }
         }
     }
 
@@ -637,19 +731,26 @@
         const member = getStoredMember();
         if (member) {
             delete member.wonGift;
-            saveStoredMember(member);
+            saveStoredMemberLocally(member);
 
             // Arka planda buluttan da bu öğrencinin hediyesini kaldır (kullanıcı UI'ı bloke olmasın)
             if (member.studentNo) {
                 (async () => {
                     try {
                         const sNo = String(member.studentNo).trim().toLowerCase();
+                        const sNoDigits = sNo.replace(/^0+/, '');
                         const gifts = await CloudSync.getGifts();
-                        const filtered = gifts.filter(g => String(g.target || '').trim().toLowerCase() !== sNo);
+                        const filtered = gifts.filter(g => {
+                            const t = String(g.target || '').trim().toLowerCase();
+                            return t !== sNo && (!sNoDigits || t.replace(/^0+/, '') !== sNoDigits);
+                        });
                         await CloudSync.pushGifts(filtered);
 
                         const members = await CloudSync.getMembers();
-                        const m = members.find(x => String(x.studentNo || '').trim().toLowerCase() === sNo);
+                        const m = members.find(x => {
+                            const t = String(x.studentNo || '').trim().toLowerCase();
+                            return t === sNo || (sNoDigits && t.replace(/^0+/, '') === sNoDigits);
+                        });
                         if (m && m.wonGift) {
                             delete m.wonGift;
                             await CloudSync.pushMembers(members);
@@ -758,6 +859,11 @@
 
         const isStandQrScanned = (token.toUpperCase() === SECRET_AUTH_TOKEN);
 
+        let hasPendingActivation = false;
+        try {
+            hasPendingActivation = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('uluceeit_pending_activation') === 'true';
+        } catch(e) {}
+
         if (isStandQrScanned) {
             try { sessionStorage.setItem('uluceeit_pending_activation', 'true'); } catch(e){}
             try { window.history.replaceState({}, document.title, window.location.pathname); } catch(e) {}
@@ -768,7 +874,7 @@
                     try { confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } }); } catch(e){}
                 }
             }, 250);
-        } else if (sessionStorage.getItem('uluceeit_pending_activation') === 'true') {
+        } else if (hasPendingActivation) {
             const member = getStoredMember();
             if (!member || !member.fullName) {
                 setTimeout(() => {
@@ -823,10 +929,24 @@
         }
     });
 
+    function openMemberCardModal() {
+        handleMemberCardClick();
+    }
+
+    function openUnregisteredModal() {
+        closeMobileMenu();
+        const unregistered = document.getElementById('unregisteredModal');
+        if (unregistered) {
+            unregistered.classList.remove('hidden');
+            unregistered.style.display = 'flex';
+        }
+    }
+
     // Global fonksiyonları dışarı aktar
     window.CloudSync = CloudSync;
     window.getStoredMember = getStoredMember;
     window.saveStoredMember = saveStoredMember;
+    window.saveStoredMemberLocally = saveStoredMemberLocally;
     window.removeStoredMember = removeStoredMember;
     window.updateNavbarCardState = updateNavbarCardState;
     window.handleMemberCardClick = handleMemberCardClick;

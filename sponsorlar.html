@@ -126,13 +126,6 @@
         .modal-scrollable::-webkit-scrollbar-track { background: transparent; }
         .modal-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 9999px; }
     </style>
-
-    <!-- Guard: Remove any cached lottery elements -->
-    <script id="cekilis_cleanup_guard">
-      document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll("a[href*='cekilis']").forEach(function(el) { el.remove(); });
-      });
-    </script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-amber-500 selection:text-slate-950 pb-20 md:pb-0">
 
@@ -159,6 +152,9 @@
                     <a href="index.html" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Ana Sayfa</a>
                     <a href="sponsorlar.html" class="text-amber-600 font-extrabold text-sm transition-colors flex items-center gap-1.5 border-b-2 border-amber-500 pb-1">
                         <i class="fa-solid fa-tags text-xs text-amber-500"></i> İndirimler
+                    </a>
+                    <a href="cekilis.html" class="text-slate-700 hover:text-amber-600 font-semibold text-sm transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-gift text-xs text-amber-500"></i> Çekiliş
                     </a>
                     <a href="etkinlikler.html" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Etkinlikler</a>
                     <a href="hakkimizda.html" class="text-slate-700 hover:text-blue-600 font-semibold text-sm transition-colors">Hakkımızda</a>
@@ -197,6 +193,10 @@
                 <a href="sponsorlar.html" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-amber-700 bg-amber-50 transition-colors">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-tags text-amber-500 w-5"></i> Sponsorlarımız & İndirimler</span>
                     <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">%30 İndirim</span>
+                </a>
+                <a href="cekilis.html" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-base font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-gift text-amber-500 w-5"></i> Büyük Üye Çekilişi</span>
+                    <span class="bg-amber-500 text-slate-950 text-xs px-2.5 py-0.5 rounded-full font-black">Aktif</span>
                 </a>
                 <a href="etkinlikler.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-base font-bold text-slate-800 hover:text-blue-600 hover:bg-blue-50 transition-colors">
                     <i class="fa-solid fa-calendar-check text-blue-600 w-5"></i> Etkinlikler & Geziler
@@ -947,7 +947,7 @@
                         <p id="cardGiveawayTicketNumber" class="text-xs sm:text-sm font-mono font-black text-white">BİLET-0000</p>
                     </div>
                 </div>
-                <!-- <a href="cekilis.html" class="text-[10px] bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1 rounded-full font-black flex items-center gap-1 transition-all"><span>Çekiliş Detayı</span> <i class="fa-solid fa-arrow-right text-[8px]"></i></a> -->
+                <a href="cekilis.html" class="text-[10px] bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1 rounded-full font-black flex items-center gap-1 transition-all"><span>Çekiliş Detayı</span> <i class="fa-solid fa-arrow-right text-[8px]"></i></a>
             </div>
 
             <!-- 🎁 KAZANILAN HEDİYE ROZETİ (YÖNETİM TANIMLADIYSA KİŞİYE ÖZEL GÖRÜNÜR) -->
