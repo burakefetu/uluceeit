@@ -649,8 +649,8 @@
             <!-- ========================================================================= -->
             <!-- 🎁 DOĞRUDAN KİŞİYE HEDİYE TANIMLAMA MODAL'I (POPUP) -->
             <!-- ========================================================================= -->
-            <div id="assignGiftModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-                <div class="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl relative text-left">
+            <div id="assignGiftModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto" onclick="if(event.target === this) closeAssignGiftModal()">
+                <div class="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl relative text-left my-auto max-h-[92dvh] overflow-y-auto overscroll-contain modal-scrollable">
                     
                     <!-- Kapat Butonu -->
                     <button onclick="closeAssignGiftModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
@@ -659,7 +659,7 @@
 
                     <!-- Başlık -->
                     <div class="flex items-center gap-3 mb-5">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl border border-amber-400/30 shadow-md">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl border border-amber-400/30 shadow-md shrink-0">
                             <i class="fa-solid fa-gift"></i>
                         </div>
                         <div>
@@ -670,17 +670,17 @@
 
                     <!-- Seçilen Üye Rozet Kartı (Kilitli & Net) -->
                     <div class="mb-5 p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 via-blue-500/10 to-slate-950 border border-amber-400/40 flex items-center gap-3.5">
-                        <div id="modalMemberAvatar" class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 font-black flex items-center justify-center text-lg border border-amber-400/50 shadow-md">
+                        <div id="modalMemberAvatar" class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 font-black flex items-center justify-center text-lg border border-amber-400/50 shadow-md shrink-0">
                             Ö
                         </div>
-                        <div class="flex-grow">
+                        <div class="flex-grow min-w-0">
                             <div class="flex items-center gap-2">
                                 <span class="text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/30">
                                     <i class="fa-solid fa-circle-check"></i> HEDEF ÖĞRENCİ
                                 </span>
                             </div>
-                            <h4 id="modalMemberName" class="text-base font-black text-white mt-0.5">Öğrenci Adı</h4>
-                            <p id="modalMemberNo" class="text-xs font-mono font-bold text-amber-300">Öğrenci No: -</p>
+                            <h4 id="modalMemberName" class="text-base font-black text-white mt-0.5 truncate">Öğrenci Adı</h4>
+                            <p id="modalMemberNo" class="text-xs font-mono font-bold text-amber-300 truncate">Öğrenci No: -</p>
                         </div>
                     </div>
 
@@ -700,11 +700,11 @@
                         <div id="modalCustomGiftContainer" class="hidden p-3.5 bg-slate-950 rounded-xl border border-slate-800 space-y-2.5">
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-400 mb-1">Özel Hediye Başlığı</label>
-                                <input type="text" id="modalCustomGiftTitle" placeholder="Örn: 250 TL İndirim Kuponu" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs">
+                                <input type="text" id="modalCustomGiftTitle" placeholder="Örn: 250 TL İndirim Kuponu" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-[16px] sm:text-xs">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-400 mb-1">Özel Teslim Kodu</label>
-                                <input type="text" id="modalCustomGiftCode" placeholder="Örn: ULU-OZEL-250" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white font-mono text-xs">
+                                <input type="text" id="modalCustomGiftCode" placeholder="Örn: ULU-OZEL-250" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white font-mono text-[16px] sm:text-xs">
                             </div>
                         </div>
 
@@ -725,14 +725,14 @@
             <!-- ========================================================================= -->
             <!-- ⏱️ ÇEKİLİŞ TARİHİ AYARLAMA MODALI -->
             <!-- ========================================================================= -->
-            <div id="giveawayConfigModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-                <div class="w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl relative text-left">
+            <div id="giveawayConfigModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto" onclick="if(event.target === this) closeGiveawayConfigModal()">
+                <div class="w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl relative text-left my-auto max-h-[92dvh] overflow-y-auto overscroll-contain modal-scrollable">
                     <button onclick="closeGiveawayConfigModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
                         <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
 
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-400/30">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-400/30 shrink-0">
                             <i class="fa-regular fa-clock"></i>
                         </div>
                         <div>
@@ -744,7 +744,7 @@
                     <form onsubmit="handleSaveGiveawayConfig(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1">Hedef Tarih ve Saat</label>
-                            <input type="datetime-local" id="giveawayTargetDateTimeInput" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-sm focus:outline-none focus:border-amber-400">
+                            <input type="datetime-local" id="giveawayTargetDateTimeInput" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-[16px] sm:text-sm focus:outline-none focus:border-amber-400">
                             <p class="text-[11px] text-slate-500 mt-1">Örn: 15 Ekim 2026 Saat 20:00</p>
                         </div>
                         <div class="flex justify-end gap-2 pt-2">
@@ -758,18 +758,18 @@
             <!-- ========================================================================= -->
             <!-- 📱 TANIŞMA ETKİNLİĞİ DEV PROJEKSİYON QR KOD MODALI -->
             <!-- ========================================================================= -->
-            <div id="eventQrModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl">
-                <div class="w-full max-w-xl bg-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl relative text-center">
+            <div id="eventQrModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl overflow-y-auto" onclick="if(event.target === this) closeEventQrModal()">
+                <div class="w-full max-w-xl bg-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl relative text-center my-auto max-h-[92dvh] overflow-y-auto overscroll-contain modal-scrollable">
                     <button onclick="closeEventQrModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
                         <i class="fa-solid fa-xmark text-xl"></i>
                     </button>
 
                     <!-- Başlık -->
                     <div class="flex items-center justify-center gap-3 mb-2">
-                        <img src="logo.png" alt="Logo" class="w-12 h-12 object-contain" onerror="this.src='logo.jpg'">
+                        <img src="logo.png" alt="Logo" class="w-10 h-10 sm:w-12 sm:h-12 object-contain" onerror="this.src='logo.jpg'">
                         <div class="text-left">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-emerald-400">BURSA ULUDAĞ ÜNİVERSİTESİ • ULUÇEEİT</p>
-                            <h3 class="text-xl sm:text-2xl font-black text-white">Tanışma Etkinliği Çekilişi</h3>
+                            <p class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-emerald-400">BURSA ULUDAĞ ÜNİVERSİTESİ • ULUÇEEİT</p>
+                            <h3 class="text-lg sm:text-2xl font-black text-white">Tanışma Etkinliği Çekilişi</h3>
                         </div>
                     </div>
                     <p class="text-xs sm:text-sm text-slate-300 mb-6 max-w-md mx-auto">
@@ -777,8 +777,8 @@
                     </p>
 
                     <!-- QR Kod Kutusu (Beyaz Arka Plan & Keskin Kontrast) -->
-                    <div class="bg-white p-6 rounded-3xl inline-block shadow-2xl border-4 border-emerald-400 mb-5 relative group">
-                        <div id="eventQrCodeContainer" class="flex items-center justify-center min-w-[220px] min-h-[220px]">
+                    <div class="bg-white p-4 sm:p-6 rounded-3xl inline-block shadow-2xl border-4 border-emerald-400 mb-5 relative group max-w-full">
+                        <div id="eventQrCodeContainer" class="flex items-center justify-center min-w-[180px] min-h-[180px] sm:min-w-[220px] sm:min-h-[220px]">
                             <!-- Dinamik QR Kod -->
                         </div>
                     </div>
@@ -808,14 +808,14 @@
             <!-- ========================================================================= -->
             <!-- ➕ SALONA MANUEL ÜYE EKLEME MODALI -->
             <!-- ========================================================================= -->
-            <div id="manualAddAttendeeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-                <div class="w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl relative text-left">
+            <div id="manualAddAttendeeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto" onclick="if(event.target === this) closeManualAddAttendeeModal()">
+                <div class="w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl relative text-left my-auto max-h-[92dvh] overflow-y-auto overscroll-contain modal-scrollable">
                     <button onclick="closeManualAddAttendeeModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
                         <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
 
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg border border-emerald-400/30">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg border border-emerald-400/30 shrink-0">
                             <i class="fa-solid fa-user-plus"></i>
                         </div>
                         <div>
@@ -827,7 +827,7 @@
                     <form onsubmit="handleManualAddAttendeeSubmit(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase">Kayıtlı Üyelerden Seçin:</label>
-                            <select id="manualAttendeeSelect" required class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-emerald-400">
+                            <select id="manualAttendeeSelect" required class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-[16px] sm:text-xs focus:outline-none focus:border-emerald-400">
                                 <option value="">Üye Seçiniz...</option>
                             </select>
                         </div>
@@ -849,45 +849,45 @@
                 <div class="fixed -bottom-40 -right-40 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
                 <!-- Üst Bar -->
-                <header class="px-6 sm:px-10 py-5 border-b border-white/10 flex items-center justify-between relative z-10 bg-slate-950/60 backdrop-blur-md">
-                    <div class="flex items-center gap-4">
-                        <img src="logo.png" alt="Logo" class="w-12 h-12 object-contain drop-shadow" onerror="this.src='logo.jpg'">
+                <header class="px-4 sm:px-10 py-3 sm:py-5 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 relative z-10 bg-slate-950/80 backdrop-blur-md">
+                    <div class="flex items-center gap-3 sm:gap-4">
+                        <img src="logo.png" alt="Logo" class="w-10 h-10 sm:w-12 sm:h-12 object-contain drop-shadow shrink-0" onerror="this.src='logo.jpg'">
                         <div>
-                            <p class="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">BURSA ULUDAĞ ÜNİVERSİTESİ • ULUÇEEİT</p>
-                            <h1 class="text-lg sm:text-2xl font-black tracking-tight text-white">2026 Tanışma Etkinliği Büyük Çekilişi</h1>
+                            <p class="text-[9px] sm:text-xs font-black uppercase tracking-widest text-amber-400">BURSA ULUDAĞ ÜNİVERSİTESİ • ULUÇEEİT</p>
+                            <h1 class="text-base sm:text-2xl font-black tracking-tight text-white">2026 Tanışma Etkinliği Büyük Çekilişi</h1>
                         </div>
                     </div>
 
                     <!-- Sağ Kontrol Butonları -->
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center flex-wrap gap-2">
                         <!-- Canlı Sayaç Rozeti -->
-                        <div class="flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-4 py-2 rounded-2xl font-black text-xs sm:text-sm border border-emerald-500/30 shadow-lg">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                            <span>Salonda: <b id="stageAttendeeCount" class="font-mono text-white text-base">0</b> Katılımcı</span>
+                        <div class="flex items-center gap-1.5 sm:gap-2 bg-emerald-500/20 text-emerald-300 px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl font-black text-xs sm:text-sm border border-emerald-500/30 shadow-lg">
+                            <span class="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span>Salonda: <b id="stageAttendeeCount" class="font-mono text-white text-sm sm:text-base">0</b> Katılımcı</span>
                         </div>
 
                         <!-- QR Butonu -->
-                        <button type="button" onclick="openEventQrModal()" class="px-3.5 py-2 bg-slate-800/80 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-bold transition-all border border-amber-500/30 flex items-center gap-1.5 shadow-sm" title="Salondaki QR Kodu Göster">
+                        <button type="button" onclick="openEventQrModal()" class="px-3 sm:px-3.5 py-1.5 sm:py-2 bg-slate-800/80 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-bold transition-all border border-amber-500/30 flex items-center gap-1.5 shadow-sm" title="Salondaki QR Kodu Göster">
                             <i class="fa-solid fa-qrcode text-amber-400"></i> <span class="hidden md:inline">Katılım QR</span>
                         </button>
 
                         <!-- Tam Ekran -->
-                        <button type="button" onclick="toggleStageFullscreen()" class="px-3.5 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition-all border border-slate-700 flex items-center gap-1.5" title="Tam Ekran Modu (F11)">
+                        <button type="button" onclick="toggleStageFullscreen()" class="px-3 sm:px-3.5 py-1.5 sm:py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition-all border border-slate-700 flex items-center gap-1.5" title="Tam Ekran Modu (F11)">
                             <i class="fa-solid fa-expand text-sky-400"></i> <span class="hidden md:inline">Tam Ekran</span>
                         </button>
 
                         <!-- Kapat -->
-                        <button type="button" onclick="closeStageProjectorModal()" class="px-3.5 py-2 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded-xl text-xs font-black transition-all border border-rose-500/30 flex items-center gap-1.5" title="Panele Dön">
+                        <button type="button" onclick="closeStageProjectorModal()" class="px-3 sm:px-3.5 py-1.5 sm:py-2 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded-xl text-xs font-black transition-all border border-rose-500/30 flex items-center gap-1.5" title="Panele Dön">
                             <i class="fa-solid fa-xmark text-sm"></i> <span class="hidden md:inline">Panele Dön</span>
                         </button>
                     </div>
                 </header>
 
                 <!-- Ana Sahne Alanı -->
-                <main class="flex-grow flex flex-col items-center justify-center p-4 sm:p-8 max-w-5xl mx-auto w-full relative z-10 text-center">
+                <main class="flex-grow flex flex-col items-center justify-center p-3 sm:p-8 max-w-5xl mx-auto w-full relative z-10 text-center">
 
                     <!-- Hediye Seçim Şeridi -->
-                    <div class="mb-6 flex flex-col sm:flex-row items-center gap-3 bg-slate-900/80 border border-amber-500/30 px-6 py-3.5 rounded-2xl shadow-xl max-w-xl w-full">
+                    <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 bg-slate-900/80 border border-amber-500/30 px-4 sm:px-6 py-3 sm:py-3.5 rounded-2xl shadow-xl max-w-xl w-full">
                         <span class="text-xs font-black uppercase text-amber-400 flex items-center gap-1.5 shrink-0">
                             <i class="fa-solid fa-gift text-sm"></i> Çekilecek Hediye:
                         </span>
@@ -897,50 +897,50 @@
                     </div>
 
                     <!-- 🎰 KURA VİTRİNİ & SLOT KUTUSU -->
-                    <div id="stageShowcaseBox" class="w-full bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-slate-900/90 border-2 border-amber-400/50 rounded-3xl p-8 sm:p-14 shadow-2xl relative overflow-hidden mb-8 min-h-[360px] flex flex-col items-center justify-center">
+                    <div id="stageShowcaseBox" class="w-full bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-slate-900/90 border-2 border-amber-400/50 rounded-3xl p-5 sm:p-14 shadow-2xl relative overflow-hidden mb-6 sm:mb-8 min-h-[280px] sm:min-h-[360px] flex flex-col items-center justify-center">
                         <!-- Şık Altın Işık Çerçevesi -->
                         <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
                         <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
 
                         <!-- BEKLEME DURUMU -->
-                        <div id="stageStateIdle" class="flex flex-col items-center justify-center space-y-4">
-                            <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 flex items-center justify-center text-5xl shadow-2xl shadow-amber-500/30 animate-bounce">
+                        <div id="stageStateIdle" class="flex flex-col items-center justify-center space-y-3 sm:space-y-4">
+                            <div class="w-16 h-16 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 flex items-center justify-center text-3xl sm:text-5xl shadow-2xl shadow-amber-500/30 animate-bounce">
                                 <i class="fa-solid fa-gift"></i>
                             </div>
-                            <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                            <h2 class="text-xl sm:text-4xl font-black text-white tracking-tight">
                                 Tanışma Etkinliği Büyük Kurası
                             </h2>
-                            <p class="text-sm sm:text-base text-slate-300 max-w-lg leading-relaxed">
-                                Kura yalnızca salonda bulunup QR okutmuş üyeler arasında çekilir. Hazır olduğunuzda aşağıdaki butona basarak kurayı başlatın!
+                            <p class="text-xs sm:text-base text-slate-300 max-w-lg leading-relaxed">
+                                Kura yalnızca salonda bulunup QR okutmuş üyeler arasında çekilir. Hazır olduğunuzda butona basarak kurayı başlatın!
                             </p>
                         </div>
 
                         <!-- DÖNME / ÇEKİLİŞ DURUMU (HIZLA AKAN İSİMLER) -->
-                        <div id="stageStateSpinning" class="hidden flex flex-col items-center justify-center space-y-4 w-full">
+                        <div id="stageStateSpinning" class="hidden flex flex-col items-center justify-center space-y-3 sm:space-y-4 w-full">
                             <span class="text-xs sm:text-sm font-black uppercase tracking-widest text-amber-400 animate-pulse flex items-center gap-2">
                                 <i class="fa-solid fa-dice text-base animate-spin"></i> KURA ÇEKİLİYOR...
                             </span>
-                            <div class="w-full max-w-2xl py-6 px-4 bg-black/60 rounded-3xl border-2 border-amber-400/80 shadow-2xl">
-                                <h2 id="stageRollingName" class="text-3xl sm:text-5xl font-black text-amber-300 tracking-tight truncate font-sans">
+                            <div class="w-full max-w-2xl py-4 sm:py-6 px-3 sm:px-4 bg-black/60 rounded-3xl border-2 border-amber-400/80 shadow-2xl">
+                                <h2 id="stageRollingName" class="text-2xl sm:text-5xl font-black text-amber-300 tracking-tight truncate font-sans break-words">
                                     Katılımcı İsimleri...
                                 </h2>
-                                <p id="stageRollingTicket" class="text-sm sm:text-lg font-mono font-black text-sky-400 mt-2">
+                                <p id="stageRollingTicket" class="text-xs sm:text-lg font-mono font-black text-sky-400 mt-2">
                                     SALON-000
                                 </p>
                             </div>
-                            <p class="text-xs text-slate-400">Salondaki tüm adaylar taranıyor...</p>
+                            <p class="text-[11px] sm:text-xs text-slate-400">Salondaki tüm adaylar taranıyor...</p>
                         </div>
 
                         <!-- KAZANAN TALİHLİ EKRANI -->
-                        <div id="stageStateWinner" class="hidden flex flex-col items-center justify-center space-y-4 w-full animate-fade">
-                            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 px-5 py-1.5 rounded-full font-black text-xs sm:text-sm uppercase tracking-wider shadow-xl">
-                                <i class="fa-solid fa-crown text-base"></i> TEBRİKLER! KAZANAN TALİHLİ
+                        <div id="stageStateWinner" class="hidden flex flex-col items-center justify-center space-y-3 sm:space-y-4 w-full animate-fade">
+                            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 px-4 sm:px-5 py-1.5 rounded-full font-black text-[11px] sm:text-sm uppercase tracking-wider shadow-xl">
+                                <i class="fa-solid fa-crown text-sm sm:text-base"></i> TEBRİKLER! KAZANAN TALİHLİ
                             </div>
-                            <div class="w-full max-w-2xl py-6 px-6 bg-gradient-to-b from-amber-500/15 via-slate-950/80 to-amber-500/10 rounded-3xl border-2 border-amber-400 shadow-2xl">
-                                <h2 id="stageWinnerName" class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+                            <div class="w-full max-w-2xl py-5 sm:py-6 px-4 sm:px-6 bg-gradient-to-b from-amber-500/15 via-slate-950/80 to-amber-500/10 rounded-3xl border-2 border-amber-400 shadow-2xl">
+                                <h2 id="stageWinnerName" class="text-2xl sm:text-5xl font-black text-white tracking-tight leading-tight break-words">
                                     Ahmet Yılmaz
                                 </h2>
-                                <div class="flex flex-wrap items-center justify-center gap-3 mt-3 text-xs sm:text-sm">
+                                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-3 text-xs sm:text-sm">
                                     <span class="bg-amber-500 text-slate-950 px-3 py-1 rounded-xl font-mono font-black shadow-sm" id="stageWinnerTicket">
                                         SALON-104
                                     </span>
@@ -949,21 +949,21 @@
                                     </span>
                                 </div>
                                 <div class="mt-4 pt-3 border-t border-white/10">
-                                    <p class="text-xs uppercase font-bold text-slate-400">Kazanılan Hediye:</p>
-                                    <h4 id="stageWinnerPrizeTitle" class="text-base sm:text-xl font-black text-amber-300 mt-0.5">
+                                    <p class="text-[11px] sm:text-xs uppercase font-bold text-slate-400">Kazanılan Hediye:</p>
+                                    <h4 id="stageWinnerPrizeTitle" class="text-sm sm:text-xl font-black text-amber-300 mt-0.5 break-words">
                                         EspressoLab Kahve Paketi
                                     </h4>
                                 </div>
                             </div>
 
                             <!-- Salonda mı? Kontrolü (Roll Call Butonları) -->
-                            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md pt-2">
-                                <button type="button" onclick="confirmStageWinnerPresent()" class="w-full sm:w-auto flex-1 py-3.5 px-6 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-black rounded-2xl text-xs sm:text-sm shadow-xl shadow-emerald-500/30 transition-all flex items-center justify-center gap-2 active:scale-95">
-                                    <i class="fa-solid fa-check text-base"></i>
+                            <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 w-full max-w-md pt-2">
+                                <button type="button" onclick="confirmStageWinnerPresent()" class="w-full sm:w-auto flex-1 py-3 sm:py-3.5 px-4 sm:px-6 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-black rounded-2xl text-xs sm:text-sm shadow-xl shadow-emerald-500/30 transition-all flex items-center justify-center gap-2 active:scale-95">
+                                    <i class="fa-solid fa-check text-sm sm:text-base"></i>
                                     <span>✅ Salonda! Hediyeyi Tanımla</span>
                                 </button>
-                                <button type="button" onclick="rejectStageWinnerAbsent()" class="w-full sm:w-auto flex-1 py-3.5 px-6 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-black rounded-2xl text-xs sm:text-sm border border-rose-500/40 transition-all flex items-center justify-center gap-2 active:scale-95" title="Salonda yoksa bu kişiyi ele ve yeniden çek">
-                                    <i class="fa-solid fa-xmark text-base"></i>
+                                <button type="button" onclick="rejectStageWinnerAbsent()" class="w-full sm:w-auto flex-1 py-3 sm:py-3.5 px-4 sm:px-6 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-black rounded-2xl text-xs sm:text-sm border border-rose-500/40 transition-all flex items-center justify-center gap-2 active:scale-95" title="Salonda yoksa bu kişiyi ele ve yeniden çek">
+                                    <i class="fa-solid fa-xmark text-sm sm:text-base"></i>
                                     <span>❌ Yok! Yedek Çek</span>
                                 </button>
                             </div>
@@ -972,9 +972,9 @@
                     </div>
 
                     <!-- BÜYÜK KURAYI ÇEK BUTONU (DURUMA GÖRE GÖRÜNÜR) -->
-                    <div id="stageDrawBtnContainer" class="flex justify-center">
-                        <button type="button" id="btnStartStageLottery" onclick="startStageLotteryDraw()" class="py-5 px-10 sm:px-14 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black rounded-3xl text-base sm:text-xl shadow-2xl shadow-amber-500/40 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-3">
-                            <i class="fa-solid fa-dice text-2xl"></i>
+                    <div id="stageDrawBtnContainer" class="flex justify-center w-full">
+                        <button type="button" id="btnStartStageLottery" onclick="startStageLotteryDraw()" class="w-full sm:w-auto py-4 sm:py-5 px-6 sm:px-14 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black rounded-3xl text-sm sm:text-xl shadow-2xl shadow-amber-500/40 transition-all transform active:scale-95 flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-dice text-xl sm:text-2xl"></i>
                             <span>🎲 BÜYÜK KURAYI BAŞLAT</span>
                         </button>
                     </div>
@@ -1157,6 +1157,39 @@
                 }
             },
 
+            async getEventAttendees() {
+                try {
+                    const res = await fetch(`${this.API_BASE}/event_attendees?_t=${Date.now()}`, {
+                        headers: { 'X-Mantle-Key': this.API_KEY },
+                        cache: 'no-store'
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data)) {
+                            localStorage.setItem('uluceeit_event_attendees_cache', JSON.stringify(data));
+                            return data;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('MantleDB event_attendees fetch failed, fallback to local cache:', e);
+                }
+                const cached = localStorage.getItem('uluceeit_event_attendees_cache');
+                return cached ? JSON.parse(cached) : [];
+            },
+
+            async pushEventAttendees(attendees) {
+                try {
+                    localStorage.setItem('uluceeit_event_attendees_cache', JSON.stringify(attendees));
+                    await fetch(`${this.API_BASE}/event_attendees`, {
+                        method: 'POST',
+                        headers: this.getHeaders(),
+                        body: JSON.stringify(attendees)
+                    });
+                } catch (e) {
+                    console.warn('MantleDB event_attendees push error:', e);
+                }
+            },
+
             async getAnalytics() {
                 try {
                     const res = await fetch(`${this.API_BASE}/analytics?_t=${Date.now()}`, {
@@ -1220,11 +1253,12 @@
         // =========================================================================
         // 👥 CANLI BULUT ÜYE & HEDİYE YÜKLEME (DELTA / HASH KORUMALI)
         // =========================================================================
-        let cachedCloudData = { members: [], gifts: [], pool: [] };
+        let cachedCloudData = { members: [], gifts: [], pool: [], attendees: [] };
         let isSyncing = false;
         let lastMembersHash = '';
         let lastGiftsHash = '';
         let lastPoolHash = '';
+        let lastAttendeesHash = '';
 
         // Seçili Üye ve Hediye Durumunu Koruma Değişkenleri
         let selectedTargetMemberNo = '';
@@ -1238,15 +1272,52 @@
             if (refreshBtn && showFeedback) refreshBtn.querySelector('i')?.classList.add('animate-spin');
 
             try {
-                const [members, gifts, pool] = await Promise.all([
+                const [members, gifts, pool, attendees] = await Promise.all([
                     CloudSync.getMembers(),
                     CloudSync.getGifts(),
-                    CloudSync.getPool()
+                    CloudSync.getPool(),
+                    CloudSync.getEventAttendees()
                 ]);
 
                 const newMembers = Array.isArray(members) ? members : [];
                 const newGifts = Array.isArray(gifts) ? gifts : [];
                 const newPool = (Array.isArray(pool) && pool.length > 0) ? pool : getGiftPool();
+                let newAttendees = Array.isArray(attendees) ? attendees : [];
+
+                // Reconcile: Eğer bir üye salonda işaretliyse ve newAttendees içinde yoksa ekle
+                let attendeesUpdated = false;
+                newMembers.forEach(m => {
+                    if (m && (m.eventAttended || m.eventTicket)) {
+                        const sNo = String(m.studentNo || '').trim().toLowerCase();
+                        if (sNo && !newAttendees.some(a => String(a.studentNo || '').trim().toLowerCase() === sNo)) {
+                            newAttendees.push({
+                                fullName: m.fullName || '',
+                                studentNo: m.studentNo || '',
+                                eventTicket: m.eventTicket || ('SALON-' + (101 + newAttendees.length)),
+                                eventAttended: true,
+                                eventJoinedAt: m.eventJoinedAt || new Date().toISOString(),
+                                wonGift: m.wonGift || null
+                            });
+                            attendeesUpdated = true;
+                        }
+                    }
+                });
+
+                // Hediye kazanmışsa katılımcı kaydına da işle
+                newAttendees.forEach(a => {
+                    if (!a.wonGift) {
+                        const sNo = String(a.studentNo || '').trim().toLowerCase();
+                        const m = newMembers.find(mem => String(mem.studentNo || '').trim().toLowerCase() === sNo);
+                        if (m && m.wonGift) {
+                            a.wonGift = m.wonGift;
+                            attendeesUpdated = true;
+                        }
+                    }
+                });
+
+                if (attendeesUpdated) {
+                    CloudSync.pushEventAttendees(newAttendees);
+                }
 
                 // Yerel kayıtlı üye varsa bulutta da yoksa ekle
                 const localMemberRaw = localStorage.getItem(STORAGE_KEY);
@@ -1262,18 +1333,22 @@
                 const membersHash = JSON.stringify(newMembers);
                 const giftsHash = JSON.stringify(newGifts);
                 const poolHash = JSON.stringify(newPool);
+                const attendeesHash = JSON.stringify(newAttendees);
 
                 const membersChanged = (membersHash !== lastMembersHash);
                 const giftsChanged = (giftsHash !== lastGiftsHash);
                 const poolChanged = (poolHash !== lastPoolHash);
+                const attendeesChanged = (attendeesHash !== lastAttendeesHash);
 
                 cachedCloudData.members = newMembers;
                 cachedCloudData.gifts = newGifts;
                 cachedCloudData.pool = newPool;
+                cachedCloudData.attendees = newAttendees;
 
                 lastMembersHash = membersHash;
                 lastGiftsHash = giftsHash;
                 lastPoolHash = poolHash;
+                lastAttendeesHash = attendeesHash;
 
                 localStorage.setItem(GIFT_POOL_KEY, JSON.stringify(newPool));
 
@@ -1283,7 +1358,7 @@
                     updateGiftSelectDropdown();
                 }
 
-                if (membersChanged || giftsChanged || showFeedback) {
+                if (membersChanged || giftsChanged || attendeesChanged || showFeedback) {
                     renderCloudMembers();
                     renderEventAttendees();
                     renderGiveawayParticipants();
@@ -2580,6 +2655,9 @@
         let stageExcludedStudentNos = new Set();
 
         function getEventAttendees() {
+            if (Array.isArray(cachedCloudData.attendees) && cachedCloudData.attendees.length > 0) {
+                return cachedCloudData.attendees;
+            }
             const allMembers = cachedCloudData.members || [];
             return allMembers.filter(m => !!(m.eventAttended || m.eventTicket));
         }
@@ -2725,10 +2803,12 @@
             if (qrContainer && typeof QRCode !== 'undefined') {
                 qrContainer.innerHTML = '';
                 const targetUrl = `${window.location.origin}/cekilis.html?etkinlik=tanisma2026`;
+                const isMobile = window.innerWidth < 640;
+                const qrSize = isMobile ? 180 : 220;
                 eventQrInstance = new QRCode(qrContainer, {
                     text: targetUrl,
-                    width: 220,
-                    height: 220,
+                    width: qrSize,
+                    height: qrSize,
                     colorDark: "#020617",
                     colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
@@ -2800,18 +2880,36 @@
                 return;
             }
 
-            if (member.eventTicket) {
-                alert(`Bu üye zaten salonda kayıtlı! Bilet No: ${member.eventTicket}`);
+            if (!cachedCloudData.attendees) cachedCloudData.attendees = [];
+            const existing = cachedCloudData.attendees.find(a => {
+                const target = String(a.studentNo || '').trim().toLowerCase();
+                return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+            });
+            if (existing) {
+                alert(`Bu üye zaten salonda kayıtlı! Bilet No: ${existing.eventTicket}`);
                 return;
             }
 
-            const attendees = getEventAttendees();
-            const ticketNo = 'SALON-' + (101 + attendees.length);
+            const ticketNo = 'SALON-' + (101 + cachedCloudData.attendees.length);
+            const attendeeItem = {
+                fullName: member.fullName || '',
+                studentNo: member.studentNo || '',
+                eventTicket: ticketNo,
+                eventAttended: true,
+                eventJoinedAt: new Date().toISOString(),
+                wonGift: member.wonGift || null
+            };
+
+            cachedCloudData.attendees.push(attendeeItem);
             member.eventTicket = ticketNo;
             member.eventAttended = true;
-            member.eventJoinedAt = new Date().toISOString();
+            member.eventJoinedAt = attendeeItem.eventJoinedAt;
 
-            await CloudSync.pushMembers(members);
+            await Promise.all([
+                CloudSync.pushEventAttendees(cachedCloudData.attendees),
+                CloudSync.pushMembers(members)
+            ]);
+
             renderCloudMembers();
             renderEventAttendees();
             updateStats();
@@ -2827,6 +2925,14 @@
 
             const sNo = String(studentNo || '').trim().toLowerCase();
             const sNoDigits = sNo.replace(/^0+/, '');
+
+            if (cachedCloudData.attendees) {
+                cachedCloudData.attendees = cachedCloudData.attendees.filter(a => {
+                    const target = String(a.studentNo || '').trim().toLowerCase();
+                    return !(target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits));
+                });
+            }
+
             const members = cachedCloudData.members || [];
             const member = members.find(m => {
                 const target = String(m.studentNo || '').trim().toLowerCase();
@@ -2837,12 +2943,17 @@
                 delete member.eventTicket;
                 delete member.eventAttended;
                 delete member.eventJoinedAt;
-                await CloudSync.pushMembers(members);
-                renderCloudMembers();
-                renderEventAttendees();
-                updateStats();
-                alert(`${fullName} salondan çıkarıldı.`);
             }
+
+            await Promise.all([
+                CloudSync.pushEventAttendees(cachedCloudData.attendees || []),
+                CloudSync.pushMembers(members)
+            ]);
+
+            renderCloudMembers();
+            renderEventAttendees();
+            updateStats();
+            alert(`${fullName} salondan çıkarıldı.`);
         }
 
         // =========================================================================
@@ -3060,9 +3171,25 @@
                 };
             }
 
+            if (cachedCloudData.attendees) {
+                const att = cachedCloudData.attendees.find(a => {
+                    const mt = String(a.studentNo || '').trim().toLowerCase();
+                    return mt === targetNo.toLowerCase() || (sNoDigits && mt.replace(/^0+/, '') === sNoDigits);
+                });
+                if (att) {
+                    att.wonGift = {
+                        title: currentStagePrize.prizeTitle,
+                        code: code,
+                        id: newGiftItem.id,
+                        assignedAt: new Date().toISOString()
+                    };
+                }
+            }
+
             await Promise.all([
                 CloudSync.pushGifts(cachedCloudData.gifts),
                 CloudSync.pushMembers(allMembers),
+                CloudSync.pushEventAttendees(cachedCloudData.attendees || []),
                 CloudSync.pushPool(pool)
             ]);
 

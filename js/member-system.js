@@ -323,6 +323,39 @@
             }
         },
 
+        async getEventAttendees() {
+            try {
+                const res = await fetch(`${this.API_BASE}/event_attendees?_t=${Date.now()}`, {
+                    headers: { 'X-Mantle-Key': this.API_KEY },
+                    cache: 'no-store'
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        localStorage.setItem('uluceeit_event_attendees', JSON.stringify(data));
+                        return data;
+                    }
+                }
+            } catch (e) {
+                console.warn('MantleDB event attendees fetch error:', e);
+            }
+            const cached = localStorage.getItem('uluceeit_event_attendees');
+            return cached ? JSON.parse(cached) : [];
+        },
+
+        async pushEventAttendees(attendees) {
+            try {
+                localStorage.setItem('uluceeit_event_attendees', JSON.stringify(attendees));
+                await fetch(`${this.API_BASE}/event_attendees`, {
+                    method: 'POST',
+                    headers: this.getHeaders(),
+                    body: JSON.stringify(attendees)
+                });
+            } catch (e) {
+                console.warn('MantleDB event attendees push error:', e);
+            }
+        },
+
         async checkInToEvent(member) {
             if (!member || !member.studentNo) return { status: 'no_member' };
             const config = await this.getGiveawayConfig();
@@ -333,27 +366,39 @@
                 return { status: 'already_checked_in', ticket: member.eventTicket };
             }
 
-            const members = await this.getMembers();
-            const attendees = members.filter(m => m.eventAttended || m.eventTicket);
+            const attendees = await this.getEventAttendees();
+            const sNo = String(member.studentNo).trim().toLowerCase();
+            const sNoDigits = sNo.replace(/^0+/, '');
+
+            // Halihazırda bulut yoklama listesinde var mı kontrol et
+            const existing = attendees.find(a => {
+                const target = String(a.studentNo || '').trim().toLowerCase();
+                return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+            });
+
+            if (existing) {
+                member.eventTicket = existing.ticket;
+                member.eventAttended = true;
+                member.eventJoinedAt = existing.joinedAt || new Date().toISOString();
+                saveStoredMemberLocally(member);
+                return { status: 'already_checked_in', ticket: existing.ticket };
+            }
+
             const ticketNo = 'SALON-' + (101 + attendees.length);
+            const joinedAt = new Date().toISOString();
 
             member.eventTicket = ticketNo;
             member.eventAttended = true;
-            member.eventJoinedAt = new Date().toISOString();
+            member.eventJoinedAt = joinedAt;
 
-            const sNo = String(member.studentNo).trim().toLowerCase();
-            const sNoDigits = sNo.replace(/^0+/, '');
-            const idx = members.findIndex(m => {
-                const target = String(m.studentNo || '').trim().toLowerCase();
-                return target === sNo || (sNoDigits && target.replace(/^0+/, '') === sNoDigits);
+            attendees.push({
+                studentNo: String(member.studentNo).trim(),
+                fullName: member.fullName || 'İsimsiz Üye',
+                ticket: ticketNo,
+                joinedAt: joinedAt
             });
-            if (idx >= 0) {
-                members[idx] = { ...members[idx], ...member };
-            } else {
-                members.push(member);
-            }
 
-            await this.pushMembers(members);
+            await this.pushEventAttendees(attendees);
             saveStoredMemberLocally(member);
             return { status: 'success', ticket: ticketNo };
         },
@@ -593,23 +638,26 @@
         saveStoredMember(newMember);
         closeActivationModal();
 
-        // Eğer etkinlik QR kodundan gelinmişse otomatik salon yoklamasını yap
+        // Eğer etkinlik QR kodundan gelinmişse veya çekiliş sayfasındaysa otomatik salon yoklamasını yap
         try {
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('etkinlik') || urlParams.has('salon') || urlParams.has('giris')) {
-                await CloudSync.checkInToEvent(newMember);
+            const isEventContext = urlParams.has('etkinlik') || urlParams.has('salon') || urlParams.has('giris') || window.location.pathname.includes('cekilis');
+            if (isEventContext) {
+                const res = await CloudSync.checkInToEvent(newMember);
+                if (res && res.ticket) {
+                    newMember.eventTicket = res.ticket;
+                    newMember.eventAttended = true;
+                }
             }
         } catch (err) {
             console.warn('Auto event check-in error:', err);
         }
 
         if (typeof confetti === 'function') {
-            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
         }
 
-        setTimeout(() => {
-            handleMemberCardClick();
-        }, 300);
+        handleMemberCardClick();
     }
 
     // =========================================================================
