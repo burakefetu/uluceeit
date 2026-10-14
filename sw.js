@@ -1,8 +1,9 @@
-const CACHE_NAME = 'uluceeit-pwa-v19';
+const CACHE_NAME = 'uluceeit-pwa-v20';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './cekilis.html',
+  './kapi.html',
   './sponsorlar.html',
   './etkinlikler.html',
   './hakkimizda.html',

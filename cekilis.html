@@ -808,34 +808,53 @@
             </button>
             
             <div class="text-center mb-6">
-                <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 flex items-center justify-center text-3xl mx-auto mb-4">
-                    <i class="fa-solid fa-id-card"></i>
+                <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-ticket"></i>
                 </div>
-                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold mb-2 border border-emerald-400/30">
-                    <i class="fa-solid fa-check"></i> <span>2026 - 2027 Dönemi Resmi Kayıt</span>
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-black uppercase tracking-wider mb-2 border border-emerald-400/30">
+                    <i class="fa-solid fa-check"></i> <span id="modalEventBadge">2026 Tanışma Etkinliği Girişi</span>
                 </div>
-                <h3 class="text-2xl font-black text-white">Dijital Kartını Oluştur</h3>
-                <p class="text-xs text-slate-300 mt-1">Kartınız bu cihaza mühürlenecek ve buluta kaydedilecektir.</p>
+                <h3 id="modalEventTitle" class="text-2xl font-black text-white">Çekilişe Katıl & Biletini Al</h3>
+                <p id="modalEventDesc" class="text-xs text-slate-300 mt-1 max-w-xs mx-auto">
+                    Bilgilerinizi girdiğinizde resmi kulüp kaydınız mühürlenir ve salon çekiliş biletiniz (SALON-XXX) anında oluşturulur.
+                </p>
             </div>
 
             <form id="activationForm" onsubmit="handleActivationSubmit(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">Adınız ve Soyadınız</label>
-                    <input type="text" id="inputFullName" required placeholder="Örn: Burak Efe Türk" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 text-[16px] sm:text-sm">
+                    <input type="text" id="inputFullName" required placeholder="Örn: Burak Efe Türk" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-400 text-[16px] sm:text-sm">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">Öğrenci Numaranız</label>
-                    <input type="text" id="inputStudentNo" required placeholder="Örn: 022201045" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 text-[16px] sm:text-sm font-mono">
+                    <input type="text" id="inputStudentNo" required placeholder="Örn: 022201045" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-400 text-[16px] sm:text-sm font-mono">
                 </div>
 
                 <div class="pt-2">
-                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-600 hover:to-amber-500 text-slate-950 font-black rounded-xl text-base shadow-xl shadow-amber-500/30 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 min-h-[48px]">
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 hover:from-emerald-600 hover:to-teal-500 text-slate-950 font-black rounded-xl text-base shadow-xl shadow-emerald-500/30 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 min-h-[48px]">
                         <i class="fa-solid fa-id-card text-lg"></i>
-                        <span>Kartımı Oluştur ve Çekilişe Katıl</span>
+                        <span>Kaydı Tamamla & Çekiliş Biletini Al</span>
                     </button>
                 </div>
             </form>
+
+            <!-- Stantta Zaten Kayıtlı Olanlar İçin Geri Yükle -->
+            <div class="mt-4 pt-4 border-t border-white/10 text-center">
+                <button type="button" onclick="toggleModalRestoreBox()" class="text-xs text-amber-300 hover:text-amber-200 underline font-bold flex items-center justify-center gap-1.5 mx-auto">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span>Zaten stantta üye oldum, kartımı yükle</span>
+                </button>
+                <div id="modalRestoreBox" class="hidden mt-3 p-3 bg-slate-950/90 rounded-2xl border border-white/10 text-left">
+                    <label class="block text-[11px] font-bold text-slate-300 mb-1">Öğrenci Numaranız</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="modalRestoreInput" placeholder="Örn: 022201045" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-mono text-[16px] sm:text-xs focus:outline-none focus:border-amber-400">
+                        <button type="button" onclick="handleModalRestoreSubmit()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs shrink-0">
+                            Getir
+                        </button>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -1226,6 +1245,30 @@
             }
         }
 
+        function toggleModalRestoreBox() {
+            const box = document.getElementById('modalRestoreBox');
+            if (box) box.classList.toggle('hidden');
+        }
+
+        async function handleModalRestoreSubmit() {
+            const input = document.getElementById('modalRestoreInput');
+            const studentNo = input ? input.value.trim() : '';
+            if (!studentNo) {
+                showToast("Lütfen öğrenci numaranızı girin.", "warning");
+                return;
+            }
+            if (window.CloudSync && CloudSync.restoreMemberByStudentNo) {
+                const member = await CloudSync.restoreMemberByStudentNo(studentNo);
+                if (member) {
+                    showToast(`✅ Hoş Geldin, ${member.fullName}!`, "success");
+                    closeActivationModal();
+                    await handleEventCheckinClick();
+                } else {
+                    showToast("❌ Bu öğrenci numarasına ait üye kaydı bulunamadı. Lütfen formu doldurarak üye olun.", "error");
+                }
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             const member = typeof getStoredMember === 'function' ? getStoredMember() : null;
             updateGiveawayBtnState();
@@ -1233,7 +1276,7 @@
             startCountdown();
 
             const urlParams = new URLSearchParams(window.location.search);
-            const isEventScan = urlParams.has('etkinlik') || urlParams.has('salon') || urlParams.has('giris');
+            const isEventScan = urlParams.has('etkinlik') || urlParams.has('salon') || urlParams.has('giris') || urlParams.has('kapi');
 
             if (window.CloudSync) {
                 CloudSync.recordVisit('cekilis');
@@ -1255,12 +1298,12 @@
                 } catch (e) {}
             }
 
-            // Eğer QR kod okutularak gelinmişse otomatik yoklama yap!
+            // Eğer Kapı / Etkinlik QR kodu okutularak gelinmişse:
             if (isEventScan) {
                 setTimeout(async () => {
                     const currentM = typeof getStoredMember === 'function' ? getStoredMember() : null;
                     if (!currentM) {
-                        showToast("👋 Tanışma Etkinliği Çekilişi için kartınızı oluşturun!", "info");
+                        showToast("🎟️ Çekilişe katılmak ve biletinizi almak için bilgilerinizi giriniz!", "info");
                         if (typeof openActivationModal === 'function') openActivationModal();
                     } else if (!currentM.eventTicket) {
                         await handleEventCheckinClick();

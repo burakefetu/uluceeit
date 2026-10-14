@@ -189,8 +189,8 @@
         async registerMember(member) {
             try {
                 if (!member || !member.studentNo) return;
-                const members = await this.getMembers();
-                if (!Array.isArray(members) || members.length === 0) return;
+                let members = await this.getMembers();
+                if (!Array.isArray(members)) members = [];
                 const sNo = String(member.studentNo).trim().toLowerCase();
                 const sNoDigits = sNo.replace(/^0+/, '');
                 const idx = members.findIndex(m => {
@@ -359,9 +359,14 @@
         async checkInToEvent(member) {
             if (!member || !member.studentNo) return { status: 'no_member' };
             const config = await this.getGiveawayConfig();
-            if (!config || !config.eventCheckinOpen) {
+            
+            // Eğer config kapalıysa ancak kapı/etkinlik QR kodu taranmışsa yoklamayı kabul et
+            const isDoorScan = typeof window !== 'undefined' && window.location.search && (window.location.search.includes('kapi') || window.location.search.includes('etkinlik'));
+            const isClosed = config && config.eventCheckinOpen === false;
+            if (isClosed && !isDoorScan) {
                 return { status: 'checkin_closed' };
             }
+
             if (member.eventTicket) {
                 return { status: 'already_checked_in', ticket: member.eventTicket };
             }
@@ -377,11 +382,12 @@
             });
 
             if (existing) {
-                member.eventTicket = existing.ticket;
+                const existingTicket = existing.ticket || existing.eventTicket || 'SALON-101';
+                member.eventTicket = existingTicket;
                 member.eventAttended = true;
-                member.eventJoinedAt = existing.joinedAt || new Date().toISOString();
+                member.eventJoinedAt = existing.joinedAt || existing.eventJoinedAt || new Date().toISOString();
                 saveStoredMemberLocally(member);
-                return { status: 'already_checked_in', ticket: existing.ticket };
+                return { status: 'already_checked_in', ticket: existingTicket };
             }
 
             const ticketNo = 'SALON-' + (101 + attendees.length);
@@ -395,7 +401,9 @@
                 studentNo: String(member.studentNo).trim(),
                 fullName: member.fullName || 'İsimsiz Üye',
                 ticket: ticketNo,
-                joinedAt: joinedAt
+                eventTicket: ticketNo,
+                joinedAt: joinedAt,
+                eventJoinedAt: joinedAt
             });
 
             await this.pushEventAttendees(attendees);
@@ -638,15 +646,18 @@
         saveStoredMember(newMember);
         closeActivationModal();
 
-        // Eğer etkinlik QR kodundan gelinmişse veya çekiliş sayfasındaysa otomatik salon yoklamasını yap
+        // Eğer etkinlik / kapı QR kodundan gelinmişse veya çekiliş sayfasındaysa otomatik salon yoklamasını yap
+        let ticketAssigned = null;
         try {
             const urlParams = new URLSearchParams(window.location.search);
-            const isEventContext = urlParams.has('etkinlik') || urlParams.has('salon') || urlParams.has('giris') || window.location.pathname.includes('cekilis');
+            const isEventContext = urlParams.has('etkinlik') || urlParams.has('salon') || urlParams.has('giris') || urlParams.has('kapi') || window.location.pathname.includes('cekilis');
             if (isEventContext) {
                 const res = await CloudSync.checkInToEvent(newMember);
                 if (res && res.ticket) {
                     newMember.eventTicket = res.ticket;
                     newMember.eventAttended = true;
+                    ticketAssigned = res.ticket;
+                    saveStoredMemberLocally(newMember);
                 }
             }
         } catch (err) {
@@ -654,10 +665,17 @@
         }
 
         if (typeof confetti === 'function') {
-            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+            try { confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } }); } catch(e){}
         }
 
-        handleMemberCardClick();
+        // Eğer cekilis.html sayfasındaysa ve bilet atandıysa doğrudan Bilet Başarı Modalını göster!
+        if (typeof openEventTicketSuccessModal === 'function' && (ticketAssigned || newMember.eventTicket)) {
+            openEventTicketSuccessModal(ticketAssigned || newMember.eventTicket, newMember);
+            if (typeof updateEventCheckinUI === 'function') updateEventCheckinUI(newMember);
+            if (typeof updateGiveawayBtnState === 'function') updateGiveawayBtnState();
+        } else {
+            handleMemberCardClick();
+        }
     }
 
     // =========================================================================
@@ -1019,6 +1037,13 @@
                 }, 250);
             } else {
                 try { sessionStorage.removeItem('uluceeit_pending_activation'); } catch(e){}
+            }
+        } else if (params.has('kapi') || params.has('etkinlik') || params.has('salon')) {
+            const member = getStoredMember();
+            if (!member || !member.fullName) {
+                setTimeout(() => {
+                    openActivationModal();
+                }, 250);
             }
         }
 

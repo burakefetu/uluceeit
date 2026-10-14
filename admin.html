@@ -436,6 +436,12 @@
                             <span id="textEventCheckin">🔴 Yoklama Kapalı (Açmak için tıkla)</span>
                         </button>
 
+                        <!-- Kapı Görevlisi Portalı Butonu -->
+                        <a href="kapi.html" target="_blank" class="px-3.5 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 rounded-xl text-xs font-black transition-all flex items-center gap-2 border border-emerald-500/40 shadow-sm active:scale-95" title="Kapıdaki görevlinin kullanacağı canlı QR ve yoklama ekranı">
+                            <i class="fa-solid fa-door-open text-emerald-400 text-sm"></i>
+                            <span>🚪 Kapı Görevlisi Portalı</span>
+                        </a>
+
                         <!-- Katılım QR Kodunu Yansıt / Göster -->
                         <button type="button" onclick="openEventQrModal()" class="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-black transition-all flex items-center gap-2 border border-amber-500/40 shadow-sm active:scale-95">
                             <i class="fa-solid fa-qrcode text-amber-400 text-sm"></i>
@@ -794,11 +800,14 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-center gap-3">
-                        <button type="button" onclick="closeEventQrModal()" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs transition-all">
+                    <div class="flex flex-wrap justify-center gap-2.5">
+                        <button type="button" onclick="closeEventQrModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs transition-all">
                             Kapat
                         </button>
-                        <button type="button" onclick="openStageProjectorModal(); closeEventQrModal();" class="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-600 hover:to-yellow-500 text-slate-950 font-black rounded-xl text-xs shadow-lg transition-all flex items-center gap-2">
+                        <a href="kapi.html" target="_blank" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs shadow-lg transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-door-open"></i> <span>Kapı Görevlisi Portalı</span>
+                        </a>
+                        <button type="button" onclick="openStageProjectorModal(); closeEventQrModal();" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-600 hover:to-yellow-500 text-slate-950 font-black rounded-xl text-xs shadow-lg transition-all flex items-center gap-2">
                             <i class="fa-solid fa-film"></i> <span>Sahne Çekilişine Geç</span>
                         </button>
                     </div>
@@ -2802,7 +2811,7 @@
             const qrContainer = document.getElementById('eventQrCodeContainer');
             if (qrContainer && typeof QRCode !== 'undefined') {
                 qrContainer.innerHTML = '';
-                const targetUrl = `${window.location.origin}/cekilis.html?etkinlik=tanisma2026`;
+                const targetUrl = `${window.location.origin}/cekilis.html?kapi=1&etkinlik=tanisma2026`;
                 const isMobile = window.innerWidth < 640;
                 const qrSize = isMobile ? 180 : 220;
                 eventQrInstance = new QRCode(qrContainer, {
