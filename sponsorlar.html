@@ -126,8 +126,48 @@
         .modal-scrollable::-webkit-scrollbar-track { background: transparent; }
         .modal-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 9999px; }
     </style>
+    <link rel="stylesheet" href="assets/redesign.css">
+    <script src="js/redesign.js" defer></script>
+    <style>
+        .redesign .offer-feature {
+            display: grid;
+            align-content: center;
+            padding: clamp(1.3rem, 4vw, 3rem);
+            min-height: clamp(11rem, 24vw, 18rem);
+            background: var(--lime);
+            border-radius: 7px;
+            color: var(--navy);
+        }
+        .redesign .offer-feature p { font-weight: 700; }
+        .redesign .offer-feature strong { font: 800 clamp(4rem, 8vw, 8rem)/1 var(--heading); letter-spacing: -.08em; }
+        .redesign .offer-controls { display: grid; gap: .65rem; }
+        .redesign .offer-controls label { font-weight: 700; }
+        .redesign #sponsorSearchInput {
+            width: min(100%, 31rem);
+            padding: .65rem .9rem;
+            border: 1px solid var(--muted);
+            border-radius: 5px;
+            background: white;
+            color: var(--ink);
+        }
+        .redesign #filterTabsContainer { display: flex; flex-wrap: wrap; gap: .45rem; }
+        .redesign .filter-tab-btn { border: 1px solid var(--ink); color: var(--ink); background: white; cursor: pointer; }
+        .redesign .filter-tab-btn.bg-amber-500 { background: var(--ink); color: white; }
+        .redesign .offer-card { display: flex; flex-direction: column; align-items: start; }
+        .redesign .offer-card h3 { overflow-wrap: anywhere; }
+        .redesign .offer-card-meta { display: flex; gap: .45rem; flex-wrap: wrap; align-items: baseline; width: 100%; justify-content: space-between; }
+        .redesign .offer-card-meta p { font-size: .875rem; }
+        .redesign .offer-card-meta span { color: var(--ink); font-size: .875rem; font-weight: 750; padding: .15rem .45rem; border-radius: 4px; background: var(--lime); }
+        .redesign .offer-card .button { align-self: stretch; margin-top: auto; }
+        .redesign .offer-card > p:last-of-type { padding-bottom: 1rem; }
+        .redesign #sponsorEmptyState { margin-top: 1rem; }
+        @media (max-width: 64rem) and (min-width: 43.01rem) {
+            .redesign .offer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-amber-500 selection:text-slate-950 pb-20 md:pb-0">
+<body class="redesign-page bg-slate-50 text-slate-800 antialiased selection:bg-amber-500 selection:text-slate-950 pb-20 md:pb-0">
+    <a class="redesign-skip" href="#icerik">İçeriğe geç</a>
 
     <!-- ========================================================================= -->
     <!-- 🧭 ORTAK ÜST MENÜ (NAVBAR) -->
@@ -225,603 +265,216 @@
     <!-- ========================================================================= -->
     <!-- 🏷️ SPONSORLAR VE İNDİRİMLER SAYFASI -->
     <!-- ========================================================================= -->
-    <main class="pt-28 pb-16">
-        
-        <!-- Üst Başlık Bannerı -->
-        <section class="relative py-12 md:py-16 bg-gradient-to-b from-[#081538] via-[#0b1d4a] to-[#081538] text-white overflow-hidden mb-10">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40 text-xs sm:text-sm font-extrabold mb-4 shadow-sm">
-                    <i class="fa-solid fa-sparkles text-amber-400"></i> 2026 - 2027 Dönemi Resmi Protokolleri
-                </span>
-                <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4 leading-tight">
-                    Sponsorlarımız & <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500">Üye İndirimleri</span>
-                </h1>
-                <p class="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed mb-6">
-                    ULUÇEEİT Dijital Üye Kartını kasada göstererek Görükle ve Bursa genelindeki anlaşmalı seçkin işletmelerde <strong class="text-amber-400 font-bold">%30'a varan</strong> anında indirimlerden yararlan!
-                </p>
-
-                <!-- Hızlı İstatistik Rozetleri -->
-                <div class="flex flex-wrap justify-center gap-2.5 sm:gap-3 text-xs sm:text-sm font-bold">
-                    <span class="px-3.5 py-1.5 rounded-xl bg-white/10 text-slate-200 border border-white/15 flex items-center gap-1.5">
-                        <i class="fa-solid fa-store text-amber-400"></i> 11 Anlaşmalı İşletme
-                    </span>
-                    <span class="px-3.5 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center gap-1.5">
-                        <i class="fa-solid fa-percent text-amber-400"></i> %30'a Varan İndirim
-                    </span>
-                    <span class="px-3.5 py-1.5 rounded-xl bg-white/10 text-slate-200 border border-white/15 flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot text-emerald-400"></i> Görükle & Nilüfer
-                    </span>
-                    <span class="px-3.5 py-1.5 rounded-xl bg-white/10 text-slate-200 border border-white/15 flex items-center gap-1.5">
-                        <i class="fa-solid fa-id-card text-sky-400"></i> Anında Dijital Kartla Geçerli
-                    </span>
-                </div>
-            </div>
-        </section>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <!-- 🔍 ARAMA & KATEGORİ FİLTRELEME ÇUBUĞU -->
-            <div class="mb-10 space-y-4">
-                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-                    
-                    <!-- Canlı Arama Inputu -->
-                    <div class="relative w-full md:w-96">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                            <i class="fa-solid fa-magnifying-glass text-sm"></i>
-                        </div>
-                        <input 
-                            type="text" 
-                            id="sponsorSearchInput" 
-                            oninput="applyFilters()" 
-                            placeholder="İşletme adı veya lezzet ara... (örn: Motto, Burger, Kahve)" 
-                            class="w-full pl-11 pr-4 py-3 rounded-2xl bg-white border border-slate-200/90 shadow-sm text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition-all"
-                        >
-                    </div>
-
-                    <!-- Sıralama Bilgi Rozeti -->
-                    <div class="flex items-center gap-2 text-xs font-bold text-slate-500 bg-slate-100 px-3.5 py-2 rounded-xl">
-                        <i class="fa-solid fa-arrow-down-wide-short text-amber-500"></i>
-                        <span>İndirim Oranına Göre Sıralı (%30 → %10)</span>
-                    </div>
-                </div>
-
-                <!-- Kategori Butonları -->
-                <div class="flex flex-wrap gap-2 pt-1" id="filterTabsContainer">
-                    <button type="button" onclick="filterSponsors('all', this)" data-target="all" class="filter-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20">
-                        Tümü (11)
-                    </button>
-                    <button type="button" onclick="filterSponsors('kafe', this)" data-target="kafe" class="filter-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-50">
-                        <i class="fa-solid fa-mug-hot text-amber-500 mr-1.5"></i> Kafe & Kahve (5)
-                    </button>
-                    <button type="button" onclick="filterSponsors('yemek', this)" data-target="yemek" class="filter-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-50">
-                        <i class="fa-solid fa-utensils text-orange-500 mr-1.5"></i> Yeme & İçme (4)
-                    </button>
-                    <button type="button" onclick="filterSponsors('egitim', this)" data-target="egitim" class="filter-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-50">
-                        <i class="fa-solid fa-graduation-cap text-sky-500 mr-1.5"></i> Dil & Eğitim (1)
-                    </button>
-                    <button type="button" onclick="filterSponsors('sponsor', this)" data-target="sponsor" class="filter-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-50">
-                        <i class="fa-solid fa-handshake text-amber-500 mr-1.5"></i> Sponsor (1)
-                    </button>
-                </div>
-            </div>
-
-            <!-- ========================================================================= -->
-            <!-- 🏢 İŞLETME KARTLARI IZGARASI (YÜZDELİK SIRALAMA: %30 -> %10 -> SPONSOR) -->
-            <!-- ========================================================================= -->
-            <div id="sponsorGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-
-                <!-- 1. MOTTO BREW COFFEE (%30 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="kafe" data-percentage="30">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-500/15 text-amber-600 flex items-center justify-center text-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-sm">
-                                <i class="fa-solid fa-mug-hot"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs"></i> %30 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Kafe & 3. Nesil Kahve
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-amber-600 transition-colors">
-                                Motto Brew Coffee
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-amber-500"></i> Görükle Yerleşkesi / Nilüfer
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%30 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 2. AMERİKAN KÜLTÜR DİL OKULLARI (%25 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="egitim" data-percentage="25">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-blue-500/15 text-blue-600 flex items-center justify-center text-2xl group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs text-amber-300"></i> %25 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Eğitim & Dil Okulu
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-blue-600 transition-colors">
-                                Amerikan Kültür Dil Okulları
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-blue-500"></i> Bursa Nilüfer & Görükle Şubeleri
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%25 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 3. MANTI ŞERİ (%20 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="yemek" data-percentage="20">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-orange-500/15 text-orange-600 flex items-center justify-center text-2xl group-hover:bg-orange-500 group-hover:text-white transition-all shadow-sm">
-                                <i class="fa-solid fa-bowl-food"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs"></i> %20 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-orange-700 bg-orange-50 border border-orange-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Yeme & İçme / Ev Yemekleri & Mantı
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-orange-600 transition-colors">
-                                Mantı Şeri
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-orange-500"></i> Görükle Yerleşkesi / Nilüfer
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%20 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 4. MID BITE (%15 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="yemek" data-percentage="15">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-500 to-yellow-500"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-500/15 text-amber-600 flex items-center justify-center text-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-sm">
-                                <i class="fa-solid fa-burger"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs"></i> %15 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Yeme & İçme / Fast Casual & Lezzet
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-amber-600 transition-colors">
-                                MID BITE
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-amber-500"></i> Görükle Yerleşkesi / Nilüfer
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%15 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 5. TEAMO CAFE (%15 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="kafe" data-percentage="15">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-rose-500 via-amber-500 to-yellow-500"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-rose-500/15 text-rose-600 flex items-center justify-center text-2xl group-hover:bg-rose-500 group-hover:text-white transition-all shadow-sm">
-                                <i class="fa-solid fa-mug-saucer"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs"></i> %15 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-rose-700 bg-rose-50 border border-rose-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Kafe & Bistro & Tatlı
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-rose-600 transition-colors">
-                                TeAmo Cafe
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-rose-500"></i> Görükle Yerleşkesi / Nilüfer
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%15 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 6. NEST'O COFFEE ROASTERY (%15 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="kafe" data-percentage="15">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-600"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-600/15 text-amber-700 flex items-center justify-center text-2xl group-hover:bg-amber-600 group-hover:text-white transition-all shadow-sm">
-                                <i class="fa-solid fa-fire-flame-curved"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs"></i> %15 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Kafe & Kahve Kavurma (Roastery)
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-amber-700 transition-colors">
-                                Nest'o Coffee Roastery
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-amber-600"></i> Görükle Yerleşkesi / Nilüfer
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%15 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 7. GEVEZE (%15 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="kafe" data-percentage="15">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-teal-500 via-amber-500 to-yellow-500"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-teal-500/15 text-teal-600 flex items-center justify-center text-2xl group-hover:bg-teal-500 group-hover:text-white transition-all shadow-sm">
-                                <i class="fa-solid fa-comments"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs"></i> %15 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Kafe & Sosyal Mekan
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-teal-600 transition-colors">
-                                Geveze
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-teal-500"></i> Görükle Yerleşkesi / Nilüfer
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%15 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- KOFFIAN COFFEE (%15 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="kafe" data-percentage="15">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-teal-500 via-amber-500 to-yellow-500"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-teal-500/15 text-teal-600 flex items-center justify-center text-2xl group-hover:bg-teal-500 group-hover:text-white transition-all shadow-sm">
-                                <i class="fa-solid fa-mug-hot"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs"></i> %15 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Kafe
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-teal-600 transition-colors">
-                                KOFFIAN COFFEE
-                            </h3>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%15 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 8. PRUSA MUHALLEBİCİSİ (%10 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="yemek" data-percentage="10">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center text-2xl group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">
-                                <i class="fa-solid fa-cookie-bite"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs text-amber-200"></i> %10 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Tatlı & Muhallebi & Kafe
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-emerald-600 transition-colors">
-                                Prusa Muhallebicisi
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-emerald-500"></i> Görükle Yerleşkesi / Nilüfer
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%10 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 9. PİLAV İSTASYONU (%10 İNDİRİM) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="yemek" data-percentage="10">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-500 to-orange-500"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-500/15 text-amber-600 flex items-center justify-center text-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-sm">
-                                <i class="fa-solid fa-bowl-rice"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black text-sm sm:text-base px-3.5 py-1.5 rounded-xl shadow-md tracking-tight">
-                                <i class="fa-solid fa-tag text-xs text-amber-200"></i> %10 İNDİRİM
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Yeme & İçme / Sokak Lezzetleri
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-amber-600 transition-colors">
-                                Pilav İstasyonu
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-amber-500"></i> Görükle Yerleşkesi / Nilüfer
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT üyelerine özel <strong class="text-slate-900 font-bold">%10 indirim.</strong>
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital İndirim Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 10. STRONG BURGER (SPONSOR) -->
-                <div class="sponsor-item-card group relative bg-white rounded-3xl border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between overflow-hidden" data-category="sponsor yemek" data-percentage="0">
-                    <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-slate-400 via-amber-400 to-slate-500"></div>
-                    <div class="p-6 sm:p-7">
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-500/15 text-amber-600 flex items-center justify-center text-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-sm">
-                                <i class="fa-solid fa-burger"></i>
-                            </div>
-                            <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-800 font-extrabold text-xs sm:text-sm px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-sm">
-                                <i class="fa-solid fa-handshake text-xs text-amber-500"></i> SPONSOR
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-slate-700 bg-slate-100 border border-slate-200/80 px-2.5 py-0.5 rounded-lg mb-1.5">
-                                Sponsor • Burger & Yeme İçme
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-amber-600 transition-colors">
-                                Strong Burger
-                            </h3>
-                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                                <i class="fa-solid fa-location-dot text-amber-500"></i> Görükle Yerleşkesi / Nilüfer
-                            </p>
-                        </div>
-
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                            ULUÇEEİT’in değerli sponsoru.
-                        </p>
-
-                    </div>
-
-                    <div class="p-6 pt-0">
-                        <button onclick="handleMemberCardClick()" class="w-full py-3 bg-slate-900 hover:bg-ceko-navy text-amber-400 font-extrabold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-id-card text-amber-400"></i>
-                            <span>Dijital Üye Kartını Göster</span>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- 🚫 Arama / Filtre Sonuç Bulunamadı Durumu -->
-            <div id="sponsorEmptyState" class="hidden text-center py-16 px-4 bg-white rounded-3xl border border-slate-200 shadow-sm mb-16">
-                <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-3xl mx-auto mb-4">
-                    <i class="fa-solid fa-store-slash"></i>
-                </div>
-                <h4 class="text-lg font-black text-slate-800 mb-1">Aramanızla Eşleşen İşletme Bulunamadı</h4>
-                <p class="text-slate-500 text-xs sm:text-sm max-w-sm mx-auto mb-4">
-                    Arama kriterlerinizi değiştirerek veya tüm kategorileri seçerek anlaşmalı işletmelerimizi görüntüleyebilirsiniz.
-                </p>
-                <button type="button" onclick="resetSponsorFilters()" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-md transition-all">
-                    Tüm İşletmeleri Göster
-                </button>
-            </div>
-
-            <!-- ========================================================================= -->
-            <!-- 💡 NASIL KULLANILIR? (3 ADIMDA İNDİRİM REHBERİ) -->
-            <!-- ========================================================================= -->
-            <div class="relative rounded-3xl bg-gradient-to-br from-slate-900 via-ceko-navy to-slate-950 border border-white/15 p-8 sm:p-10 text-white shadow-2xl mb-12 overflow-hidden">
-                <div class="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                
-                <div class="relative z-10 max-w-4xl mx-auto text-center mb-8">
-                    <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold mb-3 border border-amber-400/30">
-                        <i class="fa-solid fa-circle-question"></i> Kolay & Hızlı Kullanım
-                    </span>
-                    <h3 class="text-2xl sm:text-3xl font-black text-white">İndirimlerden Nasıl Faydalanırsın?</h3>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-2 max-w-xl mx-auto">
-                        Karmaşık kupon kodlarına veya fiş toplamaya gerek yok! Canlı dijital kartın telefonunda her an hazır.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                    <div class="p-6 rounded-2xl bg-white/[0.05] border border-white/10 hover:border-amber-400/40 transition-all text-center">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-400/30 flex items-center justify-center text-xl font-black mx-auto mb-4">
-                            1
-                        </div>
-                        <h4 class="font-extrabold text-white text-base mb-1.5">Standımızda Kartını Tanımla</h4>
-                        <p class="text-xs text-slate-300 leading-relaxed">
-                            İİBF Kulüp Odamızdaki veya tanıtım stantlarımızdaki QR kodu telefonuna okutarak Dijital Üye Kartını saniyeler içinde oluştur.
-                        </p>
-                    </div>
-
-                    <div class="p-6 rounded-2xl bg-white/[0.05] border border-white/10 hover:border-blue-400/40 transition-all text-center">
-                        <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-400/30 flex items-center justify-center text-xl font-black mx-auto mb-4">
-                            2
-                        </div>
-                        <h4 class="font-extrabold text-white text-base mb-1.5">Anlaşmalı Mekana Git</h4>
-                        <p class="text-xs text-slate-300 leading-relaxed">
-                            Yukarıdaki listede yer alan Görükle ve Nilüfer'deki anlaşmalı kafe, restoran veya dil okuluna git ve siparişini ver.
-                        </p>
-                    </div>
-
-                    <div class="p-6 rounded-2xl bg-white/[0.05] border border-white/10 hover:border-emerald-400/40 transition-all text-center">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 flex items-center justify-center text-xl font-black mx-auto mb-4">
-                            3
-                        </div>
-                        <h4 class="font-extrabold text-white text-base mb-1.5">Kasada Canlı Kartını Göster</h4>
-                        <p class="text-xs text-slate-300 leading-relaxed">
-                            Ödeme anında sitedeki <strong class="text-amber-400">"Dijital Üye Kartı"</strong> butonuna basarak onaylı canlı kartını görevliye göster, anında indirimini al!
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sponsorluk Başvuru Bandı -->
-            <div class="liquid-glass-navy border border-white/20 rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl text-white">
-                <div class="flex items-center gap-5">
-                    <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-2xl flex-shrink-0 border border-amber-400/30">
-                        <i class="fa-solid fa-handshake"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-white mb-1">İşletmenizle Sponsorumuz Olmak İster misiniz?</h3>
-                        <p class="text-slate-300 text-sm sm:text-base">
-                            500+ aktif üyemiz ve binlerce üniversite öğrencisine ulaşarak işletmenizi öne çıkarın.
-                        </p>
-                    </div>
-                </div>
-                <a href="mailto:iletisim@uluceeit.com?subject=ULUÇEEİT%20Sponsorluk%20ve%20İndirim%20Protokolü%20Talebi" class="flex-shrink-0 inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold px-7 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-amber-500/30 transform hover:-translate-y-0.5">
-                    <span>Sponsorluk Başvurusu</span>
-                    <i class="fa-solid fa-arrow-right text-xs"></i>
-                </a>
-            </div>
-
+    <main class="redesign" id="icerik" tabindex="-1">
+    <section class="page-hero" aria-labelledby="discount-title">
+      <div class="wrap page-intro page-hero-grid">
+        <div>
+          <p class="eyebrow">Anlaşmalı işletmeler</p>
+          <h1 id="discount-title">Üyelere özel <em>indirimler.</em></h1>
+          <p class="page-lede">Görükle ve Nilüfer’de kahveden dil eğitimine, anlaşmalı işletmelerde dijital üye kartınla indirimlerden yararlan.</p>
+          <div class="actions">
+            <a class="button button-lime" href="#isletmeler">İşletmeleri gör</a>
+            <a class="button button-outline" href="#kart-kullanimi">Kart nasıl kullanılır?</a>
+          </div>
         </div>
-    </main>
+        <div class="offer-feature">
+          <p>En yüksek üye indirimi</p>
+          <strong>%30</strong>
+          <p>Motto Brew Coffee</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="isletmeler" aria-labelledby="offers-title">
+      <div class="wrap section-space">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">2026–2027 dönemi</p>
+            <h2 id="offers-title">Anlaşmalı işletmeler</h2>
+          </div>
+        </div>
+        <div class="offer-controls">
+          <label for="sponsorSearchInput">İşletme ara</label>
+          <input type="search" id="sponsorSearchInput" oninput="applyFilters()" placeholder="Örn. kahve, mantı veya dil okulu" autocomplete="off">
+          <div id="filterTabsContainer" role="group" aria-label="İşletme türü">
+            <button type="button" onclick="filterSponsors('all', this)" class="button filter-tab-btn bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20" data-target="all">Tümü</button>
+            <button type="button" onclick="filterSponsors('kafe', this)" class="button filter-tab-btn bg-white text-slate-700 border border-slate-200" data-target="kafe">Kafe ve kahve</button>
+            <button type="button" onclick="filterSponsors('yemek', this)" class="button filter-tab-btn bg-white text-slate-700 border border-slate-200" data-target="yemek">Yeme içme</button>
+            <button type="button" onclick="filterSponsors('egitim', this)" class="button filter-tab-btn bg-white text-slate-700 border border-slate-200" data-target="egitim">Dil ve eğitim</button>
+            <button type="button" onclick="filterSponsors('sponsor', this)" class="button filter-tab-btn bg-white text-slate-700 border border-slate-200" data-target="sponsor">Sponsor</button>
+          </div>
+          <p>11 işletme · İndirim oranına göre sıralı</p>
+        </div>
+        <div id="sponsorGrid" class="page-grid offer-grid">
+          <article class="page-panel offer-card sponsor-item-card" data-category="kafe" data-percentage="30">
+            <div class="offer-card-meta">
+              <p>Kafe &amp; 3. Nesil Kahve</p>
+              <span>%30 indirim</span>
+            </div>
+            <h3>Motto Brew Coffee</h3>
+            <p>Görükle Yerleşkesi / Nilüfer</p>
+            <p>ULUÇEEİT üyelerine özel %30 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="egitim" data-percentage="25">
+            <div class="offer-card-meta">
+              <p>Eğitim &amp; Dil Okulu</p>
+              <span>%25 indirim</span>
+            </div>
+            <h3>Amerikan Kültür Dil Okulları</h3>
+            <p>Bursa Nilüfer &amp; Görükle Şubeleri</p>
+            <p>ULUÇEEİT üyelerine özel %25 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="yemek" data-percentage="20">
+            <div class="offer-card-meta">
+              <p>Yeme &amp; İçme / Ev Yemekleri &amp; Mantı</p>
+              <span>%20 indirim</span>
+            </div>
+            <h3>Mantı Şeri</h3>
+            <p>Görükle Yerleşkesi / Nilüfer</p>
+            <p>ULUÇEEİT üyelerine özel %20 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="yemek" data-percentage="15">
+            <div class="offer-card-meta">
+              <p>Yeme &amp; İçme / Fast Casual &amp; Lezzet</p>
+              <span>%15 indirim</span>
+            </div>
+            <h3>MID BITE</h3>
+            <p>Görükle Yerleşkesi / Nilüfer</p>
+            <p>ULUÇEEİT üyelerine özel %15 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="kafe" data-percentage="15">
+            <div class="offer-card-meta">
+              <p>Kafe &amp; Bistro &amp; Tatlı</p>
+              <span>%15 indirim</span>
+            </div>
+            <h3>TeAmo Cafe</h3>
+            <p>Görükle Yerleşkesi / Nilüfer</p>
+            <p>ULUÇEEİT üyelerine özel %15 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="kafe" data-percentage="15">
+            <div class="offer-card-meta">
+              <p>Kafe &amp; Kahve Kavurma (Roastery)</p>
+              <span>%15 indirim</span>
+            </div>
+            <h3>Nest'o Coffee Roastery</h3>
+            <p>Görükle Yerleşkesi / Nilüfer</p>
+            <p>ULUÇEEİT üyelerine özel %15 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="kafe" data-percentage="15">
+            <div class="offer-card-meta">
+              <p>Kafe &amp; Sosyal Mekan</p>
+              <span>%15 indirim</span>
+            </div>
+            <h3>Geveze</h3>
+            <p>Görükle Yerleşkesi / Nilüfer</p>
+            <p>ULUÇEEİT üyelerine özel %15 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="kafe" data-percentage="15">
+            <div class="offer-card-meta">
+              <p>Kafe</p>
+              <span>%15 indirim</span>
+            </div>
+            <h3>KOFFIAN COFFEE</h3>
+            <p>ULUÇEEİT üyelerine özel %15 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="yemek" data-percentage="10">
+            <div class="offer-card-meta">
+              <p>Tatlı &amp; Muhallebi &amp; Kafe</p>
+              <span>%10 indirim</span>
+            </div>
+            <h3>Prusa Muhallebicisi</h3>
+            <p>Görükle Yerleşkesi / Nilüfer</p>
+            <p>ULUÇEEİT üyelerine özel %10 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="yemek" data-percentage="10">
+            <div class="offer-card-meta">
+              <p>Yeme &amp; İçme / Sokak Lezzetleri</p>
+              <span>%10 indirim</span>
+            </div>
+            <h3>Pilav İstasyonu</h3>
+            <p>Görükle Yerleşkesi / Nilüfer</p>
+            <p>ULUÇEEİT üyelerine özel %10 indirim.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital indirim kartını göster
+            </button>
+          </article>
+          <article class="page-panel offer-card sponsor-item-card" data-category="sponsor yemek" data-percentage="0">
+            <div class="offer-card-meta">
+              <p>Sponsor • Burger &amp; Yeme İçme</p>
+              <span>Sponsor</span>
+            </div>
+            <h3>Strong Burger</h3>
+            <p>Görükle Yerleşkesi / Nilüfer</p>
+            <p>ULUÇEEİT’in değerli sponsoru.</p>
+            <button class="button button-dark" type="button" onclick="handleMemberCardClick()">
+              Dijital üye kartını göster
+            </button>
+          </article>
+        </div>
+        <div id="sponsorEmptyState" class="hidden page-panel" role="status">
+          <h3>Aramana uygun işletme bulunamadı</h3>
+          <p>Arama terimini veya kategoriyi değiştirerek tekrar dene.</p>
+          <button class="button button-dark-outline" type="button" onclick="resetSponsorFilters()">Tüm işletmeleri göster</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section page-section-alt" id="kart-kullanimi" aria-labelledby="card-use-title">
+      <div class="wrap section-space" data-reveal>
+        <p class="eyebrow">Dijital üye kartı</p>
+        <h2 id="card-use-title">İndirim nasıl kullanılır?</h2>
+        <div class="page-grid">
+          <article class="page-panel"><h3>Kartını oluştur</h3><p>İİBF Kulüp Odası’ndaki veya tanıtım standındaki QR kodu okut.</p></article>
+          <article class="page-panel"><h3>İşletmeni seç</h3><p>Yukarıdaki listeden Görükle ve Nilüfer’deki anlaşmalı işletmeleri bul.</p></article>
+          <article class="page-panel"><h3>Kasada göster</h3><p>Ödeme sırasında dijital üye kartını açıp işletme görevlisine göster.</p></article>
+        </div>
+        <div class="actions">
+          <button class="button button-dark" type="button" onclick="handleMemberCardClick()">Dijital kartımı aç</button>
+          <a class="button button-dark-outline" href="hakkimizda.html#sks-uye">SKS üyelik rehberi</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="join" aria-labelledby="sponsor-contact-title">
+      <div class="wrap join-grid section-space" data-reveal>
+        <div>
+          <p class="eyebrow">Sponsorluk</p>
+          <h2 id="sponsor-contact-title">İş birliği yapalım.</h2>
+          <p>İşletmenle ULUÇEEİT üyelerine ulaşmak için sponsorluk ekibimize yaz.</p>
+        </div>
+        <div class="join-actions">
+          <a class="button button-dark" href="mailto:iletisim@uluceeit.com?subject=ULUÇEEİT%20Sponsorluk%20ve%20İndirim%20Protokolü%20Talebi">Sponsorluk başvurusu</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
     <!-- ========================================================================= -->
     <!-- 📱 MOBİL ALT GEZİNME ÇUBUĞU (APP-STYLE BOTTOM TAB BAR) -->
@@ -1230,17 +883,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             if (window.CloudSync) CloudSync.recordVisit('sponsorlar');
-            
-            // Eski sürüm önbelleklerini temizle
-            if ('caches' in window) {
-                caches.keys().then(names => {
-                    names.forEach(name => {
-                        if (name !== 'uluceeit-pwa-v16') {
-                            caches.delete(name);
-                        }
-                    });
-                });
-            }
         });
 
         // PWA Service Worker

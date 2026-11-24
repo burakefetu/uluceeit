@@ -161,8 +161,215 @@
             border-radius: 9999px;
         }
     </style>
+    <link rel="stylesheet" href="assets/redesign.css">
+    <script src="js/redesign.js" defer></script>
+    <style>
+        .raffle-main {
+            --raffle-ink: #101a2d;
+            --raffle-navy: #0b1325;
+            --raffle-lime: #e3fa91;
+            --raffle-paper: #f8f7f3;
+            --raffle-muted: #4c5668;
+            font-family: system-ui, sans-serif;
+            color: var(--raffle-ink);
+        }
+
+        .raffle-wrap {
+            width: min(90%, 82rem);
+            margin-inline: auto;
+        }
+
+        .raffle-hero {
+            padding-block: clamp(4rem, 8vw, 7rem);
+            color: #f7f8fc;
+            background: radial-gradient(ellipse at 80% 30%, #182e52, var(--raffle-navy) 70%);
+        }
+
+        .raffle-overview, .raffle-live, .raffle-process-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: clamp(1.5rem, 6vw, 5rem);
+        }
+
+        .raffle-eyebrow {
+            font-size: .875rem;
+            font-weight: 750;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .raffle-hero .raffle-eyebrow { color: var(--raffle-lime); }
+
+        .raffle-title, .raffle-heading {
+            margin-top: .65rem;
+            font-family: "Avenir Next", "Segoe UI", sans-serif;
+            font-size: clamp(2.6rem, 6vw, 5.7rem);
+            font-weight: 800;
+            letter-spacing: -.066em;
+            line-height: 1;
+        }
+
+        .raffle-title em {
+            color: var(--raffle-lime);
+            font-family: Georgia, serif;
+            font-weight: 400;
+        }
+
+        .raffle-heading { font-size: clamp(2rem, 4.9vw, 4.75rem); }
+
+        .raffle-lede {
+            max-width: 36rem;
+            margin-top: 1.2rem;
+            color: #bdc7da;
+            font-size: clamp(1rem, 1.6vw, 1.16rem);
+            line-height: 1.65;
+        }
+
+        .raffle-prize-link {
+            display: inline-flex;
+            align-items: center;
+            min-height: 2.85rem;
+            margin-top: 1.4rem;
+            padding: .55rem .9rem;
+            border: 1px solid #ffffff62;
+            border-radius: 5px;
+            font-weight: 700;
+        }
+
+        .raffle-prize-link:hover { background: #ffffff16; }
+
+        .raffle-ticket {
+            display: grid;
+            grid-template-columns: 1fr 25%;
+            position: relative;
+            border-radius: 12px;
+            background: var(--raffle-lime);
+            color: var(--raffle-ink);
+        }
+
+        .raffle-ticket::before, .raffle-ticket::after {
+            position: absolute;
+            right: 25%;
+            width: 1rem;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: #142442;
+            content: "";
+        }
+
+        .raffle-ticket::before { top: 0; transform: translate(50%, -50%); }
+        .raffle-ticket::after { bottom: 0; transform: translate(50%, 50%); }
+
+        .raffle-ticket-body {
+            display: grid;
+            align-content: space-between;
+            gap: 1.1rem;
+            min-height: clamp(9rem, 20vw, 16rem);
+            padding: clamp(1.1rem, 3vw, 2.7rem);
+        }
+
+        .raffle-ticket-body small { font-size: .875rem; font-weight: 700; }
+        .raffle-ticket-body strong {
+            font-family: "Avenir Next", "Segoe UI", sans-serif;
+            font-size: clamp(1.7rem, 3.8vw, 3.65rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -.065em;
+        }
+
+        .raffle-ticket-side {
+            display: grid;
+            place-items: center;
+            padding: .6rem;
+            border-left: 1px dashed #101a2d78;
+        }
+
+        .raffle-ticket-side img { width: min(100%, 3.75rem); height: auto; border-radius: 50%; }
+
+        .raffle-live {
+            align-items: start;
+            gap: 1.15rem;
+            margin-top: clamp(2rem, 5vw, 4rem);
+        }
+
+        .raffle-main .raffle-countdown, .raffle-main #eventCheckinCard {
+            max-width: none;
+            min-width: 0;
+            margin: 0;
+            padding: clamp(1rem, 2.2vw, 1.4rem);
+            border: 1px solid #ffffff38;
+            border-radius: 8px;
+            background: #ffffff0c;
+            box-shadow: none;
+        }
+
+        .raffle-main .raffle-countdown .raffle-time { padding: .55rem .25rem; border-radius: 5px; }
+        .raffle-main .raffle-countdown .raffle-time > span:last-child { font-size: .6875rem; }
+        .raffle-main #countdownStatusText, .raffle-main #countHours, .raffle-main #countSeconds { color: var(--raffle-lime); }
+        .raffle-main #targetDateBadge { color: var(--raffle-lime); background: #e3fa911a; border-color: #e3fa9155; }
+        .raffle-main .raffle-join { max-width: 27rem; margin: 1.4rem 0 0; }
+        .raffle-main .raffle-join button, .raffle-main #btnEventCheckin {
+            min-height: 3.15rem;
+            padding: .65rem 1rem;
+            color: var(--raffle-ink);
+            background: var(--raffle-lime);
+            border-radius: 5px;
+            box-shadow: none;
+            font-size: 1rem;
+            transform: none;
+        }
+        .raffle-main #btnEventCheckin { color: #f7f8fc; background: #263e64; }
+        .raffle-main .raffle-join button:hover:not(:disabled) { background: #f0ffb8; }
+        .raffle-main #btnEventCheckin:hover:not(:disabled) { background: #365482; }
+        .raffle-main .raffle-join button:disabled, .raffle-main #btnEventCheckin:disabled { opacity: .65; cursor: not-allowed; }
+        .raffle-main .raffle-join p, .raffle-main #eventCheckinCard p { font-size: .875rem; }
+        .raffle-main :focus-visible { outline: 3px solid #7599ff; outline-offset: 4px; }
+
+        .raffle-prizes, .raffle-process {
+            padding-block: clamp(3.25rem, 6.8vw, 6.25rem);
+            background: var(--raffle-paper);
+        }
+
+        .raffle-prizes { scroll-margin-top: 5rem; }
+        .raffle-prizes .raffle-eyebrow, .raffle-process .raffle-eyebrow { color: #32496f; }
+        .raffle-process { background: #eeefed; }
+        .raffle-process-layout { align-items: start; }
+        .raffle-prize-grid { margin-top: 2rem; }
+        .raffle-main .raffle-prize-grid > div {
+            color: var(--raffle-ink);
+            background: white;
+            border: 1px solid #d7d9d9;
+            border-radius: 7px;
+            box-shadow: none;
+            backdrop-filter: none;
+            transform: none;
+        }
+        .raffle-main .raffle-prize-grid h3 { color: var(--raffle-ink); line-height: 1.2; }
+        .raffle-main .raffle-prize-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            color: #294269;
+            background: #e8edf5;
+            border: none;
+            border-radius: 5px;
+            box-shadow: none;
+            font-size: 1.1rem;
+            transform: none;
+        }
+        .raffle-prize-grid p, .raffle-main .raffle-winner-count { color: var(--raffle-muted); font-size: .875rem; }
+        .raffle-main .raffle-prize-meta { gap: .65rem; border-color: #d7d9d9; }
+        .raffle-main .raffle-prize-meta .raffle-prize-kind { color: var(--raffle-ink); background: #e3fa9180; border: none; }
+        .raffle-process-steps { display: grid; gap: 1.15rem; padding-left: 1.5rem; list-style: decimal; }
+        .raffle-process-steps h3 { font-size: 1.1rem; font-weight: 800; }
+        .raffle-process-steps p { margin-top: .22rem; color: var(--raffle-muted); }
+
+        @media (max-width: 43rem) {
+            .raffle-overview, .raffle-live, .raffle-process-layout { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
-<body class="bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-ceko-navy selection:text-white pb-20 md:pb-0">
+<body class="redesign-page bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-ceko-navy selection:text-white pb-20 md:pb-0">
 
     <!-- NAVBAR -->
     <nav class="fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm z-50 transition-all duration-300" id="navbar">
@@ -253,33 +460,37 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION: BÜYÜK ÇEKİLİŞ VİTRİNİ -->
-    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-b from-[#081538] via-[#0b1d4a] to-[#081538] text-white">
-        <div class="absolute top-1/4 left-10 -translate-x-1/2 w-[600px] h-[600px] bg-amber-500/20 blur-[150px] rounded-full pointer-events-none animate-pulse-glow"></div>
-        <div class="absolute top-1/3 right-10 w-[500px] h-[500px] bg-blue-500/20 blur-[140px] rounded-full pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            
-            <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-400/30 backdrop-blur-2xl text-xs sm:text-sm text-amber-300 mb-6 shadow-glass-amber">
-                <i class="fa-solid fa-sparkles text-amber-400"></i>
-                <span class="font-extrabold text-white tracking-wide">2026 - 2027 Güz Dönemi</span>
-                <span class="text-amber-400/50">•</span>
-                <span class="font-bold text-amber-300">Büyük Üye Çekilişi</span>
+    <main class="raffle-main" id="icerik" tabindex="-1">
+    <section class="raffle-hero" aria-labelledby="raffle-title">
+        <div class="raffle-wrap">
+            <div class="raffle-overview">
+                <div>
+                    <p class="raffle-eyebrow">2026–2027 güz dönemi</p>
+                    <h1 class="raffle-title" id="raffle-title">Büyük üye <em>çekilişi.</em></h1>
+                    <p class="raffle-lede">Resmî ULUÇEEİT üyeleri çekiliş biletlerini ve kazandıkları hediyeleri dijital üye kartlarından takip edebilir.</p>
+                    <!-- TEK TIKLA BİLET ALMA / KATILIM BUTONU -->
+                    <div class="raffle-join">
+                        <button onclick="handleJoinGiveaway()" id="joinGiveawayBtn" class="w-full py-4 px-8 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black text-lg rounded-2xl shadow-xl shadow-amber-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-ticket text-xl"></i>
+                            <span id="joinBtnText">🎟️ Çekilişe Katıl & Biletini Al</span>
+                        </button>
+                        <p class="text-xs text-slate-400 mt-3">
+                            * Yalnızca doğrulanmış ULUÇEEİT SKS üyeleri katılabilir. Katılım tamamen ücretsizdir.
+                        </p>
+                    </div>
+                    <a class="raffle-prize-link" href="#hediyeler">Hediyeleri gör</a>
+                </div>
+                <div class="raffle-ticket" aria-hidden="true">
+                    <div class="raffle-ticket-body">
+                        <small>ULUÇEEİT · 2026–2027</small>
+                        <strong>Büyük üye çekilişi</strong>
+                    </div>
+                    <div class="raffle-ticket-side"><img src="logo.png" alt="" width="60" height="60"></div>
+                </div>
             </div>
-
-            <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1] mb-6 text-white max-w-4xl mx-auto">
-                ULUÇEEİT Üyelerine Özel <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-500">
-                    Büyük Hediye Çekilişi Başladı! 🎁
-                </span>
-            </h1>
-
-            <p class="text-base sm:text-lg text-slate-300 mb-10 max-w-2xl mx-auto font-normal leading-relaxed">
-                Kulübümüze kayıtlı resmi üyelerimize özel hazırladığımız muhteşem ödülleri kazanma fırsatını kaçırmayın. Tek tıkla biletinizi alın, kazandığınız hediye doğrudan <strong>Dijital Üye Kartınıza</strong> tanımlansın!
-            </p>
-
+            <div class="raffle-live">
             <!-- GERİ SAYIM SAYACI -->
-            <div class="max-w-xl mx-auto mb-12 bg-white/[0.06] border border-white/15 rounded-3xl p-6 backdrop-blur-xl shadow-2xl">
+            <div class="raffle-countdown max-w-xl mx-auto mb-12 bg-white/[0.06] border border-white/15 rounded-3xl p-6 backdrop-blur-xl shadow-2xl">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-2 mb-4">
                     <p class="text-xs font-bold uppercase tracking-widest text-amber-400 flex items-center justify-center gap-2">
                         <i class="fa-regular fa-clock"></i> <span id="countdownStatusText">Çekilişin Açıklanmasına Kalan Süre</span>
@@ -287,19 +498,19 @@
                     <span id="targetDateBadge" class="text-[11px] font-mono font-bold bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-400/30">15 Ekim 2026 20:00</span>
                 </div>
                 <div class="grid grid-cols-4 gap-3 text-center">
-                    <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
+                    <div class="raffle-time p-3 bg-white/[0.08] rounded-2xl border border-white/10">
                         <span id="countDays" class="block text-2xl sm:text-3xl font-black text-white font-mono">--</span>
                         <span class="text-[10px] sm:text-xs text-slate-400 font-bold">GÜN</span>
                     </div>
-                    <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
+                    <div class="raffle-time p-3 bg-white/[0.08] rounded-2xl border border-white/10">
                         <span id="countHours" class="block text-2xl sm:text-3xl font-black text-amber-400 font-mono">--</span>
                         <span class="text-[10px] sm:text-xs text-slate-400 font-bold">SAAT</span>
                     </div>
-                    <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
+                    <div class="raffle-time p-3 bg-white/[0.08] rounded-2xl border border-white/10">
                         <span id="countMinutes" class="block text-2xl sm:text-3xl font-black text-white font-mono">--</span>
                         <span class="text-[10px] sm:text-xs text-slate-400 font-bold">DAKİKA</span>
                     </div>
-                    <div class="p-3 bg-white/[0.08] rounded-2xl border border-white/10">
+                    <div class="raffle-time p-3 bg-white/[0.08] rounded-2xl border border-white/10">
                         <span id="countSeconds" class="block text-2xl sm:text-3xl font-black text-amber-400 font-mono">--</span>
                         <span class="text-[10px] sm:text-xs text-slate-400 font-bold">SANİYE</span>
                     </div>
@@ -317,9 +528,9 @@
                         Yoklama: Kontrol Ediliyor...
                     </span>
                 </div>
-                <h3 class="text-lg sm:text-xl font-black text-white">
+                <h2 class="text-lg sm:text-xl font-black text-white">
                     Etkinlik Salonunda mısınız? 🎟️
-                </h3>
+                </h2>
                 <p class="text-xs sm:text-sm text-slate-300 mt-1.5 mb-5 leading-relaxed">
                     Bu çekiliş <strong>yalnızca salonda fiziksel olarak bulunan üyelerimiz</strong> arasında çekilecektir! Salondaki QR kodu okutarak veya aşağıdaki butona basarak salon biletinizi anında alabilirsiniz.
                 </p>
@@ -335,105 +546,82 @@
                 </div>
             </div>
 
-            <!-- TEK TIKLA BİLET ALMA / KATILIM BUTONU -->
-            <div class="max-w-md mx-auto">
-                <button onclick="handleJoinGiveaway()" id="joinGiveawayBtn" class="w-full py-4 px-8 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black text-lg rounded-2xl shadow-xl shadow-amber-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
-                    <i class="fa-solid fa-ticket text-xl"></i>
-                    <span id="joinBtnText">🎟️ Çekilişe Katıl & Biletini Al</span>
-                </button>
-                <p class="text-xs text-slate-400 mt-3">
-                    * Yalnızca doğrulanmış ULUÇEEİT SKS üyeleri katılabilir. Katılım tamamen ücretsizdir.
-                </p>
             </div>
-
         </div>
     </section>
 
     <!-- HEDİYELER VİTRİNİ -->
-    <section class="py-24 bg-white relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-black text-ceko-navy tracking-tight mb-4">
-                    Dağıtılacak <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600">Özel Hediyeler</span>
-                </h2>
-                <div class="w-24 h-1.5 bg-gradient-to-r from-amber-500 to-blue-600 mx-auto rounded-full mb-6"></div>
-                <p class="text-slate-600 max-w-2xl mx-auto text-base sm:text-lg">
-                    Çekilişimizde öğrencilerimizin akademik, sosyal ve günlük kampüs hayatına değer katacak hediyeler sizi bekliyor!
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <section class="raffle-prizes" id="hediyeler" aria-labelledby="raffle-prizes-title">
+        <div class="raffle-wrap">
+            <p class="raffle-eyebrow">Çekiliş duyurusu</p>
+            <h2 class="raffle-heading" id="raffle-prizes-title">Duyurulan hediyeler.</h2>
+            <div class="raffle-prize-grid grid grid-cols-1 sm:grid-cols-2 gap-5">
                 
                 <!-- Hediye 1: Kitap Seti -->
                 <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy border border-white/15 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 group">
                     <div>
-                        <div class="w-16 h-16 rounded-2xl bg-blue-500/20 border border-blue-400/30 text-blue-300 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner">
+                        <div class="raffle-prize-icon flex items-center justify-center mb-5" aria-hidden="true">
                             <i class="fa-solid fa-book-bookmark"></i>
                         </div>
-                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">1. ÖDÜL KATEGORİSİ</span>
                         <h3 class="text-xl font-black text-white mb-2 mt-1">ÇEEİ & KPSS Kitap Seti</h3>
                         <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
                             İş Hukuku, Sosyal Güvenlik ve Çalışma Ekonomisi ders özetleri + KPSS A Grubu hazırlık soru bankası seti.
                         </p>
                     </div>
-                    <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs">
-                        <span class="text-slate-400 font-semibold">3 Talihliye</span>
-                        <span class="text-amber-400 font-bold bg-amber-500/15 px-2.5 py-1 rounded-md border border-amber-500/30">Akademik Paket</span>
+                    <div class="raffle-prize-meta pt-4 border-t border-white/10 flex flex-wrap justify-between items-center text-xs">
+                        <span class="raffle-winner-count text-slate-400 font-semibold">3 Talihliye</span>
+                        <span class="raffle-prize-kind text-amber-400 font-bold bg-amber-500/15 px-2.5 py-1 rounded-md border border-amber-500/30">Akademik Paket</span>
                     </div>
                 </div>
 
                 <!-- Hediye 2: Kahve Paketi -->
                 <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy border border-white/15 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 group">
                     <div>
-                        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/30 text-amber-300 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all shadow-inner">
+                        <div class="raffle-prize-icon flex items-center justify-center mb-5" aria-hidden="true">
                             <i class="fa-solid fa-mug-hot"></i>
                         </div>
-                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">2. ÖDÜL KATEGORİSİ</span>
                         <h3 class="text-xl font-black text-white mb-2 mt-1">1 Aylık Kahve Aboneliği</h3>
                         <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
                             EspressoLab Görükle şubesinde geçerli, dilediğiniz sıcak/soğuk kahve çeşitlerinden oluşan ücretsiz kupon paketi.
                         </p>
                     </div>
-                    <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs">
-                        <span class="text-slate-400 font-semibold">5 Talihliye</span>
-                        <span class="text-amber-400 font-bold bg-amber-500/15 px-2.5 py-1 rounded-md border border-amber-500/30">EspressoLab</span>
+                    <div class="raffle-prize-meta pt-4 border-t border-white/10 flex flex-wrap justify-between items-center text-xs">
+                        <span class="raffle-winner-count text-slate-400 font-semibold">5 Talihliye</span>
+                        <span class="raffle-prize-kind text-amber-400 font-bold bg-amber-500/15 px-2.5 py-1 rounded-md border border-amber-500/30">EspressoLab</span>
                     </div>
                 </div>
 
                 <!-- Hediye 3: İK Eğitimi -->
                 <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy border border-white/15 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 group">
                     <div>
-                        <div class="w-16 h-16 rounded-2xl bg-purple-500/20 border border-purple-400/30 text-purple-300 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-inner">
+                        <div class="raffle-prize-icon flex items-center justify-center mb-5" aria-hidden="true">
                             <i class="fa-solid fa-graduation-cap"></i>
                         </div>
-                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">3. ÖDÜL KATEGORİSİ</span>
                         <h3 class="text-xl font-black text-white mb-2 mt-1">İK & Bordro Eğitim Bursu</h3>
                         <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
                             Kampüs Kariyer Akademi'den %100 burslu İnsan Kaynakları Uzmanlığı ve Sertifikalı Bordrolama Eğitimi.
                         </p>
                     </div>
-                    <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs">
-                        <span class="text-slate-400 font-semibold">2 Talihliye</span>
-                        <span class="text-purple-300 font-bold bg-purple-500/15 px-2.5 py-1 rounded-md border border-purple-500/30">Sertifikalı</span>
+                    <div class="raffle-prize-meta pt-4 border-t border-white/10 flex flex-wrap justify-between items-center text-xs">
+                        <span class="raffle-winner-count text-slate-400 font-semibold">2 Talihliye</span>
+                        <span class="raffle-prize-kind text-purple-300 font-bold bg-purple-500/15 px-2.5 py-1 rounded-md border border-purple-500/30">Sertifikalı</span>
                     </div>
                 </div>
 
                 <!-- Hediye 4: Kulüp Özel Seti -->
                 <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy border border-white/15 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 group">
                     <div>
-                        <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
+                        <div class="raffle-prize-icon flex items-center justify-center mb-5" aria-hidden="true">
                             <i class="fa-solid fa-shirt"></i>
                         </div>
-                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">4. ÖDÜL KATEGORİSİ</span>
                         <h3 class="text-xl font-black text-white mb-2 mt-1">ULUÇEEİT VIP Hediye Seti</h3>
                         <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
                             Özel tasarım ULUÇEEİT çelik termos, kulüp sweatshirt'ü, bez çanta ve özel sticker seti.
                         </p>
                     </div>
-                    <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs">
-                        <span class="text-slate-400 font-semibold">10 Talihliye</span>
-                        <span class="text-emerald-300 font-bold bg-emerald-500/15 px-2.5 py-1 rounded-md border border-emerald-500/30">Özel Tasarım</span>
+                    <div class="raffle-prize-meta pt-4 border-t border-white/10 flex flex-wrap justify-between items-center text-xs">
+                        <span class="raffle-winner-count text-slate-400 font-semibold">10 Talihliye</span>
+                        <span class="raffle-prize-kind text-emerald-300 font-bold bg-emerald-500/15 px-2.5 py-1 rounded-md border border-emerald-500/30">Özel Tasarım</span>
                     </div>
                 </div>
 
@@ -443,32 +631,29 @@
     </section>
 
     <!-- NASIL İŞLİYOR BÖLÜMÜ -->
-    <section class="py-20 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] border-t border-slate-200">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h3 class="text-2xl sm:text-3xl font-black text-ceko-navy mb-2">Çekiliş ve Hediye Teslimatı Nasıl Çalışır?</h3>
-                <p class="text-slate-600 text-sm">3 basit adımda hediyenizi alın:</p>
+    <section class="raffle-process" aria-labelledby="raffle-process-title">
+        <div class="raffle-wrap raffle-process-layout">
+            <div>
+                <p class="raffle-eyebrow">Dijital üye kartı</p>
+                <h2 class="raffle-heading" id="raffle-process-title">Katılım nasıl işliyor?</h2>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                <div class="bg-white p-7 rounded-3xl shadow-md border border-slate-200">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl font-black mx-auto mb-4">1</div>
-                    <h4 class="font-bold text-slate-900 mb-2">Biletini Al</h4>
-                    <p class="text-xs text-slate-600">SKS üye kartınla tek tıkla çekilişe katıl. Adına özel çekiliş numarası anında kartına kaydedilir.</p>
-                </div>
-                <div class="bg-white p-7 rounded-3xl shadow-md border border-slate-200">
-                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center text-xl font-black mx-auto mb-4">2</div>
-                    <h4 class="font-bold text-slate-900 mb-2">Sonuçları Bekle</h4>
-                    <p class="text-xs text-slate-600">Çekiliş günü canlı kura çekilir. Kazanan şanslı üyelerin ödülleri doğrudan kartlarına işlenir.</p>
-                </div>
-                <div class="bg-white p-7 rounded-3xl shadow-md border border-slate-200">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl font-black mx-auto mb-4">3</div>
-                    <h4 class="font-bold text-slate-900 mb-2">Hediyeni Teslim Al</h4>
-                    <p class="text-xs text-slate-600">Kartındaki özel kupon kodunu İİBF Kulüp Odası'nda veya anlaşmalı mekanda göstererek hediyeni teslim al!</p>
-                </div>
-            </div>
+            <ol class="raffle-process-steps">
+                <li>
+                    <h3>Biletini al</h3>
+                    <p>SKS üye kartınla çekilişe katıl. Çekiliş numaran dijital üye kartına kaydedilir.</p>
+                </li>
+                <li>
+                    <h3>Sonucu takip et</h3>
+                    <p>Canlı kuranın ardından kazanan üyelerin ödülleri kartlarına işlenir.</p>
+                </li>
+                <li>
+                    <h3>Hediyeni teslim al</h3>
+                    <p>Kartındaki özel kupon kodunu İİBF Kulüp Odası’nda veya anlaşmalı mekânda göster.</p>
+                </li>
+            </ol>
         </div>
     </section>
+    </main>
 
     <!-- FOOTER -->
     <footer class="bg-[#050c1a] text-white pt-14 pb-8 border-t border-white/10">
