@@ -451,20 +451,18 @@
         const drawerBtn = document.getElementById('mobileDrawerCardBtn');
         const drawerBtnText = document.getElementById('mobileDrawerCardBtnText');
         const bottomNavCardLabel = document.getElementById('bottomNavCardLabel');
+        const hasMember = Boolean(member && member.fullName);
 
-        if (member && member.fullName) {
+        if (mobileBtn) mobileBtn.dataset.cardState = hasMember ? 'active' : 'locked';
+        if (mobileBtnText) mobileBtnText.textContent = 'Kartım';
+
+        if (hasMember) {
             const firstName = member.fullName.trim().split(' ')[0] || 'Üye';
 
             // Masaüstü Butonu -> Yeşil Zümrüt (Aktif Üye)
             if (btnText) btnText.innerHTML = `🟢 🪪 ${firstName} (Kartım)`;
             if (navBtn) {
                 navBtn.className = "inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all border shadow-sm bg-gradient-to-r from-emerald-500 to-emerald-600 text-white border-emerald-400 hover:shadow-emerald-500/30 transform hover:-translate-y-0.5";
-            }
-
-            // Mobil Üst Buton
-            if (mobileBtnText) mobileBtnText.innerHTML = `🟢 ${firstName}`;
-            if (mobileBtn) {
-                mobileBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 text-white flex items-center gap-1.5 transition-all active:scale-95 shadow-sm";
             }
 
             // Mobil Açılır Menü (Drawer) Butonu
@@ -483,12 +481,6 @@
             if (btnText) btnText.innerHTML = `🪪 Dijital Üye Kartı`;
             if (navBtn) {
                 navBtn.className = "inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all border shadow-sm bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 border-amber-400 hover:shadow-amber-500/30 transform hover:-translate-y-0.5";
-            }
-
-            // Mobil Üst Buton
-            if (mobileBtnText) mobileBtnText.innerHTML = `Kartım`;
-            if (mobileBtn) {
-                mobileBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm";
             }
 
             // Mobil Açılır Menü (Drawer) Butonu

@@ -236,8 +236,8 @@
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     </style>
 
-    <link rel="stylesheet" href="assets/redesign.css?v=22">
-    <script src="js/redesign.js" defer></script>
+    <link rel="stylesheet" href="assets/redesign.css?v=23">
+    <script src="js/redesign.js?v=23" defer></script>
 </head>
 <body class="redesign-page bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-ceko-navy selection:text-white pb-20 md:pb-0">
 
@@ -286,8 +286,8 @@
 
                 <!-- Mobil Menü Butonu -->
                 <div class="md:hidden flex items-center gap-2">
-                    <button onclick="handleMemberCardClick()" id="mobileNavCardBtn" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
-                        <i class="fa-solid fa-id-card"></i> <span id="mobileNavCardBtnText">Kartım</span>
+                    <button onclick="handleMemberCardClick()" id="mobileNavCardBtn" type="button">
+                        <i class="fa-solid fa-id-card" aria-hidden="true"></i> <span id="mobileNavCardBtnText">Kartım</span>
                     </button>
                     <button id="mobileMenuBtn" class="text-slate-700 hover:text-blue-600 p-2.5 rounded-xl hover:bg-slate-100 focus:outline-none transition-colors" aria-label="Menüyü Aç">
                         <i class="fa-solid fa-bars text-2xl" id="menuIcon"></i>
@@ -823,7 +823,7 @@
     <!-- ========================================================================= -->
     <!-- JAVASCRIPT: ORTAK ÜYE & BULUT SİSTEMİ MOTORU -->
     <!-- ========================================================================= -->
-    <script src="js/member-system.js"></script>
+    <script src="js/member-system.js?v=23"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             if (window.CloudSync) CloudSync.recordVisit("index");
@@ -1178,8 +1178,8 @@
     <!-- ========================================================================= -->
     <!-- 📱 MOBİL ALT GEZİNME ÇUBUĞU (APP-STYLE BOTTOM TAB BAR) -->
     <!-- ========================================================================= -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] px-1 pt-1.5 flex items-center justify-between" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0.5rem));">
-        <a href="index.html" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-blue-600 bg-blue-50/80 rounded-xl transition-colors">
+    <nav aria-label="Mobil gezinme" class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] px-1 pt-1.5 flex items-center justify-between" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0.5rem));">
+        <a href="index.html" aria-current="page" class="flex flex-col items-center justify-center flex-1 py-1 text-center min-w-0 text-blue-600 rounded-xl transition-colors">
             <i class="fa-solid fa-house text-lg text-blue-600"></i>
             <span class="text-[10px] font-black mt-0.5 truncate w-full px-0.5">Ana Sayfa</span>
         </a>

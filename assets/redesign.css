@@ -474,8 +474,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 4.85rem; }
 
 .redesign-page #navbar > div:first-child > div:first-child > :nth-child(2) > a:last-child:hover { background: var(--lime-hover); }
 
-.redesign-page #navbar #navCardBtn,
-.redesign-page #navbar #mobileNavCardBtn {
+.redesign-page #navbar #navCardBtn {
   min-height: 2.55rem;
   padding: .45rem .7rem;
   border: 1px solid #ffffff55;
@@ -485,8 +484,45 @@ html { scroll-behavior: smooth; scroll-padding-top: 4.85rem; }
   box-shadow: none;
 }
 
-.redesign-page #navbar #navCardBtn:hover,
-.redesign-page #navbar #mobileNavCardBtn:hover { background: #ffffff19; }
+.redesign-page #navbar #navCardBtn:hover { background: #ffffff19; }
+
+.redesign-page #navbar #mobileNavCardBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: .36rem;
+  min-height: 2.75rem;
+  padding: .25rem .65rem .25rem .3rem;
+  border: 1px solid #ffffff48;
+  border-radius: 999px;
+  background: #1e2c46;
+  color: #f4f6fc;
+  font-size: .8125rem;
+  font-weight: 750;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.redesign-page #navbar #mobileNavCardBtn > i {
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: 0 0 1.75rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff14;
+  color: inherit;
+}
+
+.redesign-page #navbar #mobileNavCardBtn:hover { background: #2a3a56; }
+
+.redesign-page #navbar #mobileNavCardBtn[data-card-state="active"] {
+  border-color: var(--lime);
+  background: var(--lime);
+  color: var(--navy);
+}
+
+.redesign-page #navbar #mobileNavCardBtn[data-card-state="active"] > i { background: #101a2d13; }
+.redesign-page #navbar #mobileNavCardBtn[data-card-state="active"]:hover { background: var(--lime-hover); }
 
 .redesign-page #navbar #mobileMenuBtn { color: #f7f8fc; }
 .redesign-page #navbar #mobileMenuBtn:hover { background: #ffffff19; }
@@ -513,10 +549,36 @@ html { scroll-behavior: smooth; scroll-padding-top: 4.85rem; }
 .redesign-page #mobileMenu a i { color: var(--lime); }
 .redesign-page #mobileMenu #mobileDrawerCardBtn { color: var(--navy); background: var(--lime); }
 
-.redesign-page > nav:not(#navbar) { background: var(--navy); border-color: #ffffff23; color: var(--light-text); }
-.redesign-page > nav:not(#navbar) > a,
-.redesign-page > nav:not(#navbar) > button { color: var(--light-text); }
-.redesign-page > nav:not(#navbar) i { color: var(--lime); }
+.redesign-page .mobile-bottom-nav {
+  gap: .18rem;
+  border-color: #ffffff23;
+  background: var(--navy);
+  color: var(--light-text);
+}
+
+.redesign-page .mobile-bottom-nav > :is(a, button) {
+  min-height: 2.85rem;
+  min-width: 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--light-text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.redesign-page .mobile-bottom-nav > :is(a, button) > i { color: var(--lime); }
+
+.redesign-page .mobile-bottom-nav > :is(a, button):active,
+.redesign-page .mobile-bottom-nav > a[aria-current="page"] {
+  border-color: #e3fa9155;
+  background: #243653;
+  color: var(--lime);
+}
+
+.redesign-page .mobile-bottom-nav > :is(a, button):focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 1px;
+}
 .redesign-page #navbar a:focus-visible,
 .redesign-page #navbar button:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
 
@@ -556,7 +618,8 @@ html { scroll-behavior: smooth; scroll-padding-top: 4.85rem; }
 @media (max-width: 31rem) {
   .redesign-page #navbar > div:first-child > div:first-child { gap: .25rem; }
   .redesign-page #navbar > div:first-child > div:first-child > :first-child { gap: .45rem; }
-  .redesign-page #navbar #mobileNavCardBtn { min-height: 2.25rem; padding: .35rem .45rem; }
+  .redesign-page #navbar #mobileNavCardBtn { padding-inline: .25rem .52rem; }
+  .redesign-page #navbar #mobileNavCardBtn > i { width: 1.45rem; height: 1.45rem; flex-basis: 1.45rem; }
   .redesign-page #navbar #mobileMenuBtn { padding: .45rem; }
 }
 
@@ -838,4 +901,19 @@ html { scroll-behavior: smooth; scroll-padding-top: 4.85rem; }
 
 .redesign-page:has(#memberCardModal:not(.hidden), #unregisteredModal:not(.hidden)) :is(#chatbot-button, #chatbot-window) {
   visibility: hidden;
+}
+
+html.member-dialog-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.member-dialog-open > body {
+  position: fixed;
+  top: var(--member-dialog-offset, 0px);
+  inset-inline: 0;
+}
+
+.member-dialog-open :is(#memberCardModal, #unregisteredModal, #activationModal, #redeemConfirmModal, #redeemSuccessModal) {
+  overscroll-behavior: contain;
 }
