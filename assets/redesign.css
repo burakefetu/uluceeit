@@ -835,3 +835,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 4.85rem; }
 @media (max-width: 24rem) {
   .member-card-help { align-items: stretch; flex-direction: column; }
 }
+
+.redesign-page:has(#memberCardModal:not(.hidden), #unregisteredModal:not(.hidden)) :is(#chatbot-button, #chatbot-window) {
+  visibility: hidden;
+}
