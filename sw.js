@@ -1,4 +1,4 @@
-const CACHE_NAME = 'uluceeit-pwa-v22';
+const CACHE_NAME = 'uluceeit-pwa-v23';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -10,8 +10,9 @@ const STATIC_ASSETS = [
   './oyun.html',
   './kutu-baski.html',
   './js/member-system.js',
-  './js/redesign.js',
-  './assets/redesign.css?v=22',
+  './js/member-system.js?v=23',
+  './js/redesign.js?v=23',
+  './assets/redesign.css?v=23',
   './assets/logo.webp',
   './assets/ankara.webp',
   './assets/zonguldak.webp',

@@ -161,8 +161,8 @@
             border-radius: 9999px;
         }
     </style>
-    <link rel="stylesheet" href="assets/redesign.css?v=22">
-    <script src="js/redesign.js" defer></script>
+    <link rel="stylesheet" href="assets/redesign.css?v=23">
+    <script src="js/redesign.js?v=23" defer></script>
     <style>
         .raffle-main {
             --raffle-ink: #101a2d;
@@ -415,8 +415,8 @@
 
                 <!-- Mobil Menü Butonu & Hızlı Kart -->
                 <div class="md:hidden flex items-center gap-2">
-                    <button onclick="handleMemberCardClick()" id="mobileNavCardBtn" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
-                        <i class="fa-solid fa-id-card"></i> <span id="mobileNavCardBtnText">Kartım</span>
+                    <button onclick="handleMemberCardClick()" id="mobileNavCardBtn" type="button">
+                        <i class="fa-solid fa-id-card" aria-hidden="true"></i> <span id="mobileNavCardBtnText">Kartım</span>
                     </button>
                     <button id="mobileMenuBtn" class="text-slate-700 hover:text-blue-600 p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Menüyü Aç">
                         <i class="fa-solid fa-bars text-2xl" id="menuIcon"></i>
@@ -677,7 +677,7 @@
     <!-- ========================================================================= -->
     <!-- 📱 MOBİL ALT GEZİNME ÇUBUĞU (APP-STYLE BOTTOM TAB BAR) -->
     <!-- ========================================================================= -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 py-1.5 flex items-center justify-around">
+    <nav aria-label="Mobil gezinme" class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 py-1.5 flex items-center justify-around">
         <a href="index.html" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-500 hover:text-blue-600 transition-colors">
             <i class="fa-solid fa-house text-lg"></i>
             <span class="text-[10px] font-bold mt-0.5">Ana Sayfa</span>
@@ -690,7 +690,7 @@
             <i class="fa-solid fa-calendar-days text-lg"></i>
             <span class="text-[10px] font-bold mt-0.5">Etkinlik</span>
         </a>
-        <a href="cekilis.html" class="flex flex-col items-center justify-center flex-1 py-1 text-amber-600 bg-amber-50 font-black relative">
+        <a href="cekilis.html" aria-current="page" class="flex flex-col items-center justify-center flex-1 py-1 text-amber-600 font-black relative">
             <i class="fa-solid fa-gift text-lg text-amber-500"></i>
             <span class="text-[10px] font-extrabold mt-0.5">Çekiliş</span>
             <span class="absolute top-0 right-3 w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
@@ -1081,7 +1081,7 @@
     </div>
 
     <!-- JAVASCRIPT MOTORLARI -->
-    <script src="js/member-system.js"></script>
+    <script src="js/member-system.js?v=23"></script>
     <script>
         const GIVEAWAY_CONFIG_KEY = 'uluceeit_giveaway_config';
         const DEFAULT_TARGET_TIME = '2026-10-15T20:00:00+03:00';
