@@ -1001,23 +1001,9 @@
         });
 
         // Mobil Menü Açma/Kapama
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const menuIcon = document.getElementById('menuIcon');
         
-        mobileMenuBtn.addEventListener('click', () => {
-            const isClosed = mobileMenu.classList.contains('hidden');
-            if (isClosed) {
-                mobileMenu.classList.remove('hidden');
-                menuIcon.classList.remove('fa-bars');
-                menuIcon.classList.add('fa-xmark');
-            } else {
-                mobileMenu.classList.add('hidden');
-                menuIcon.classList.remove('fa-xmark');
-                menuIcon.classList.add('fa-bars');
-            }
-        });
-
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
