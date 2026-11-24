@@ -1,4 +1,4 @@
-const CACHE_NAME = 'uluceeit-pwa-v20';
+const CACHE_NAME = 'uluceeit-pwa-v21';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -10,6 +10,11 @@ const STATIC_ASSETS = [
   './oyun.html',
   './kutu-baski.html',
   './js/member-system.js',
+  './js/redesign.js',
+  './assets/redesign.css',
+  './assets/logo.webp',
+  './assets/ankara.webp',
+  './assets/zonguldak.webp',
   './logo.png',
   './icon-192.png',
   './icon-512.png',
@@ -32,7 +37,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(keys => {
       return Promise.all(
         keys.map(key => {
-          if (key !== CACHE_NAME) {
+          if (key.startsWith('uluceeit-pwa-') && key !== CACHE_NAME) {
             return caches.delete(key);
           }
         })

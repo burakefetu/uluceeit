@@ -126,8 +126,47 @@
         .modal-scrollable::-webkit-scrollbar-track { background: transparent; }
         .modal-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 9999px; }
     </style>
+    <link rel="stylesheet" href="assets/redesign.css">
+    <script src="js/redesign.js" defer></script>
+    <style>
+        .redesign .about-hero-photo img { object-position: center 60%; }
+        .redesign .page-grid.about-team { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .redesign .about-team .page-panel p { margin-top: .55rem; }
+        .redesign .about-departments { margin-top: clamp(2.25rem, 5vw, 4rem); }
+        .redesign .about-departments h3, .redesign .career-opportunities h3 {
+            font-size: clamp(1.45rem, 3vw, 2rem);
+            letter-spacing: -.035em;
+            line-height: 1.15;
+            margin-bottom: .9rem;
+        }
+        .redesign .komite-karti { border-bottom: 1px solid var(--line); }
+        .redesign .komite-karti:first-of-type { border-top: 1px solid var(--line); }
+        .redesign .komite-karti button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            width: 100%;
+            padding: .95rem 0;
+            font-weight: 730;
+            text-align: left;
+            cursor: pointer;
+        }
+        .redesign .komite-karti p { padding: 0 0 .95rem 1rem; }
+        .redesign .komite-uyeler.max-h-0 { visibility: hidden; }
+        .redesign .career-opportunities { margin-top: 2.3rem; max-width: 49rem; }
+        .redesign .about-steps { margin: .85rem 0 0; padding-left: 1.3rem; list-style: decimal; }
+        .redesign .about-steps li + li { margin-top: .65rem; }
+        @media (max-width: 60rem) {
+            .redesign .page-grid.about-team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 29rem) {
+            .redesign .page-grid.about-team { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-blue-600 selection:text-white pb-20 md:pb-0">
+<body class="redesign-page bg-slate-50 text-slate-800 antialiased selection:bg-blue-600 selection:text-white pb-20 md:pb-0">
+    <a class="redesign-skip" href="#icerik">İçeriğe geç</a>
 
     <!-- ========================================================================= -->
     <!-- 🧭 ORTAK ÜST MENÜ (NAVBAR) -->
@@ -224,488 +263,149 @@
     <!-- ========================================================================= -->
     <!-- 🌟 HERO BAŞLIK BÖLÜMÜ -->
     <!-- ========================================================================= -->
-    <section class="relative pt-32 pb-16 lg:pt-40 lg:pb-20 bg-gradient-to-b from-[#081538] via-[#0b1d4a] to-[#081538] text-white overflow-hidden">
-        <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
-        <div class="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/40 text-blue-300 text-xs sm:text-sm font-bold mb-6">
-                <i class="fa-solid fa-users text-blue-400"></i> Bursa Uludağ Üniversitesi
-            </div>
-            
-            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6">
-                Hakkımızda & <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-amber-300">Kulüp Yönetimi</span>
-            </h1>
-            
-            <p class="text-slate-300 max-w-3xl mx-auto text-base sm:text-lg leading-relaxed mb-8">
-                Akademik yetkinlik, güçlü iş ağları ve sosyal duyarlılıkla donatılmış, geleceğin çalışma hayatına yön veren öncü öğrenci topluluğu.
-            </p>
-
-            <!-- Hızlı Sayfa İçi Gezinme Kısayolları -->
-            <div class="flex flex-wrap justify-center gap-2.5 text-xs sm:text-sm font-bold">
-                <a href="#misyon-vizyon" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all">
-                    🎯 Misyon & Vizyon
-                </a>
-                <a href="#kariyer-haritasi" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all">
-                    💼 Kariyer Haritası
-                </a>
-                <a href="#yonetim" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all">
-                    👔 Yönetim Kurulu
-                </a>
-                <a href="#sks-uye" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all font-black">
-                    📝 Resmi Üyelik
-                </a>
-            </div>
+<main class="redesign" id="icerik" tabindex="-1">
+    <section class="page-hero" aria-labelledby="page-title">
+      <div class="wrap page-intro page-hero-grid">
+        <div>
+          <p class="eyebrow">Hakkımızda</p>
+          <h1 id="page-title">Kampüste <em>birlikteyiz.</em></h1>
+          <p class="page-lede">Biz, Bursa Uludağ Üniversitesi Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğuyuz. Çalışma hayatını merak eden öğrencileri gezilerde, eğitimlerde ve öğrenci buluşmalarında bir araya getiriyoruz.</p>
+          <div class="actions">
+            <a class="button button-lime" href="#sks-uye">Üyelik adımlarını gör</a>
+            <a class="button button-outline" href="#kariyer-haritasi">ÇEEİ kariyer haritası</a>
+            <a class="button button-outline" href="#yonetim">Yönetim kurulu</a>
+          </div>
         </div>
+        <figure class="page-hero-media about-hero-photo">
+          <img src="assets/zonguldak.webp" alt="AKAD’EMEK Öğrenci Kurultayı’nda ULUÇEEİT topluluğu" width="1024" height="728" fetchpriority="high">
+          <figcaption>AKAD’EMEK Öğrenci Kurultayı, Zonguldak</figcaption>
+        </figure>
+      </div>
     </section>
 
-    <!-- ========================================================================= -->
-    <!-- 🎯 SECTION 1: MİSYON & VİZYON -->
-    <!-- ========================================================================= -->
-    <section id="misyon-vizyon" class="py-20 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] relative overflow-hidden scroll-mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-14">
-                <h2 class="text-3xl md:text-5xl font-black tracking-tight text-ceko-navy mb-4">
-                    Biz Kimiz ve <span class="text-blue-600">Ne Yapıyoruz?</span>
-                </h2>
-                <div class="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-amber-500 mx-auto rounded-full mb-6"></div>
-                <p class="text-slate-600 max-w-2xl mx-auto text-base sm:text-lg">
-                    Çalışma Ekonomisi ve Endüstri İlişkileri alanında teorik bilgiyi pratik saha vizyonuyla birleştiriyoruz.
-                </p>
-            </div>
-
-            <!-- Misyon & Vizyon Kartları -->
-            <div class="grid md:grid-cols-2 gap-8 mb-8">
-                <!-- Misyonumuz Kartı -->
-                <div class="group relative rounded-3xl liquid-glass-navy p-8 sm:p-10 shadow-card-navy hover:shadow-glass-glow transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between text-white overflow-hidden border border-white/15">
-                    <div class="absolute top-0 right-0 w-44 h-44 bg-blue-500/15 rounded-full blur-2xl group-hover:bg-blue-500/30 transition-all pointer-events-none"></div>
-
-                    <div>
-                        <div class="flex items-center gap-4 mb-6">
-                            <div class="w-14 h-14 rounded-2xl bg-blue-500/20 border border-blue-400/30 text-blue-300 flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner">
-                                <i class="fa-solid fa-bullseye"></i>
-                            </div>
-                            <div>
-                                <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Hedefimiz</span>
-                                <h3 class="text-2xl font-black text-white">Misyonumuz</h3>
-                            </div>
-                        </div>
-
-                        <p class="text-slate-200 leading-relaxed text-base sm:text-lg mb-6">
-                            Çalışma hayatının dinamiklerini bilimsel temelde kavrayarak toplumsal ihtiyaçlara yenilikçi çözümler üreten donanımlı profesyoneller yetiştirmek en temel hedefimizdir.
-                        </p>
-                    </div>
-
-                    <div class="space-y-3 pt-5 border-t border-white/10 text-sm text-slate-300">
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-blue-400"></i>
-                            <span>Emek piyasaları ve sosyal güvenlikte sahada fark yaratma</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-blue-400"></i>
-                            <span>Akademik derinlik ile pratik saha deneyimini birleştirme</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Vizyonumuz Kartı -->
-                <div class="group relative rounded-3xl liquid-glass-navy p-8 sm:p-10 shadow-card-navy hover:shadow-glass-amber transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between text-white overflow-hidden border border-white/15">
-                    <div class="absolute top-0 right-0 w-44 h-44 bg-amber-500/15 rounded-full blur-2xl group-hover:bg-amber-500/30 transition-all pointer-events-none"></div>
-
-                    <div>
-                        <div class="flex items-center gap-4 mb-6">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400/30 text-amber-300 flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all shadow-inner">
-                                <i class="fa-solid fa-eye"></i>
-                            </div>
-                            <div>
-                                <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Gelecek Bakışımız</span>
-                                <h3 class="text-2xl font-black text-white">Vizyonumuz</h3>
-                            </div>
-                        </div>
-
-                        <p class="text-slate-200 leading-relaxed text-base sm:text-lg mb-6">
-                            Topluluğumuz; çalışma hayatında sosyal adaleti ve etik değerleri pusula edinen, değişen küresel ekonomiye sadece uyum sağlayan değil, bizzat yön veren liderler yetiştirme vizyonuyla hareket eder.
-                        </p>
-                    </div>
-
-                    <div class="space-y-3 pt-5 border-t border-white/10 text-sm text-slate-300">
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-amber-400"></i>
-                            <span>Sürdürülebilir kalkınma ve adil çalışma koşulları inşası</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-amber-400"></i>
-                            <span>İş dünyasında sesi duyulan, vizyoner profesyonel ağı</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section id="misyon-vizyon" class="page-section" aria-labelledby="mission-title">
+      <div class="wrap section-space" data-reveal>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Misyon ve vizyon</p>
+            <h2 id="mission-title">Biz kimiz?</h2>
+          </div>
+          <a class="button button-dark-outline" href="etkinlikler.html">Etkinlikleri incele</a>
         </div>
+        <div class="page-grid page-grid-two">
+          <article class="page-panel">
+            <h3>Misyonumuz</h3>
+            <p>Çalışma ekonomisine ilişkin akademik bilgiyi sahadaki deneyimle birleştirmek. Öğrencilerin emek piyasası ve sosyal güvenlik konularını yakından tanımasına, bu alanlardaki sorunlara çözüm üretmesine katkı sağlamak.</p>
+          </article>
+          <article class="page-panel">
+            <h3>Vizyonumuz</h3>
+            <p>Sosyal adaleti ve meslek etiğini önemseyen, adil çalışma koşulları için sorumluluk alan ve çalışma hayatının geleceğine katkıda bulunan bir öğrenci topluluğu olmak.</p>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <!-- ========================================================================= -->
-    <!-- 💼 SECTION 2: KARİYER HARİTASI -->
-    <!-- ========================================================================= -->
-    <section id="kariyer-haritasi" class="py-20 bg-white relative overflow-hidden scroll-mt-20 border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-14">
-                <h2 class="text-3xl md:text-5xl font-black tracking-tight text-ceko-navy mb-4">
-                    Mezun Olunca <span class="text-blue-600">Ne İş Yapacağım?</span>
-                </h2>
-                <div class="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-amber-500 mx-auto rounded-full mb-6"></div>
-                <p class="text-slate-600 max-w-2xl mx-auto text-base sm:text-lg">
-                    Kariyer yolculuğunda sınırları sen çizersin! ÇEEİ bölümü, hem kamuda hem özel sektörde geniş çalışma alanları sunar.
-                </p>
-            </div>
-
-            <!-- 3'lü Kariyer Kartları -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
-                
-                <!-- Kariyer 1: Kamu Sektörü -->
-                <div class="group rounded-3xl liquid-glass-navy text-white p-8 shadow-card-navy hover:shadow-glass-glow transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between border border-white/15">
-                    <div>
-                        <div class="w-16 h-16 rounded-2xl bg-blue-500/20 border border-blue-400/30 text-blue-300 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner">
-                            <i class="fa-solid fa-building-columns"></i>
-                        </div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-blue-400">A Grubu & Bürokrasi</span>
-                        <h3 class="text-2xl font-black text-white mb-3 mt-1">Devletin Kilit Noktalarında</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                            Çalışma ve Sosyal Güvenlik Bakanlığı, İŞKUR, SGK müfettişlik ve uzmanlıkları; Kaymakamlık, Valilik ve İdari Hakimlik gibi prestijli kamu kariyerleri.
-                        </p>
-                    </div>
-
-                    <div class="pt-4 border-t border-white/10">
-                        <div class="flex flex-wrap gap-2 text-xs">
-                            <span class="px-2.5 py-1 rounded-lg bg-blue-500/15 text-blue-300 font-semibold border border-blue-400/30">#SGKUzmanı</span>
-                            <span class="px-2.5 py-1 rounded-lg bg-blue-500/15 text-blue-300 font-semibold border border-blue-400/30">#Kaymakamlık</span>
-                            <span class="px-2.5 py-1 rounded-lg bg-blue-500/15 text-blue-300 font-semibold border border-blue-400/30">#Müfettişlik</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kariyer 2: Özel Sektör & İK -->
-                <div class="group rounded-3xl liquid-glass-navy text-white p-8 shadow-card-navy hover:shadow-glass-amber transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between border border-white/15">
-                    <div>
-                        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/30 text-amber-300 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all shadow-inner">
-                            <i class="fa-solid fa-building"></i>
-                        </div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Kurumsal Dünya</span>
-                        <h3 class="text-2xl font-black text-white mb-3 mt-1">Özel Sektörün Kalbinde</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                            Global ve yerel holdinglerde İnsan Kaynakları (İK) Direktörlüğü, Bordrolama & Özlük İşleri, Big4 Denetim & Danışmanlık ve Yetenek Yönetimi.
-                        </p>
-                    </div>
-
-                    <div class="pt-4 border-t border-white/10">
-                        <div class="flex flex-wrap gap-2 text-xs">
-                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 font-semibold border border-amber-400/30">#İnsanKaynakları</span>
-                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 font-semibold border border-amber-400/30">#BordroUzmanı</span>
-                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 font-semibold border border-amber-400/30">#Danışmanlık</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kariyer 3: Global & Alternatif Rotalar -->
-                <div class="group rounded-3xl liquid-glass-navy text-white p-8 shadow-card-navy hover:shadow-glass-glow transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between border border-white/15">
-                    <div>
-                        <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
-                            <i class="fa-solid fa-globe"></i>
-                        </div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Uluslararası & Akademi</span>
-                        <h3 class="text-2xl font-black text-white mb-3 mt-1">Alternatif Kariyer Rotaları</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                            Üniversitelerde akademik kariyer, ILO (Uluslararası Çalışma Örgütü), Birleşmiş Milletler, sendikalar ve uluslararası STK'larda sosyal politika uzmanlığı.
-                        </p>
-                    </div>
-
-                    <div class="pt-4 border-t border-white/10">
-                        <div class="flex flex-wrap gap-2 text-xs">
-                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 font-semibold border border-emerald-400/30">#Akademi</span>
-                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 font-semibold border border-emerald-400/30">#ILO</span>
-                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 font-semibold border border-emerald-400/30">#SosyalPolitika</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Fırsatlar Paneli -->
-            <div class="rounded-3xl liquid-glass-navy text-white p-8 sm:p-12 shadow-card-navy relative overflow-hidden border border-white/20">
-                <div class="relative z-10">
-                    <div class="text-center mb-10">
-                        <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3">Öğrencilere Sunulan Fırsatlar</h3>
-                        <p class="text-slate-300 max-w-xl mx-auto text-sm sm:text-base">Dört yıllık lisans eğitimini sadece amfilerle sınırlamıyor, kariyerini bugünden inşa etmen için güçlü imkanlar sunuyoruz:</p>
-                    </div>
-
-                    <div class="grid md:grid-cols-3 gap-8">
-                        <div class="text-center p-6 rounded-2xl bg-white/[0.06] border border-white/10 backdrop-blur-md hover:bg-white/[0.1] transition-all">
-                            <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-300 flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner border border-blue-400/30">
-                                <i class="fa-solid fa-award"></i>
-                            </div>
-                            <h4 class="font-bold text-lg text-white mb-2">Çift Anadal ve Yandal</h4>
-                            <p class="text-xs sm:text-sm text-slate-300">İkinci bir alanda resmi diploma alarak uzmanlığını genişletme şansı.</p>
-                        </div>
-                        
-                        <div class="text-center p-6 rounded-2xl bg-white/[0.06] border border-white/10 backdrop-blur-md hover:bg-white/[0.1] transition-all">
-                            <div class="w-14 h-14 rounded-2xl bg-sky-500/20 text-sky-300 flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner border border-sky-400/30">
-                                <i class="fa-solid fa-plane-departure"></i>
-                            </div>
-                            <h4 class="font-bold text-lg text-white mb-2">Değişim Programları</h4>
-                            <p class="text-xs sm:text-sm text-slate-300">Erasmus+, Farabi ve Mevlana ile yurt içinde ve yurt dışında küresel vizyon.</p>
-                        </div>
-                        
-                        <div class="text-center p-6 rounded-2xl bg-white/[0.06] border border-white/10 backdrop-blur-md hover:bg-white/[0.1] transition-all">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner border border-amber-400/30">
-                                <i class="fa-solid fa-file-contract"></i>
-                            </div>
-                            <h4 class="font-bold text-lg text-white mb-2">Güçlü Bir Özgeçmiş</h4>
-                            <p class="text-xs sm:text-sm text-slate-300">Sertifikalı eğitimler, mesleki geziler, çalıştaylar ve staj referansları.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+    <section id="kariyer-haritasi" class="page-section page-section-alt" aria-labelledby="career-title">
+      <div class="wrap section-space" data-reveal>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ÇEEİ kariyer haritası</p>
+            <h2 id="career-title">Mezuniyet sonrası</h2>
+          </div>
         </div>
+        <div class="page-grid">
+          <article class="page-panel">
+            <h3>Kamu</h3>
+            <p>Çalışma ve Sosyal Güvenlik Bakanlığı, SGK ve İŞKUR’da uzmanlık ve denetim alanlarını inceleyebilirsin. Kaymakamlık, valilik ve idari hâkimlik gibi kariyerler için ilgili kadroların başvuru koşullarına bak.</p>
+          </article>
+          <article class="page-panel">
+            <h3>Özel sektör</h3>
+            <p>Yerel ve uluslararası şirketlerde insan kaynakları, yetenek yönetimi, bordro ve özlük işleri, denetim ve danışmanlık alanlarında kariyer geliştirebilirsin.</p>
+          </article>
+          <article class="page-panel">
+            <h3>Akademi ve sosyal politika</h3>
+            <p>Üniversitelerde araştırma ve lisansüstü eğitim, sendikalarda ve sivil toplumda çalışma ya da ILO ve Birleşmiş Milletler gibi uluslararası kuruluşlarda sosyal politika alanları da seçenekler arasında.</p>
+          </article>
+        </div>
+        <div class="career-opportunities">
+          <h3>Öğrenciyken deneyim kazan</h3>
+          <p>Çift anadal, yandal ve Erasmus+, Farabi ve Mevlana gibi öğrenci değişim programlarını üniversiteden araştırabilirsin. Toplulukta sertifikalı eğitimlere, çalıştaylara ve mesleki gezilere katılabilir, staj fırsatlarını takip edebilirsin.</p>
+        </div>
+      </div>
     </section>
 
-    <!-- ========================================================================= -->
-    <!-- 👔 SECTION 3: YÖNETİM KURULU & DEPARTMANLAR -->
-    <!-- ========================================================================= -->
-    <section id="yonetim" class="py-20 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] scroll-mt-20 border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-14">
-                <h2 class="text-3xl md:text-5xl font-black text-ceko-navy mb-4">2026-2027 <span class="text-blue-600">Yönetim Kurulumuz</span></h2>
-                <div class="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-amber-500 mx-auto rounded-full mb-6"></div>
-                <p class="text-slate-600 max-w-2xl mx-auto text-base sm:text-lg">
-                    ULUÇEEİT'i daha ileriye taşımak ve "Geleceğe Yön Ver" mottomuzu yaşatmak için özveriyle çalışan lider kadromuz.
-                </p>
-            </div>
-
-            <!-- Yönetim Kurulu Üyeleri -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy hover:shadow-glass-glow transition-all border border-white/15 text-center flex flex-col items-center group hover:-translate-y-2">
-                    <div class="w-20 h-20 bg-blue-500/20 border border-blue-400/30 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white transition-all text-blue-300 shadow-inner">
-                        <i class="fa-solid fa-user-tie text-3xl group-hover:text-white transition-colors"></i>
-                    </div>
-                    <h3 class="text-xl font-extrabold text-white">Burak Efe Türk</h3>
-                    <p class="text-blue-400 text-sm font-bold mt-1">Yönetim Kurulu Başkanı</p>
-                </div>
-
-                <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy hover:shadow-glass-glow transition-all border border-white/15 text-center flex flex-col items-center group hover:-translate-y-2">
-                    <div class="w-20 h-20 bg-blue-500/20 border border-blue-400/30 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white transition-all text-blue-300 shadow-inner">
-                        <i class="fa-solid fa-user text-3xl group-hover:text-white transition-colors"></i>
-                    </div>
-                    <h3 class="text-xl font-extrabold text-white">Melis Ceyda Öztürk</h3>
-                    <p class="text-blue-400 text-sm font-bold mt-1">Yönetim Kurulu Başkan Yrd.</p>
-                </div>
-
-                <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy hover:shadow-glass-glow transition-all border border-white/15 text-center flex flex-col items-center group hover:-translate-y-2">
-                    <div class="w-20 h-20 bg-blue-500/20 border border-blue-400/30 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white transition-all text-blue-300 shadow-inner">
-                        <i class="fa-solid fa-user text-3xl group-hover:text-white transition-colors"></i>
-                    </div>
-                    <h3 class="text-xl font-extrabold text-white">Yağmur Yetiş</h3>
-                    <p class="text-blue-400 text-sm font-bold mt-1">Yönetim Kurulu Başkan Yrd.</p>
-                </div>
-
-                <div class="liquid-glass-navy text-white rounded-3xl p-7 shadow-card-navy hover:shadow-glass-glow transition-all border border-white/15 text-center flex flex-col items-center group hover:-translate-y-2">
-                    <div class="w-20 h-20 bg-blue-500/20 border border-blue-400/30 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white transition-all text-blue-300 shadow-inner">
-                        <i class="fa-solid fa-user-gear text-3xl group-hover:text-white transition-colors"></i>
-                    </div>
-                    <h3 class="text-xl font-extrabold text-white">Efe Budak</h3>
-                    <p class="text-blue-400 text-sm font-bold mt-1">Genel Koordinatör</p>
-                </div>
-            </div>
-
-            <!-- DEPARTMANLAR (Açılır-Kapanır Accordion) -->
-            <div class="mt-16">
-                <h3 class="text-xl sm:text-2xl font-extrabold text-center text-ceko-navy mb-8">Departmanlarımız & Komiteler</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
-                    
-                    <div class="liquid-glass-navy text-white border-l-4 border-amber-400 p-5 shadow-lg hover:shadow-2xl rounded-r-2xl cursor-pointer group transition-all duration-300 border-t border-r border-b border-white/10 komite-karti w-full" onclick="toggleKomite(this)">
-                        <div class="flex justify-between items-center">
-                            <p class="font-bold text-slate-200 text-sm">Sponsorluk ve Finans</p>
-                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 transform"></i>
-                        </div>
-                        <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
-                            <div class="mt-3 pt-3 border-t border-white/10 text-xs text-slate-300 pb-1">
-                                <ul class="space-y-1.5 list-disc list-inside">
-                                    <li>Osman Eren Kahveci</li>
-                                    <li>Kemal Göç</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="liquid-glass-navy text-white border-l-4 border-sky-400 p-5 shadow-lg hover:shadow-2xl rounded-r-2xl cursor-pointer group transition-all duration-300 border-t border-r border-b border-white/10 komite-karti w-full" onclick="toggleKomite(this)">
-                        <div class="flex justify-between items-center">
-                            <p class="font-bold text-slate-200 text-sm">Organizasyon ve Etkinlik</p>
-                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 transform"></i>
-                        </div>
-                        <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
-                            <div class="mt-3 pt-3 border-t border-white/10 text-xs text-slate-300 pb-1">
-                                <ul class="space-y-1.5 list-disc list-inside">
-                                    <li>İpek Sarıoğlu</li>
-                                    <li>Esma Şen</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="liquid-glass-navy text-white border-l-4 border-blue-500 p-5 shadow-lg hover:shadow-2xl rounded-r-2xl cursor-pointer group transition-all duration-300 border-t border-r border-b border-white/10 komite-karti w-full" onclick="toggleKomite(this)">
-                        <div class="flex justify-between items-center">
-                            <p class="font-bold text-slate-200 text-sm">Sosyal Medya ve Tasarım</p>
-                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 transform"></i>
-                        </div>
-                        <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
-                            <div class="mt-3 pt-3 border-t border-white/10 text-xs text-slate-300 pb-1">
-                                <ul class="space-y-1.5 list-disc list-inside">
-                                    <li>Nilsu Gülen</li>
-                                    <li>Yavuz Selim Ekinci</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="liquid-glass-navy text-white border-l-4 border-emerald-400 p-5 shadow-lg hover:shadow-2xl rounded-r-2xl cursor-pointer group transition-all duration-300 border-t border-r border-b border-white/10 komite-karti w-full" onclick="toggleKomite(this)">
-                        <div class="flex justify-between items-center">
-                            <p class="font-bold text-slate-200 text-sm">Halkla İlişkiler ve İK</p>
-                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 transform"></i>
-                        </div>
-                        <div class="komite-uyeler max-h-0 overflow-hidden transition-all duration-500 ease-in-out opacity-0">
-                            <div class="mt-3 pt-3 border-t border-white/10 text-xs text-slate-300 pb-1">
-                                <ul class="space-y-1.5 list-disc list-inside">
-                                    <li>İlayda Şentürk</li>
-                                    <li>Şevval Sezgin</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section id="yonetim" class="page-section" aria-labelledby="board-title">
+      <div class="wrap section-space" data-reveal>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">2026–2027 dönemi</p>
+            <h2 id="board-title">Yönetim kurulu</h2>
+          </div>
         </div>
+        <div class="page-grid about-team">
+          <article class="page-panel"><h3>Burak Efe Türk</h3><p>Yönetim Kurulu Başkanı</p></article>
+          <article class="page-panel"><h3>Melis Ceyda Öztürk</h3><p>Yönetim Kurulu Başkan Yardımcısı</p></article>
+          <article class="page-panel"><h3>Yağmur Yetiş</h3><p>Yönetim Kurulu Başkan Yardımcısı</p></article>
+          <article class="page-panel"><h3>Efe Budak</h3><p>Genel Koordinatör</p></article>
+        </div>
+        <div class="about-departments">
+          <h3>Departmanlar ve komiteler</h3>
+          <div class="komite-karti">
+            <button type="button" onclick="toggleKomite(this.parentElement); document.querySelectorAll('.komite-karti > button').forEach(button => button.setAttribute('aria-expanded', String(!button.nextElementSibling.classList.contains('max-h-0'))))" aria-expanded="false">
+              <span>Sponsorluk ve Finans</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="komite-uyeler max-h-0 overflow-hidden opacity-0"><p>Osman Eren Kahveci ve Kemal Göç</p></div>
+          </div>
+          <div class="komite-karti">
+            <button type="button" onclick="toggleKomite(this.parentElement); document.querySelectorAll('.komite-karti > button').forEach(button => button.setAttribute('aria-expanded', String(!button.nextElementSibling.classList.contains('max-h-0'))))" aria-expanded="false">
+              <span>Organizasyon ve Etkinlik</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="komite-uyeler max-h-0 overflow-hidden opacity-0"><p>İpek Sarıoğlu ve Esma Şen</p></div>
+          </div>
+          <div class="komite-karti">
+            <button type="button" onclick="toggleKomite(this.parentElement); document.querySelectorAll('.komite-karti > button').forEach(button => button.setAttribute('aria-expanded', String(!button.nextElementSibling.classList.contains('max-h-0'))))" aria-expanded="false">
+              <span>Sosyal Medya ve Tasarım</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="komite-uyeler max-h-0 overflow-hidden opacity-0"><p>Nilsu Gülen ve Yavuz Selim Ekinci</p></div>
+          </div>
+          <div class="komite-karti">
+            <button type="button" onclick="toggleKomite(this.parentElement); document.querySelectorAll('.komite-karti > button').forEach(button => button.setAttribute('aria-expanded', String(!button.nextElementSibling.classList.contains('max-h-0'))))" aria-expanded="false">
+              <span>Halkla İlişkiler ve İnsan Kaynakları</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="komite-uyeler max-h-0 overflow-hidden opacity-0"><p>İlayda Şentürk ve Şevval Sezgin</p></div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- ========================================================================= -->
-    <!-- 📝 SECTION 4: AİLEMİZE KATIL (SKS ÜYELİK) -->
-    <!-- ========================================================================= -->
-    <section id="sks-uye" class="py-20 bg-white relative overflow-hidden scroll-mt-20 border-t border-slate-100">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-slate-200 bg-white">
-                
-                <!-- Sol Bilgi Kolonu (Liquid Glass Navy) -->
-                <div class="lg:w-2/5 p-8 sm:p-10 text-white flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/10 liquid-glass-navy">
-                    <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs font-bold mb-4 border border-blue-400/30">
-                            <i class="fa-solid fa-user-plus text-xs"></i> 2026-2027 Dönemi
-                        </div>
-                        <h3 class="text-3xl font-black mb-4">Ailemize<br>Katıl!</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed mb-8">
-                            Sadece derslerle sınırlı kalma. ULUÇEEİT ile kendini geliştir, sosyalleş, indirimlerden faydalan ve iş hayatına bir adım önde başla. Kulübümüze resmi kayıt işlemleri, üniversitemizin SKS sistemi üzerinden yapılmaktadır.
-                        </p>
-                        
-                        <div class="space-y-5">
-                            <div class="flex items-center gap-4">
-                                <div class="w-11 h-11 rounded-2xl bg-blue-500/20 text-blue-300 flex items-center justify-center border border-blue-400/30">
-                                    <i class="fa-solid fa-certificate text-amber-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-white text-sm">Sertifikalı Eğitimler</h4>
-                                    <p class="text-xs text-slate-300">CV'ni güçlendirecek resmi belgeler</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center border border-amber-400/30">
-                                    <i class="fa-solid fa-tags text-amber-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-white text-sm">Özel İndirimler</h4>
-                                    <p class="text-xs text-slate-300">Anlaşmalı mekanlarda %30'a varan indirim</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <div class="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center border border-emerald-400/30">
-                                    <i class="fa-solid fa-people-group text-amber-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-white text-sm">Güçlü Network</h4>
-                                    <p class="text-xs text-slate-300">Mezunlar ve sektör profesyonelleri</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-10 text-xs text-slate-400 border-t border-white/10 pt-5">
-                        Sorularınız için: <br>
-                        <a href="mailto:iletisim@uluceeit.com" class="font-bold text-white hover:text-amber-400 transition-colors text-sm">iletisim@uluceeit.com</a>
-                    </div>
-                </div>
-
-                <!-- Sağ Adımlar & Buton Kolonu -->
-                <div class="lg:w-3/5 p-8 sm:p-12 flex flex-col justify-center items-center text-center bg-white">
-                    <div class="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center mb-6 border border-blue-100 text-blue-600 shadow-sm">
-                        <i class="fa-solid fa-id-card text-4xl"></i>
-                    </div>
-                    <h3 class="text-2xl sm:text-3xl font-black text-ceko-navy mb-3">Resmi Üyelik İşlemleri</h3>
-                    <p class="text-slate-600 mb-8 max-w-md text-sm">
-                        ULUÇEEİT ailesinin resmi bir parçası olmak için Uludağ Üniversitesi Topluluk Kayıt Sistemi üzerinden giriş yaparak kulübümüzü seçebilirsiniz.
-                    </p>
-                    
-                    <div class="bg-slate-50 rounded-2xl p-6 mb-8 w-full max-w-md border border-slate-200 text-left">
-                        <h4 class="font-bold text-slate-800 mb-3 flex items-center text-sm">
-                            <i class="fa-solid fa-circle-info text-blue-600 mr-2"></i>Nasıl Kayıt Olurum?
-                        </h4>
-                        <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside">
-                            <li>Aşağıdaki butona tıklayarak SKS sistemine gidin.</li>
-                            <li>Öğrenci numaranız ve şifreniz ile giriş yapın.</li>
-                            <li>Topluluklar listesinden <strong>Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu</strong>'nu bulun.</li>
-                            <li>"Kayıt Ol" butonuna tıklayarak başvuruyu tamamlayın.</li>
-                        </ol>
-                    </div>
-
-                    <a href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F" target="_blank" rel="noopener noreferrer" class="w-full max-w-md flex justify-center items-center py-4 px-6 rounded-2xl shadow-xl text-base font-bold text-white bg-gradient-to-r from-ceko-navy via-blue-900 to-blue-700 hover:from-blue-700 hover:to-ceko-navy transition-all transform hover:-translate-y-0.5">
-                        <span>SKS Sistemi Üzerinden Kayıt Ol</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square ml-2.5 text-sm"></i>
-                    </a>
-                    
-                    <p class="mt-4 text-xs text-slate-400">
-                        * Resmi Uludağ Üniversitesi sayfasına yönlendirileceksiniz.
-                    </p>
-                </div>
-            </div>
+    <section id="sks-uye" class="join" aria-labelledby="sks-title">
+      <div class="wrap join-grid section-space" data-reveal>
+        <div>
+          <p class="eyebrow">Resmi SKS üyeliği</p>
+          <h2 id="sks-title">Aramıza <em>katıl.</em></h2>
+          <p>Üyelik başvurusu Bursa Uludağ Üniversitesi Topluluk Kayıt Sistemi’nde yapılıyor. Başvurudan sonra topluluk duyurularını WhatsApp grubundan takip edebilirsin.</p>
+          <p>Üyeler sertifikalı eğitimlere katılabilir, mezunlar ve sektör profesyonelleriyle tanışabilir ve <a class="text-link" href="sponsorlar.html">anlaşmalı işletmelerdeki indirimlerden</a> yararlanabilir.</p>
+          <div class="actions">
+            <a class="button button-dark" href="https://topluluk-etkinlik.uludag.edu.tr/Account/Login?ReturnUrl=%2F">SKS portalına git</a>
+            <a class="button button-dark-outline" href="https://chat.whatsapp.com/FvQuIcEAj1zAi3qtJNaY7A?s=cl&amp;p=i&amp;mlu=4&amp;ilr=4">WhatsApp grubuna katıl</a>
+          </div>
         </div>
-    </section>
-
-    <!-- ========================================================================= -->
-    <!-- 💬 SECTION 5: WHATSAPP GRUBU -->
-    <!-- ========================================================================= -->
-    <section class="py-14 bg-gradient-to-b from-[#f8fafc] to-white border-t border-slate-100">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="bg-gradient-to-br from-emerald-50 to-slate-50 rounded-3xl shadow-xl p-8 md:p-12 border border-emerald-200/80 flex flex-col md:flex-row items-center gap-8 justify-between relative overflow-hidden">
-                <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl z-0"></div>
-                
-                <div class="text-left relative z-10 flex-1">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold mb-4 border border-emerald-200">
-                        <i class="fa-brands fa-whatsapp text-sm text-emerald-600"></i> Resmi İletişim Kanalı
-                    </div>
-                    <h3 class="text-2xl md:text-3xl font-black text-ceko-navy mb-3">WhatsApp Grubumuza Katılın!</h3>
-                    <p class="text-slate-600 text-sm sm:text-base">
-                        Duyuruları ilk siz öğrenin, üye indirimlerinden anında haberdar olun ve ULUÇEEİT ailesiyle doğrudan iletişime geçin.
-                    </p>
-                </div>
-                
-                <div class="relative z-10 flex-shrink-0">
-                    <a href="https://chat.whatsapp.com/FvQuIcEAj1zAi3qtJNaY7A?s=cl&p=i&mlu=4&ilr=4" target="_blank" rel="noopener noreferrer" 
-                       class="group inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white px-7 py-3.5 rounded-2xl font-bold text-base transition-all shadow-xl shadow-emerald-600/20 transform hover:-translate-y-0.5">
-                        <i class="fa-brands fa-whatsapp text-xl"></i>
-                        <span>Gruba Katıl</span>
-                    </a>
-                    <p class="text-[11px] text-slate-400 mt-2 text-center">Uludağ Üniversitesi öğrencilerine özeldir.</p>
-                </div>
-            </div>
+        <div class="page-panel">
+          <h3>Başvuru adımları</h3>
+          <ol class="about-steps">
+            <li>SKS portalında öğrenci numaran ve şifrenle oturum aç.</li>
+            <li>Topluluklar listesinden Çalışma Ekonomisi ve Endüstri İlişkileri Topluluğu’nu bul.</li>
+            <li>“Kayıt Ol” düğmesiyle başvurunu tamamla.</li>
+          </ol>
+          <p>Üyelikle ilgili soruların için <a class="text-link" href="mailto:iletisim@uluceeit.com">iletisim@uluceeit.com</a> adresine yazabilirsin.</p>
         </div>
+      </div>
     </section>
+  </main>
 
     <!-- ========================================================================= -->
     <!-- 📱 MOBİL ALT GEZİNME ÇUBUĞU (APP-STYLE BOTTOM TAB BAR) -->

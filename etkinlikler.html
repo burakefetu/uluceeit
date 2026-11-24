@@ -119,8 +119,36 @@
         .modal-scrollable::-webkit-scrollbar-track { background: transparent; }
         .modal-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 9999px; }
     </style>
+    <link rel="stylesheet" href="assets/redesign.css">
+    <script src="js/redesign.js" defer></script>
+    <style>
+        .redesign .event-jump { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.8rem; }
+        .redesign .event-story {
+            display: grid;
+            grid-template-columns: minmax(0, 1.19fr) minmax(0, 1fr);
+            align-items: center;
+            gap: clamp(2rem, 6vw, 6rem);
+        }
+        .redesign .event-story-reverse { grid-template-columns: minmax(0, 1fr) minmax(0, 1.19fr); }
+        .redesign .event-story-reverse figure { grid-column: 2; grid-row: 1; }
+        .redesign .event-story-reverse .event-story-copy { grid-column: 1; grid-row: 1; }
+        .redesign .event-story .event-image { aspect-ratio: 1.37; }
+        .redesign .event-story .event-image-ankara img { object-position: 50% 63%; }
+        .redesign .event-story figcaption { color: var(--muted); font-size: .875rem; margin-top: .65rem; }
+        .redesign .event-story h2 { font-size: clamp(2.05rem, 4.2vw, 4.35rem); line-height: 1.03; overflow-wrap: break-word; }
+        .redesign .event-story-copy > p:not(.event-meta) { margin-top: 1rem; }
+        .redesign .event-details { margin-top: .85rem; }
+        .redesign .event-story-links { align-items: center; }
+        .redesign .event-toggle-btn { gap: .65rem; }
+        .redesign .event-toggle-btn i { font-size: .75rem; transition: transform .2s ease; }
+        @media (max-width: 49rem) {
+            .redesign .event-story, .redesign .event-story-reverse { grid-template-columns: 1fr; }
+            .redesign .event-story-reverse figure, .redesign .event-story-reverse .event-story-copy { grid-column: auto; grid-row: auto; }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-amber-500 selection:text-slate-950 pb-20 md:pb-0">
+<body class="redesign-page bg-slate-50 text-slate-800 antialiased selection:bg-amber-500 selection:text-slate-950 pb-20 md:pb-0">
+    <a class="redesign-skip" href="#icerik">İçeriğe geç</a>
 
     <!-- ========================================================================= -->
     <!-- 🧭 ORTAK ÜST MENÜ (NAVBAR) -->
@@ -217,144 +245,82 @@
     <!-- ========================================================================= -->
     <!-- 📅 ETKİNLİKLER VE GEZİLER SAYFASI -->
     <!-- ========================================================================= -->
-    <main class="pt-28 pb-16">
-        
-        <!-- Üst Başlık Bannerı -->
-        <section class="relative py-12 md:py-16 bg-gradient-to-b from-[#081538] via-[#0b1d4a] to-[#081538] text-white overflow-hidden mb-12">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-400/30 text-xs font-bold mb-4">
-                    <i class="fa-solid fa-calendar-check"></i> Mesleki Geziler & Zirveler
-                </span>
-                <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
-                    Kulüp <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-cyan-400">Etkinliklerimiz</span>
-                </h1>
-                <p class="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
-                    Tarihi mekanlar, kurum ziyaretleri, sendikal temaslar ve akademik öğrenci kurultayları ile dolu dolu geçen etkinliklerimizden kareler.
-                </p>
-            </div>
-        </section>
+<main class="redesign" id="icerik" tabindex="-1">
+    <section class="page-hero" aria-labelledby="events-title">
+      <div class="wrap page-intro">
+        <p class="eyebrow">Mesleki geziler ve zirveler</p>
+        <h1 id="events-title">Etkinlikler ve <em>geziler.</em></h1>
+        <p class="page-lede">Kurum ziyaretlerinden öğrenci kurultaylarına, kampüs dışında birlikte öğrendiğimiz etkinlikleri keşfet.</p>
+        <nav class="event-jump" aria-label="Etkinliklere atla">
+          <a class="button button-outline" href="#ankara">Ankara gezisi</a>
+          <a class="button button-outline" href="#akademek">Zonguldak kurultayı</a>
+        </nav>
+      </div>
+    </section>
 
-        <!-- Etkinlik Kartları Izgarası -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-16">
-                
-                <!-- Etkinlik Kartı 1: Ankara Gezisi -->
-                <div class="liquid-glass-navy text-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-glass-glow hover:-translate-y-2 transition-all duration-300 flex flex-col group border border-white/15">
-                    <div class="relative h-72 sm:h-80 overflow-hidden">
-                        <img src="ankara-gezisi.jpg" alt="ULUÇEEİT Ankara Gezisi - Anıtkabir" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#060f24] via-transparent to-transparent"></div>
-                        <div class="absolute top-4 right-4 bg-slate-900/80 text-white px-3.5 py-1 rounded-full text-xs font-bold shadow backdrop-blur-md border border-white/15">
-                            Geçmiş Etkinlik
-                        </div>
-                    </div>
-                    <div class="p-7 sm:p-8 flex-grow flex flex-col justify-between">
-                        <div>
-                            <div class="text-xs text-blue-400 font-bold mb-2 flex items-center">
-                                <i class="fa-regular fa-calendar mr-2"></i> 8 Mayıs
-                            </div>
-                            <h3 class="text-2xl font-extrabold text-white mb-3 leading-snug">Ankara Kültür ve Mesleki Gezisi</h3>
-                            
-                            <div class="text-slate-300 text-sm leading-relaxed mb-4">
-                                <p>
-                                    8 Mayıs’ta gerçekleştirdiğimiz Ankara gezimizden birbirinden güzel anılarla döndük. 🇹🇷🖤 Tarihin ve emeğin izlerini birlikte keşfettiğimiz bu özel günde hem öğrendik hem de keyifli anlar biriktirdik.
-                                </p>
-                                
-                                <div id="ankaraDetails" class="hidden mt-3 space-y-2.5 pt-3 border-t border-white/10 text-slate-200">
-                                    <p>
-                                        Anıtkabir’in manevi atmosferini hissetmek, Eski Meclis’in tarihine tanıklık etmek ve İLO ziyaretimizle farklı bakış açıları kazanmak bizler için oldukça değerliydi. ✨
-                                    </p>
-                                    <p class="text-amber-300 font-medium">
-                                        Bu etkinlikte bizlere desteklerini eksik etmeyen Türk Metal Sendikasına çok teşekkür ederiz 🙏🏻
-                                    </p>
-                                </div>
+    <section id="ankara" class="page-section" aria-labelledby="ankara-title">
+      <div class="wrap section-space event-story" data-reveal>
+        <figure>
+          <div class="event-image event-image-ankara">
+            <img src="assets/ankara.webp" alt="ULUÇEEİT üyeleri Anıtkabir önünde Türk bayrağıyla" width="768" height="1024" fetchpriority="high">
+          </div>
+          <figcaption>Anıtkabir, Ankara</figcaption>
+        </figure>
+        <div class="event-story-copy">
+          <p class="event-meta">Ankara <span aria-hidden="true">/</span> <time datetime="05-08">8 Mayıs</time></p>
+          <h2 id="ankara-title">Ankara Kültür ve Mesleki Gezisi</h2>
 
-                                <button onclick="toggleEventDetails(this, 'ankaraDetails')" class="event-toggle-btn mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
-                                    <span>Devamını Oku</span>
-                                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="border-t border-white/10 pt-4 flex justify-between items-center">
-                            <span class="text-slate-300 text-sm font-bold"><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Ankara</span>
-                            <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-sky-300 text-sm font-bold transition-colors flex items-center gap-1.5">
-                                <i class="fa-brands fa-instagram text-base"></i> Fotoğrafları Gör
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Etkinlik Kartı 2: AKAD'EMEK Zonguldak -->
-                <div class="liquid-glass-navy text-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-glass-glow hover:-translate-y-2 transition-all duration-300 flex flex-col group border border-white/15">
-                    <div class="relative h-72 sm:h-80 overflow-hidden">
-                        <img src="akademek-zonguldak.jpg" alt="AKAD'EMEK Zonguldak Öğrenci Kurultayı" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#060f24] via-transparent to-transparent"></div>
-                        <div class="absolute top-4 right-4 bg-slate-900/80 text-white px-3.5 py-1 rounded-full text-xs font-bold shadow backdrop-blur-md border border-white/15">
-                            Geçmiş Etkinlik
-                        </div>
-                    </div>
-                    <div class="p-7 sm:p-8 flex-grow flex flex-col justify-between">
-                        <div>
-                            <div class="text-xs text-blue-400 font-bold mb-2 flex items-center">
-                                <i class="fa-regular fa-calendar mr-2"></i> 23-26 Nisan
-                            </div>
-                            <h3 class="text-2xl font-extrabold text-white mb-3 leading-snug">AKAD'EMEK Zonguldak Öğrenci Kurultayı</h3>
-                            
-                            <div class="text-slate-300 text-sm leading-relaxed mb-4">
-                                <p>
-                                    AKAD’EMEK’te sadece bir etkinliğe değil; dostluğa, emeğe ve unutulmayacak anılara ev sahipliği yaptık. ✨ Birlikte geçirdiğimiz bu süreç, bizim için yalnızca bir organizasyon değil; aynı zamanda güçlü bağlar kurduğumuz çok özel bir yolculuktu.
-                                </p>
-                                
-                                <div id="akademekDetails" class="hidden mt-3 space-y-2.5 pt-3 border-t border-white/10 text-slate-200">
-                                    <p>
-                                        “Söz Çalışma Ekonomisi Öğrencilerinde” diyerek çıktığımız bu yolda dayanışmanın, ekip ruhunun ve birlikte üretmenin ne kadar kıymetli olduğunu bir kez daha gördük.
-                                    </p>
-                                    <p class="text-amber-300 font-medium">
-                                        Bu güzel süreçte emeği geçen, yanımızda olan herkese gönülden teşekkür ederiz. Daha nice güzel organizasyonlarda tekrar bir araya gelmek dileğiyle. 💐
-                                    </p>
-                                </div>
-
-                                <button onclick="toggleEventDetails(this, 'akademekDetails')" class="event-toggle-btn mt-3 text-blue-400 hover:text-sky-300 font-bold text-xs inline-flex items-center gap-1.5 focus:outline-none transition-colors">
-                                    <span>Devamını Oku</span>
-                                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="border-t border-white/10 pt-4 flex justify-between items-center">
-                            <span class="text-slate-300 text-sm font-bold"><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i> Zonguldak</span>
-                            <a href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-sky-300 text-sm font-bold transition-colors flex items-center gap-1.5">
-                                <i class="fa-brands fa-instagram text-base"></i> Fotoğrafları Gör
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- WhatsApp Topluluğu Katılım Bandı -->
-            <div class="bg-gradient-to-br from-emerald-50 to-slate-50 rounded-3xl shadow-xl p-8 md:p-12 border border-emerald-200/80 flex flex-col md:flex-row items-center gap-8 justify-between relative overflow-hidden">
-                <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl z-0"></div>
-                
-                <div class="text-left relative z-10 flex-1">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold mb-4 border border-emerald-200">
-                        <i class="fa-brands fa-whatsapp text-sm text-emerald-600"></i> Resmi İletişim Kanalı
-                    </div>
-                    <h3 class="text-2xl md:text-3xl font-black text-ceko-navy mb-3">WhatsApp Grubumuza Katılın!</h3>
-                    <p class="text-slate-600 text-sm sm:text-base">
-                        Gelecek etkinliklerden, mesleki gezilerden ve staj fırsatlarından ilk siz haberdar olun. ULUÇEEİT ailesine doğrudan katılın.
-                    </p>
-                </div>
-                
-                <div class="relative z-10 flex-shrink-0">
-                    <a href="https://chat.whatsapp.com/FvQuIcEAj1zAi3qtJNaY7A?s=cl&p=i&mlu=4&ilr=4" target="_blank" rel="noopener noreferrer" 
-                       class="group inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white px-7 py-3.5 rounded-2xl font-bold text-base transition-all shadow-xl shadow-emerald-600/20 transform hover:-translate-y-0.5">
-                        <i class="fa-brands fa-whatsapp text-xl"></i>
-                        <span>Gruba Katıl</span>
-                    </a>
-                    <p class="text-[11px] text-slate-400 mt-2 text-center">Uludağ Üniversitesi öğrencilerine özeldir.</p>
-                </div>
-            </div>
+          <p>Tarihin ve emeğin izlerini sürdüğümüz gezide Anıtkabir, Eski Meclis ve Uluslararası Çalışma Örgütü’nü (ILO) ziyaret ettik.</p>
+          <div id="ankaraDetails" class="hidden event-details"><p>Eski Meclis’in tarihine tanıklık ettik ve ILO ziyaretinde çalışma hayatını farklı bir açıdan ele aldık. Geziye destek veren Türk Metal Sendikasına teşekkür ederiz.</p></div>
+          <div class="actions event-story-links">
+            <button type="button" class="button button-dark-outline event-toggle-btn" aria-expanded="false" aria-controls="ankaraDetails" onclick="toggleEventDetails(this, 'ankaraDetails'); this.setAttribute('aria-expanded', String(!document.getElementById('ankaraDetails').classList.contains('hidden')))">
+              <span>Devamını oku</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <a class="text-link" href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer">Fotoğrafları gör</a>
+          </div>
         </div>
-    </main>
+      </div>
+    </section>
+
+    <section id="akademek" class="page-section page-section-alt" aria-labelledby="akademek-title">
+      <div class="wrap section-space event-story event-story-reverse" data-reveal>
+        <figure>
+          <div class="event-image">
+            <img src="assets/zonguldak.webp" alt="AKAD’EMEK Öğrenci Kurultayı’nda topluluk üyeleri" width="1024" height="728" loading="lazy">
+          </div>
+          <figcaption>AKAD’EMEK Öğrenci Kurultayı, Zonguldak</figcaption>
+        </figure>
+        <div class="event-story-copy">
+          <p class="event-meta">Zonguldak <span aria-hidden="true">/</span> 23–26 Nisan</p>
+          <h2 id="akademek-title">AKAD’EMEK Öğrenci Kurultayı</h2>
+
+          <p>“Söz Çalışma Ekonomisi Öğrencilerinde” diyen kurultayda farklı üniversitelerden öğrencilerle tanıştık.</p>
+          <div id="akademekDetails" class="hidden event-details"><p>Dört gün boyunca birlikte çalıştık. Dayanışmayı, ekip ruhunu ve birlikte üretmeyi deneyimlediğimiz bu süreçte emeği geçen herkese teşekkür ederiz.</p></div>
+          <div class="actions event-story-links">
+            <button type="button" class="button button-dark-outline event-toggle-btn" aria-expanded="false" aria-controls="akademekDetails" onclick="toggleEventDetails(this, 'akademekDetails'); this.setAttribute('aria-expanded', String(!document.getElementById('akademekDetails').classList.contains('hidden')))">
+              <span>Devamını oku</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <a class="text-link" href="https://www.instagram.com/uludagceeit/" target="_blank" rel="noopener noreferrer">Fotoğrafları gör</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="join" aria-labelledby="event-updates-title">
+      <div class="wrap join-grid section-space" data-reveal>
+        <div>
+          <h2 id="event-updates-title">Sıradaki etkinliği <em>kaçırma.</em></h2>
+          <p>Yeni geziler ve etkinlik duyuruları için WhatsApp grubumuzu, etkinlik fotoğrafları için Instagram hesabımızı takip et.</p>
+        </div>
+        <div class="join-actions">
+          <a class="button button-dark" href="https://chat.whatsapp.com/FvQuIcEAj1zAi3qtJNaY7A?s=cl&amp;p=i&amp;mlu=4&amp;ilr=4">WhatsApp grubu</a>
+          <a class="button button-dark-outline" href="https://www.instagram.com/uludagceeit/">Instagram</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
     <!-- ========================================================================= -->
     <!-- 📱 MOBİL ALT GEZİNME ÇUBUĞU (APP-STYLE BOTTOM TAB BAR) -->
