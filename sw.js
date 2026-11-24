@@ -11,7 +11,7 @@ const STATIC_ASSETS = [
   './kutu-baski.html',
   './js/member-system.js',
   './js/redesign.js',
-  './assets/redesign.css',
+  './assets/redesign.css?v=22',
   './assets/logo.webp',
   './assets/ankara.webp',
   './assets/zonguldak.webp',
