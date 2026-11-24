@@ -351,133 +351,81 @@
     <!-- ========================================================================= -->
     <!-- 🪪 DİJİTAL ÜYE KARTI MODALI (CANLI KOPYALANAMAZ SIVI CAM VIP KART) -->
     <!-- ========================================================================= -->
-    <div id="memberCardModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-[999] hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target === this) closeMemberCardModal()">
-        <div class="relative w-full max-w-md bg-slate-900 rounded-3xl p-4 sm:p-7 border border-amber-500/30 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto modal-scrollable overscroll-contain">
-            
-            <!-- Kapatma Butonu -->
-            <button onclick="closeMemberCardModal()" class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center transition-colors z-30" aria-label="Kapat">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-
-            <!-- Ana VIP Üye Kartı Görünümü -->
-            <div class="vip-member-card rounded-2xl p-4 sm:p-6 text-white shadow-2xl border border-amber-400/40 relative mb-4">
-                
-                <!-- Kart Üst Başlık -->
-                <div class="flex justify-between items-start mb-4 sm:mb-6">
-                    <div class="flex items-center gap-2.5 sm:gap-3">
-                        <img src="logo.png" alt="Logo" class="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-md" onerror="this.src='logo.jpg'">
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] uppercase font-extrabold tracking-widest text-amber-400">BURSA ULUDAĞ ÜNİVERSİTESİ</p>
-                            <h4 class="text-xs sm:text-sm font-black text-white tracking-tight">ULUÇEEİT RESMİ ÜYE KARTI</h4>
-                        </div>
-                    </div>
-                    <div class="text-amber-400 text-lg sm:text-xl font-bold flex items-center gap-1">
-                        <i class="fa-solid fa-wifi rotate-90 text-xs sm:text-sm"></i>
-                    </div>
-                </div>
-
-                <!-- EMV Çip ve Temassız Sembolü -->
-                <div class="flex items-center justify-between mb-4 sm:mb-6">
-                    <div class="w-10 h-7 sm:w-11 sm:h-8 rounded-md bg-gradient-to-tr from-amber-400 via-yellow-200 to-amber-500 border border-amber-600 shadow-inner flex items-center justify-center">
-                        <div class="w-6 h-4 sm:w-7 sm:h-5 border border-amber-700/60 rounded flex flex-col justify-between py-0.5 px-1 opacity-70">
-                            <div class="w-full h-px bg-amber-800"></div>
-                            <div class="w-full h-px bg-amber-800"></div>
-                        </div>
-                    </div>
-                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] sm:text-xs font-black">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                        <span>SKS ONAYLI ÜYE</span>
-                    </div>
-                </div>
-
-                <!-- Üye Bilgileri -->
-                <div class="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
-                    <div>
-                        <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">ÜYE ADI SOYADI</p>
-                        <h3 id="cardHolderName" class="text-lg sm:text-xl font-black text-white tracking-wide uppercase break-words leading-tight">BURAK EFE TÜRK</h3>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">ÖĞRENCİ NO</p>
-                            <p id="cardHolderNo" class="font-mono font-bold text-amber-300 text-xs sm:text-sm tracking-wider">022201045</p>
-                        </div>
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">DÖNEM</p>
-                            <p class="font-bold text-slate-200 text-xs sm:text-sm">2026 - 2027</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Canlı Güvenlik Hologramı ve Akan Zaman (Sahteciliği Önler) -->
-                <div class="pt-3 sm:pt-4 border-t border-white/15 flex items-center justify-between">
-                    <div>
-                        <p class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold tracking-widest">CANLI DOĞRULAMA</p>
-                        <p id="cardLiveTimestamp" class="font-mono text-[10px] sm:text-[11px] font-bold text-emerald-400">--.--.---- --:--:--</p>
-                    </div>
-                    <div class="text-right font-mono text-[9px] sm:text-[10px] font-bold text-amber-300/80 tracking-widest" id="cardSerialNo">
-                        ULU-2026-9821
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- 🎟️ ÇEKİLİŞ BİLETİ ROZETİ (ÇEKİLİŞE KATILDIYSA GÖRÜNÜR) -->
-            <div id="cardGiveawayTicketContainer" class="hidden mb-4 p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-slate-900 to-amber-500/10 border border-amber-400/40 text-white flex items-center justify-between shadow-lg">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 font-black flex items-center justify-center text-sm shadow">
-                        <i class="fa-solid fa-ticket"></i>
-                    </div>
-                    <div>
-                        <p class="text-[9px] uppercase font-bold text-amber-300">BÜYÜK ÇEKİLİŞ BİLETİNİZ</p>
-                        <p id="cardGiveawayTicketNumber" class="text-xs sm:text-sm font-mono font-black text-white">BİLET-0000</p>
-                    </div>
-                </div>
-                <a href="cekilis.html" class="text-[10px] bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1 rounded-full font-black flex items-center gap-1 transition-all"><span>Çekiliş Detayı</span> <i class="fa-solid fa-arrow-right text-[8px]"></i></a>
-            </div>
-
-            <!-- 🎁 KAZANILAN HEDİYE ROZETİ (YÖNETİM TANIMLADIYSA KİŞİYE ÖZEL GÖRÜNÜR) -->
-            <div id="wonGiftContainer" class="hidden mb-4 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-2 border-amber-400 text-white shadow-2xl">
-                <div class="flex items-center justify-between mb-2 pb-2 border-b border-white/10">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-gift text-amber-400 text-base sm:text-lg"></i>
-                        <span class="text-[11px] sm:text-xs font-black uppercase text-amber-300 tracking-wider">🎉 TEBRİKLER HEDİYE KAZANDINIZ!</span>
-                    </div>
-                    <span class="text-[9px] sm:text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded-full shrink-0">Tek Kullanımlık</span>
-                </div>
-                <h4 id="wonGiftTitle" class="text-sm sm:text-base font-black text-white mb-2 leading-snug">EspressoLab 1 Aylık Ücretsiz Kahve Paketi</h4>
-                <div class="bg-black/50 p-2.5 sm:p-3 rounded-xl border border-white/10 flex items-center justify-between gap-2 mb-3">
-                    <div class="min-w-0">
-                        <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase">Teslim Kupon Kodu</p>
-                        <p id="wonGiftCode" class="text-xs sm:text-sm font-mono font-black text-amber-300 truncate">ULU-KAHVE-8492</p>
-                    </div>
-                    <span class="shrink-0 text-[10px] sm:text-[11px] text-emerald-400 font-bold bg-emerald-500/20 px-2 sm:px-2.5 py-1 rounded-lg border border-emerald-500/30">
-                        <i class="fa-solid fa-shield-check mr-1"></i> Aktif Kupon
-                    </span>
-                </div>
-
-                <!-- TEK KULLANIMLIK TESLİM BUTONU -->
-                <button onclick="promptRedeemGift()" class="w-full py-3 sm:py-3.5 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 min-h-[44px]">
-                    <i class="fa-solid fa-check-to-slot text-base"></i>
-                    <span>Görevli Yanında Kuponu Kullan & İptal Et</span>
+    <div id="memberCardModal" class="member-card-overlay fixed inset-0 z-[999] hidden flex items-center justify-center overflow-y-auto" role="dialog" aria-labelledby="memberCardTitle" onclick="if(event.target === this) closeMemberCardModal()">
+        <div class="member-card-panel modal-scrollable">
+            <div class="member-card-heading">
+                <h2 id="memberCardTitle">Dijital üye kartı</h2>
+                <button class="member-card-close" type="button" onclick="closeMemberCardModal()" aria-label="Kartı kapat">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
                 </button>
-                <p class="text-[9px] sm:text-[10px] text-slate-400 text-center mt-2">
-                    * Yalnızca garsonun / yetkilinin yanında basınız. Kullandıktan sonra karttan silinir.
-                </p>
             </div>
 
-            <!-- Kullanım Bilgisi -->
-            <div class="mt-4 text-center">
-                <p class="text-[11px] sm:text-xs text-slate-300 mb-3 sm:mb-4">
-                    <i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i>
-                    Anlaşmalı sponsor kafelerde indirim almak veya hediyenizi teslim almak için bu ekranı göstermeniz yeterlidir.
-                </p>
-                <div class="flex gap-2 justify-center">
-                    <button onclick="closeMemberCardModal()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 active:bg-slate-900 text-white rounded-xl font-bold text-sm border border-white/10 transition-all min-h-[44px]">
-                        Kapat
-                    </button>
+            <div class="member-pass">
+                <div class="member-pass-top">
+                    <div class="member-pass-brand">
+                        <img src="assets/logo.webp" alt="" width="42" height="42" onerror="this.src='logo.jpg'">
+                        <div>
+                            <strong>ULUÇEEİT</strong>
+                            <span>Bursa Uludağ Üniversitesi</span>
+                        </div>
+                    </div>
+                    <span class="member-pass-status">SKS onaylı üye</span>
                 </div>
+
+                <div class="member-pass-identity">
+                    <p>Üye adı soyadı</p>
+                    <h3 id="cardHolderName">Üye</h3>
+                </div>
+
+                <dl class="member-pass-fields">
+                    <div>
+                        <dt>Öğrenci no</dt>
+                        <dd id="cardHolderNo">—</dd>
+                    </div>
+                    <div>
+                        <dt>Dönem</dt>
+                        <dd>2026–2027</dd>
+                    </div>
+                </dl>
+
+                <dl class="member-pass-fields member-pass-verification">
+                    <div>
+                        <dt>Canlı doğrulama</dt>
+                        <dd id="cardLiveTimestamp">—</dd>
+                    </div>
+                    <div>
+                        <dt>Kart seri no</dt>
+                        <dd id="cardSerialNo">—</dd>
+                    </div>
+                </dl>
             </div>
 
+            <div id="cardGiveawayTicketContainer" class="member-card-extra member-card-ticket hidden">
+                <div>
+                    <p>Büyük çekiliş biletiniz</p>
+                    <strong id="cardGiveawayTicketNumber">—</strong>
+                </div>
+                <a href="cekilis.html">Çekiliş detayı</a>
+            </div>
+
+            <div id="wonGiftContainer" class="member-card-extra member-card-gift hidden">
+                <div class="member-card-gift-heading">
+                    <p>Kazanılan hediye</p>
+                    <span>Tek kullanımlık</span>
+                </div>
+                <h3 id="wonGiftTitle">—</h3>
+                <dl class="member-card-gift-code">
+                    <dt>Teslim kupon kodu</dt>
+                    <dd id="wonGiftCode">—</dd>
+                </dl>
+                <button class="member-card-action" type="button" onclick="promptRedeemGift()">Kuponu görevli yanında kullan</button>
+                <p class="member-card-notice">Kupon kullanıldığında karttan kaldırılır.</p>
+            </div>
+
+            <div class="member-card-help">
+                <p>İndirim veya hediye teslimi için kartını anlaşmalı işletmedeki görevliye göster.</p>
+                <button class="member-card-dismiss" type="button" onclick="closeMemberCardModal()">Kapat</button>
+            </div>
         </div>
     </div>
 
@@ -554,7 +502,7 @@
     <!-- ========================================================================= -->
     <!-- 🔒 KİLİTLİ KART BİLGİLENDİRME MODALI (STANTTA QR OKUTMAMIŞ KULLANICILAR İÇİN) -->
     <!-- ========================================================================= -->
-    <div id="unregisteredModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-[999] hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target === this) closeUnregisteredModal()">
+    <div id="unregisteredModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-[999] hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target === this) closeUnregisteredModal()" role="dialog" aria-labelledby="lockedMemberCardTitle">
         <div class="relative w-full max-w-md bg-slate-900 rounded-3xl p-5 sm:p-7 border border-white/20 text-white shadow-2xl text-center my-auto max-h-[92dvh] overflow-y-auto modal-scrollable overscroll-contain">
             <button onclick="closeUnregisteredModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors" aria-label="Kapat">
                 <i class="fa-solid fa-xmark text-base"></i>
@@ -564,7 +512,7 @@
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
 
-            <h3 class="text-2xl font-black text-white mb-2">Dijital Üye Kartı Kilitli</h3>
+            <h3 id="lockedMemberCardTitle" class="text-2xl font-black text-white mb-2">Dijital Üye Kartı Kilitli</h3>
             <p class="text-slate-300 text-sm leading-relaxed mb-6">
                 Dijital İndirim Kartı yalnızca <strong>Uludağ Üniversitesi SKS sistemine kayıtlı</strong> ve standımızda doğrulanmış üyelere verilmektedir.
             </p>

@@ -563,3 +563,275 @@ html { scroll-behavior: smooth; scroll-padding-top: 4.85rem; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+/* The member system owns visibility and supplies the card, ticket, and coupon fields. */
+.member-card-overlay,
+.redesign-page #unregisteredModal {
+  padding: max(.65rem, env(safe-area-inset-top)) max(.65rem, env(safe-area-inset-right))
+    max(.65rem, env(safe-area-inset-bottom)) max(.65rem, env(safe-area-inset-left));
+  background: #07101fcd;
+  backdrop-filter: blur(5px);
+}
+
+.member-card-overlay.hidden,
+.member-card-extra.hidden {
+  display: none;
+}
+
+.member-card-panel {
+  width: min(100%, 31rem);
+  min-width: 0;
+  max-height: calc(100vh - 1.3rem);
+  max-height: min(92dvh, calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 1.3rem));
+  margin-block: auto;
+  padding: clamp(.85rem, 4vw, 1.5rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid #ffffff28;
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 24px 70px #0007;
+}
+
+.member-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-bottom: .8rem;
+}
+
+.member-card-heading h2 {
+  font: 800 clamp(1.25rem, 4vw, 1.65rem)/1.15 var(--heading);
+  letter-spacing: -.045em;
+}
+
+.member-card-close,
+.member-card-dismiss,
+.member-card-action,
+.member-card-ticket a {
+  min-height: 2.75rem;
+  padding: .5rem .8rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font-size: .875rem;
+  font-weight: 750;
+  text-align: center;
+}
+
+.member-card-close {
+  display: grid;
+  width: 2.75rem;
+  flex: 0 0 2.75rem;
+  place-items: center;
+  padding: 0;
+  background: #fff;
+  font-size: 1rem;
+}
+
+.member-card-close:hover,
+.member-card-dismiss:hover,
+.member-card-ticket a:hover { background: #e7eaf0; }
+
+.member-card-panel :focus-visible,
+.redesign-page #unregisteredModal :focus-visible {
+  outline: 2px solid #5475ed;
+  outline-offset: 3px;
+}
+
+.member-pass {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(.85rem, 4vw, 1.5rem);
+  border: 1px solid #49638a;
+  border-radius: 9px;
+  background: radial-gradient(ellipse at 91% 10%, #2e4a75, transparent 76%), var(--navy);
+  color: #f7f8fc;
+}
+
+.member-pass::before,
+.member-pass::after {
+  position: absolute;
+  z-index: -1;
+  top: -67%;
+  right: -24%;
+  width: 83%;
+  aspect-ratio: 1;
+  border: 1px solid #b6cdff44;
+  border-radius: 50%;
+  content: "";
+}
+
+.member-pass::after { top: -60%; right: -20%; }
+
+.member-pass-top,
+.member-pass-brand,
+.member-card-gift-heading {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+}
+
+.member-pass-top,
+.member-card-gift-heading {
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.member-pass-brand { min-width: 0; }
+.member-pass-brand img { flex: 0 0 2.55rem; width: 2.55rem; height: 2.55rem; border-radius: 50%; background: #fff; }
+.member-pass-brand strong { display: block; font: 800 1.13rem/1.13 var(--heading); letter-spacing: .02em; }
+.member-pass-brand span { display: block; margin-top: .14rem; color: #d0d9eb; font-size: .75rem; }
+
+.member-pass-status,
+.member-card-gift-heading span {
+  display: inline-flex;
+  width: fit-content;
+  padding: .28rem .48rem;
+  border-radius: 4px;
+  background: var(--lime);
+  color: var(--navy);
+  font-size: .75rem;
+  font-weight: 750;
+}
+
+.member-pass-identity { margin-block: 1.3rem .95rem; }
+
+.member-pass-identity p,
+.member-pass-fields dt {
+  color: #c0cce1;
+  font-size: .75rem;
+  font-weight: 650;
+}
+
+.member-pass-identity h3 {
+  margin-top: .16rem;
+  overflow-wrap: anywhere;
+  font: 800 clamp(1.25rem, 5vw, 1.95rem)/1.11 var(--heading);
+  letter-spacing: -.035em;
+}
+
+.member-pass-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: .5rem .8rem;
+}
+
+.member-pass-fields dd {
+  margin-top: .12rem;
+  overflow-wrap: anywhere;
+  color: #f6f8fc;
+  font-size: .875rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.member-pass-verification {
+  margin-top: .88rem;
+  padding-top: .78rem;
+  border-top: 1px solid #ffffff38;
+}
+
+.member-pass-fields #cardLiveTimestamp { color: var(--lime); }
+
+.member-card-extra {
+  margin-top: .75rem;
+  padding: .8rem;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+}
+
+.member-card-ticket {
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+}
+
+.member-card-ticket p,
+.member-card-gift-heading p,
+.member-card-gift-code dt {
+  color: var(--muted);
+  font-size: .8125rem;
+  font-weight: 700;
+}
+
+.member-card-ticket strong,
+.member-card-gift-code dd {
+  font-size: .95rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.member-card-ticket a { display: inline-flex; align-items: center; text-decoration: none; }
+.member-card-gift h3 { margin-block: .4rem .55rem; font-weight: 800; }
+.member-card-gift-code { padding: .58rem .65rem; border-radius: 5px; background: #eef1f5; }
+.member-card-gift-code dd { font-weight: 800; }
+
+.member-card-action {
+  width: 100%;
+  margin-top: .62rem;
+  border-color: var(--lime);
+  background: var(--lime);
+  color: var(--navy);
+}
+
+.member-card-action:hover { background: var(--lime-hover); }
+.member-card-notice, .member-card-help p { color: var(--muted); font-size: .8125rem; }
+.member-card-notice { margin-top: .4rem; }
+
+.member-card-help {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  margin-top: .82rem;
+}
+
+.member-card-help p { flex: 1; }
+.member-card-dismiss { flex: none; background: #fff; }
+
+.redesign-page #unregisteredModal > .modal-scrollable {
+  border-color: #ffffff2b;
+  border-radius: 14px;
+  background: var(--navy);
+}
+
+.redesign-page #lockedMemberCardTitle {
+  font: 800 clamp(1.3rem, 5vw, 1.65rem)/1.15 var(--heading);
+  letter-spacing: -.045em;
+}
+
+.redesign-page #unregisteredModal .fa-shield-halved,
+.redesign-page #unregisteredModal .fa-1,
+.redesign-page #unregisteredModal .fa-2,
+.redesign-page #unregisteredModal .fa-3 { color: var(--lime); }
+
+.redesign-page #unregisteredModal .fa-shield-halved { font-size: 1.5rem; }
+.redesign-page #unregisteredModal > .modal-scrollable > .w-16 { border-color: #e3fa9155; background: #e3fa911c; }
+
+.redesign-page #unregisteredModal a[href*="topluluk-etkinlik.uludag.edu.tr"],
+.redesign-page #btnRestoreCardSubmit {
+  min-height: 2.75rem;
+  border-radius: 5px;
+  background: var(--lime);
+  color: var(--navy);
+}
+
+.redesign-page #unregisteredModal a[href*="topluluk-etkinlik.uludag.edu.tr"]:hover,
+.redesign-page #btnRestoreCardSubmit:hover { background: var(--lime-hover); }
+
+.redesign-page #unregisteredModal button[onclick="toggleRestoreCardForm()"] {
+  border-color: #e3fa9155;
+  border-radius: 5px;
+  background: #e3fa9112;
+  color: var(--lime);
+}
+
+.redesign-page #restoreStudentNoInput:focus { border-color: var(--lime); }
+
+@media (max-width: 24rem) {
+  .member-card-help { align-items: stretch; flex-direction: column; }
+}
